@@ -1,0 +1,57 @@
+----------------------------------------------------------------
+Sun Jan 14 14:23:21 CST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0160-f356-35a1-00001dfead40 
+on database directory /Users/apple/Idea/workspace/spark/core/metastore_db with class loader sun.misc.Launcher$AppClassLoader@626b2d4a 
+Loaded from file:/Users/apple/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=/Users/apple/Idea/workspace/spark/core
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.2
+derby.system.home=null
+Warning: The database is booted with derby.system.durability=test. In this mode, it is possible that database may not be able to recover, committed transactions may be lost, database may be in an inconsistent state. Please use this mode only when these consequences are acceptable  
+
+Warning: The database was at least at one time booted with derby.system.durability=test. As a result of this mode being used, it is possible that the database may not be able to recover, committed transactions may be lost, and the database may be in an inconsistent state. This may cause unexpected errors.
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sun Jan 14 14:33:11 CST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance d8cd40ba-0160-f356-35a1-00001dfead40 
+on database directory /Users/apple/Idea/workspace/spark/core/target/JdbcRDDSuiteDb with class loader sun.misc.Launcher$AppClassLoader@626b2d4a 
+Loaded from file:/Users/apple/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=/Users/apple/Idea/workspace/spark/core
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.2
+derby.system.home=null
+Warning: The database is booted with derby.system.durability=test. In this mode, it is possible that database may not be able to recover, committed transactions may be lost, database may be in an inconsistent state. Please use this mode only when these consequences are acceptable  
+
+Warning: The database was at least at one time booted with derby.system.durability=test. As a result of this mode being used, it is possible that the database may not be able to recover, committed transactions may be lost, and the database may be in an inconsistent state. This may cause unexpected errors.
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sun Jan 14 14:33:11 CST 2018:
+Shutting down instance d8cd40ba-0160-f356-35a1-00001dfead40 on database directory /Users/apple/Idea/workspace/spark/core/target/JdbcRDDSuiteDb with class loader sun.misc.Launcher$AppClassLoader@626b2d4a 
+----------------------------------------------------------------
+Sun Jan 14 14:33:11 CST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance f33d40c7-0160-f356-35a1-00001dfead40 
+on database directory /Users/apple/Idea/workspace/spark/core/target/JdbcRDDSuiteDb with class loader sun.misc.Launcher$AppClassLoader@626b2d4a 
+Loaded from file:/Users/apple/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=/Users/apple/Idea/workspace/spark/core
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.2
+derby.system.home=null
+Warning: The database is booted with derby.system.durability=test. In this mode, it is possible that database may not be able to recover, committed transactions may be lost, database may be in an inconsistent state. Please use this mode only when these consequences are acceptable  
+
+Warning: The database was at least at one time booted with derby.system.durability=test. As a result of this mode being used, it is possible that the database may not be able to recover, committed transactions may be lost, and the database may be in an inconsistent state. This may cause unexpected errors.
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sun Jan 14 14:33:12 CST 2018:
+Shutting down instance f33d40c7-0160-f356-35a1-00001dfead40 on database directory /Users/apple/Idea/workspace/spark/core/target/JdbcRDDSuiteDb with class loader sun.misc.Launcher$AppClassLoader@626b2d4a 
