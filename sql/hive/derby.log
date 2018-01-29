@@ -1,0 +1,15 @@
+----------------------------------------------------------------
+Sun Jan 14 00:59:06 PST 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0160-f3e4-cbd1-00003548d338 
+on database directory /Users/apple/Idea/workspace/spark/sql/hive/target/tmp/spark-8409b3cd-1e79-4be2-bc25-d0e963837771 with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@64e2182f 
+Loaded from file:/Users/apple/Idea/workspace/spark/sql/hive/target/tmp/hive-v1_2-9df916a2-2595-47a9-9fdc-d97baa3e2e4e/org.apache.derby_derby-10.10.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=/Users/apple/Idea/workspace/spark/sql/hive
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.2
+derby.system.home=null
+Warning: The database is booted with derby.system.durability=test. In this mode, it is possible that database may not be able to recover, committed transactions may be lost, database may be in an inconsistent state. Please use this mode only when these consequences are acceptable  
+
+Database Class Loader started - derby.database.classpath=''
