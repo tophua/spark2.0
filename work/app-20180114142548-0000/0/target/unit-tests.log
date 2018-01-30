@@ -1,0 +1,838 @@
+18/01/14 14:25:49.855 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 71833@MacBook
+18/01/14 14:25:49.858 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:25:49.859 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:25:49.859 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:25:50.467 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:25:50.828 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:25:50.829 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:25:50.830 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:25:50.830 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:25:50.831 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:25:51.221 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:65328 after 120 ms (0 ms spent in bootstraps)
+18/01/14 14:25:51.332 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:25:51.332 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:25:51.332 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:25:51.332 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:25:51.332 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:25:51.358 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:65328 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:25:51.428 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-81434b00-0dd0-4426-b310-f61ae73b7aab/executor-cbb1b667-1ef8-47d6-9439-446fc9624c18/blockmgr-f0645bf7-4f9b-405b-8138-a651118d0294
+18/01/14 14:25:51.463 main INFO MemoryStore: MemoryStore started with capacity 366.3 MB
+18/01/14 14:25:51.844 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:65328
+18/01/14 14:25:51.847 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:65332
+18/01/14 14:25:51.854 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:65332 after 2 ms (0 ms spent in bootstraps)
+18/01/14 14:25:51.856 dispatcher-event-loop-1 INFO WorkerWatcher: Successfully connected to spark://Worker@localhost:65332
+18/01/14 14:25:51.881 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:25:51.883 dispatcher-event-loop-0 INFO Executor: Starting executor ID 0 on host localhost
+18/01/14 14:25:51.942 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 65355.
+18/01/14 14:25:51.942 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:65355
+18/01/14 14:25:51.944 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:25:51.946 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(0, localhost, 65355, None)
+18/01/14 14:25:51.957 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(0, localhost, 65355, None)
+18/01/14 14:25:51.958 dispatcher-event-loop-0 INFO BlockManager: external shuffle service port = 65246
+18/01/14 14:25:51.958 dispatcher-event-loop-0 INFO BlockManager: Registering executor with local external shuffle service.
+18/01/14 14:25:51.962 dispatcher-event-loop-0 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:65246 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:25:51.994 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(0, localhost, 65355, None)
+18/01/14 14:25:52.004 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 1
+18/01/14 14:25:52.013 Executor task launch worker for task 1 INFO Executor: Running task 1.0 in stage 0.0 (TID 1)
+18/01/14 14:25:52.155 Executor task launch worker for task 1 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:25:52.266 Executor task launch worker for task 1 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:65339 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:25:52.352 Executor task launch worker for task 1 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1867.0 B, free 366.3 MB)
+18/01/14 14:25:52.362 Executor task launch worker for task 1 INFO TorrentBroadcast: Reading broadcast variable 0 took 207 ms
+18/01/14 14:25:52.553 Executor task launch worker for task 1 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 2.9 KB, free 366.3 MB)
+18/01/14 14:25:53.723 Executor task launch worker for task 1 INFO Executor: Finished task 1.0 in stage 0.0 (TID 1). 1090 bytes result sent to driver
+18/01/14 14:25:53.727 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 5
+18/01/14 14:25:53.728 Executor task launch worker for task 5 INFO Executor: Running task 5.0 in stage 0.0 (TID 5)
+18/01/14 14:25:53.874 Executor task launch worker for task 5 INFO Executor: Finished task 5.0 in stage 0.0 (TID 5). 1004 bytes result sent to driver
+18/01/14 14:25:53.877 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 10
+18/01/14 14:25:53.877 Executor task launch worker for task 10 INFO Executor: Running task 10.0 in stage 0.0 (TID 10)
+18/01/14 14:25:53.975 Executor task launch worker for task 10 INFO Executor: Finished task 10.0 in stage 0.0 (TID 10). 1047 bytes result sent to driver
+18/01/14 14:25:53.987 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 11
+18/01/14 14:25:53.987 Executor task launch worker for task 11 INFO Executor: Running task 11.0 in stage 0.0 (TID 11)
+18/01/14 14:25:54.075 Executor task launch worker for task 11 INFO Executor: Finished task 11.0 in stage 0.0 (TID 11). 1004 bytes result sent to driver
+18/01/14 14:25:54.083 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 14
+18/01/14 14:25:54.087 Executor task launch worker for task 14 INFO Executor: Running task 14.0 in stage 0.0 (TID 14)
+18/01/14 14:25:54.131 Executor task launch worker for task 14 INFO Executor: Finished task 14.0 in stage 0.0 (TID 14). 1047 bytes result sent to driver
+18/01/14 14:25:54.134 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 16
+18/01/14 14:25:54.134 Executor task launch worker for task 16 INFO Executor: Running task 16.0 in stage 0.0 (TID 16)
+18/01/14 14:25:54.250 Executor task launch worker for task 16 INFO Executor: Finished task 16.0 in stage 0.0 (TID 16). 1004 bytes result sent to driver
+18/01/14 14:25:54.253 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 18
+18/01/14 14:25:54.253 Executor task launch worker for task 18 INFO Executor: Running task 18.0 in stage 0.0 (TID 18)
+18/01/14 14:25:54.309 Executor task launch worker for task 18 INFO Executor: Finished task 18.0 in stage 0.0 (TID 18). 1047 bytes result sent to driver
+18/01/14 14:25:54.312 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 21
+18/01/14 14:25:54.313 Executor task launch worker for task 21 INFO Executor: Running task 21.0 in stage 0.0 (TID 21)
+18/01/14 14:25:54.398 Executor task launch worker for task 21 INFO Executor: Finished task 21.0 in stage 0.0 (TID 21). 1004 bytes result sent to driver
+18/01/14 14:25:54.402 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 23
+18/01/14 14:25:54.402 Executor task launch worker for task 23 INFO Executor: Running task 23.0 in stage 0.0 (TID 23)
+18/01/14 14:25:54.419 Executor task launch worker for task 23 INFO Executor: Finished task 23.0 in stage 0.0 (TID 23). 1004 bytes result sent to driver
+18/01/14 14:25:54.423 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 24
+18/01/14 14:25:54.423 Executor task launch worker for task 24 INFO Executor: Running task 24.0 in stage 0.0 (TID 24)
+18/01/14 14:25:54.480 Executor task launch worker for task 24 INFO Executor: Finished task 24.0 in stage 0.0 (TID 24). 1004 bytes result sent to driver
+18/01/14 14:25:54.483 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 26
+18/01/14 14:25:54.483 Executor task launch worker for task 26 INFO Executor: Running task 26.0 in stage 0.0 (TID 26)
+18/01/14 14:25:54.511 Executor task launch worker for task 26 INFO Executor: Finished task 26.0 in stage 0.0 (TID 26). 1004 bytes result sent to driver
+18/01/14 14:25:54.515 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 28
+18/01/14 14:25:54.526 Executor task launch worker for task 28 INFO Executor: Running task 28.0 in stage 0.0 (TID 28)
+18/01/14 14:25:54.553 Executor task launch worker for task 28 INFO Executor: Finished task 28.0 in stage 0.0 (TID 28). 1004 bytes result sent to driver
+18/01/14 14:25:54.555 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 31
+18/01/14 14:25:54.555 Executor task launch worker for task 31 INFO Executor: Running task 31.0 in stage 0.0 (TID 31)
+18/01/14 14:25:54.567 Executor task launch worker for task 31 INFO Executor: Finished task 31.0 in stage 0.0 (TID 31). 1004 bytes result sent to driver
+18/01/14 14:25:54.570 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 32
+18/01/14 14:25:54.570 Executor task launch worker for task 32 INFO Executor: Running task 32.0 in stage 0.0 (TID 32)
+18/01/14 14:25:54.585 Executor task launch worker for task 32 INFO Executor: Finished task 32.0 in stage 0.0 (TID 32). 1004 bytes result sent to driver
+18/01/14 14:25:54.588 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 33
+18/01/14 14:25:54.588 Executor task launch worker for task 33 INFO Executor: Running task 33.0 in stage 0.0 (TID 33)
+18/01/14 14:25:54.651 Executor task launch worker for task 33 INFO Executor: Finished task 33.0 in stage 0.0 (TID 33). 1004 bytes result sent to driver
+18/01/14 14:25:54.656 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 35
+18/01/14 14:25:54.656 Executor task launch worker for task 35 INFO Executor: Running task 35.0 in stage 0.0 (TID 35)
+18/01/14 14:25:54.698 Executor task launch worker for task 35 INFO Executor: Finished task 35.0 in stage 0.0 (TID 35). 1004 bytes result sent to driver
+18/01/14 14:25:54.730 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 39
+18/01/14 14:25:54.730 Executor task launch worker for task 39 INFO Executor: Running task 39.0 in stage 0.0 (TID 39)
+18/01/14 14:25:54.742 Executor task launch worker for task 39 INFO Executor: Finished task 39.0 in stage 0.0 (TID 39). 1004 bytes result sent to driver
+18/01/14 14:25:54.764 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 41
+18/01/14 14:25:54.764 Executor task launch worker for task 41 INFO Executor: Running task 41.0 in stage 0.0 (TID 41)
+18/01/14 14:25:54.780 Executor task launch worker for task 41 INFO Executor: Finished task 41.0 in stage 0.0 (TID 41). 1004 bytes result sent to driver
+18/01/14 14:25:54.783 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 42
+18/01/14 14:25:54.783 Executor task launch worker for task 42 INFO Executor: Running task 42.0 in stage 0.0 (TID 42)
+18/01/14 14:25:54.854 Executor task launch worker for task 42 INFO Executor: Finished task 42.0 in stage 0.0 (TID 42). 1004 bytes result sent to driver
+18/01/14 14:25:54.857 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 45
+18/01/14 14:25:54.857 Executor task launch worker for task 45 INFO Executor: Running task 45.0 in stage 0.0 (TID 45)
+18/01/14 14:25:54.870 Executor task launch worker for task 45 INFO Executor: Finished task 45.0 in stage 0.0 (TID 45). 1004 bytes result sent to driver
+18/01/14 14:25:54.873 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 47
+18/01/14 14:25:54.873 Executor task launch worker for task 47 INFO Executor: Running task 47.0 in stage 0.0 (TID 47)
+18/01/14 14:25:54.911 Executor task launch worker for task 47 INFO Executor: Finished task 47.0 in stage 0.0 (TID 47). 1004 bytes result sent to driver
+18/01/14 14:25:54.915 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 49
+18/01/14 14:25:54.918 Executor task launch worker for task 49 INFO Executor: Running task 49.0 in stage 0.0 (TID 49)
+18/01/14 14:25:54.930 Executor task launch worker for task 49 INFO Executor: Finished task 49.0 in stage 0.0 (TID 49). 1004 bytes result sent to driver
+18/01/14 14:25:54.971 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 51
+18/01/14 14:25:54.976 Executor task launch worker for task 51 INFO Executor: Running task 51.0 in stage 0.0 (TID 51)
+18/01/14 14:25:54.988 Executor task launch worker for task 51 INFO Executor: Finished task 51.0 in stage 0.0 (TID 51). 1004 bytes result sent to driver
+18/01/14 14:25:54.991 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 52
+18/01/14 14:25:54.992 Executor task launch worker for task 52 INFO Executor: Running task 52.0 in stage 0.0 (TID 52)
+18/01/14 14:25:55.007 Executor task launch worker for task 52 INFO Executor: Finished task 52.0 in stage 0.0 (TID 52). 1004 bytes result sent to driver
+18/01/14 14:25:55.009 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 53
+18/01/14 14:25:55.010 Executor task launch worker for task 53 INFO Executor: Running task 53.0 in stage 0.0 (TID 53)
+18/01/14 14:25:55.025 Executor task launch worker for task 53 INFO Executor: Finished task 53.0 in stage 0.0 (TID 53). 1004 bytes result sent to driver
+18/01/14 14:25:55.028 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 54
+18/01/14 14:25:55.029 Executor task launch worker for task 54 INFO Executor: Running task 54.0 in stage 0.0 (TID 54)
+18/01/14 14:25:55.042 Executor task launch worker for task 54 INFO Executor: Finished task 54.0 in stage 0.0 (TID 54). 1004 bytes result sent to driver
+18/01/14 14:25:55.044 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 55
+18/01/14 14:25:55.045 Executor task launch worker for task 55 INFO Executor: Running task 55.0 in stage 0.0 (TID 55)
+18/01/14 14:25:55.165 Executor task launch worker for task 55 INFO Executor: Finished task 55.0 in stage 0.0 (TID 55). 1004 bytes result sent to driver
+18/01/14 14:25:55.170 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 58
+18/01/14 14:25:55.170 Executor task launch worker for task 58 INFO Executor: Running task 58.0 in stage 0.0 (TID 58)
+18/01/14 14:25:55.199 Executor task launch worker for task 58 INFO Executor: Finished task 58.0 in stage 0.0 (TID 58). 1004 bytes result sent to driver
+18/01/14 14:25:55.202 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 61
+18/01/14 14:25:55.203 Executor task launch worker for task 61 INFO Executor: Running task 61.0 in stage 0.0 (TID 61)
+18/01/14 14:25:55.254 Executor task launch worker for task 61 INFO Executor: Finished task 61.0 in stage 0.0 (TID 61). 1004 bytes result sent to driver
+18/01/14 14:25:55.257 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 63
+18/01/14 14:25:55.258 Executor task launch worker for task 63 INFO Executor: Running task 63.0 in stage 0.0 (TID 63)
+18/01/14 14:25:55.297 Executor task launch worker for task 63 INFO Executor: Finished task 63.0 in stage 0.0 (TID 63). 1004 bytes result sent to driver
+18/01/14 14:25:55.300 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 64
+18/01/14 14:25:55.301 Executor task launch worker for task 64 INFO Executor: Running task 64.0 in stage 0.0 (TID 64)
+18/01/14 14:25:55.317 Executor task launch worker for task 64 INFO Executor: Finished task 64.0 in stage 0.0 (TID 64). 1047 bytes result sent to driver
+18/01/14 14:25:55.319 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 65
+18/01/14 14:25:55.320 Executor task launch worker for task 65 INFO Executor: Running task 65.0 in stage 0.0 (TID 65)
+18/01/14 14:25:55.445 Executor task launch worker for task 65 INFO Executor: Finished task 65.0 in stage 0.0 (TID 65). 1004 bytes result sent to driver
+18/01/14 14:25:55.450 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 71
+18/01/14 14:25:55.450 Executor task launch worker for task 71 INFO Executor: Running task 71.0 in stage 0.0 (TID 71)
+18/01/14 14:25:55.469 Executor task launch worker for task 71 INFO Executor: Finished task 71.0 in stage 0.0 (TID 71). 1004 bytes result sent to driver
+18/01/14 14:25:55.473 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 73
+18/01/14 14:25:55.473 Executor task launch worker for task 73 INFO Executor: Running task 73.0 in stage 0.0 (TID 73)
+18/01/14 14:25:55.507 Executor task launch worker for task 73 INFO Executor: Finished task 73.0 in stage 0.0 (TID 73). 1004 bytes result sent to driver
+18/01/14 14:25:55.509 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 74
+18/01/14 14:25:55.509 Executor task launch worker for task 74 INFO Executor: Running task 74.0 in stage 0.0 (TID 74)
+18/01/14 14:25:55.573 Executor task launch worker for task 74 INFO Executor: Finished task 74.0 in stage 0.0 (TID 74). 1004 bytes result sent to driver
+18/01/14 14:25:55.587 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 80
+18/01/14 14:25:55.587 Executor task launch worker for task 80 INFO Executor: Running task 80.0 in stage 0.0 (TID 80)
+18/01/14 14:25:55.607 Executor task launch worker for task 80 INFO Executor: Finished task 80.0 in stage 0.0 (TID 80). 1004 bytes result sent to driver
+18/01/14 14:25:55.610 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 82
+18/01/14 14:25:55.611 Executor task launch worker for task 82 INFO Executor: Running task 82.0 in stage 0.0 (TID 82)
+18/01/14 14:25:55.626 Executor task launch worker for task 82 INFO Executor: Finished task 82.0 in stage 0.0 (TID 82). 1004 bytes result sent to driver
+18/01/14 14:25:55.629 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 83
+18/01/14 14:25:55.629 Executor task launch worker for task 83 INFO Executor: Running task 83.0 in stage 0.0 (TID 83)
+18/01/14 14:25:55.679 Executor task launch worker for task 83 INFO Executor: Finished task 83.0 in stage 0.0 (TID 83). 1004 bytes result sent to driver
+18/01/14 14:25:55.682 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 85
+18/01/14 14:25:55.683 Executor task launch worker for task 85 INFO Executor: Running task 85.0 in stage 0.0 (TID 85)
+18/01/14 14:25:55.756 Executor task launch worker for task 85 INFO Executor: Finished task 85.0 in stage 0.0 (TID 85). 1004 bytes result sent to driver
+18/01/14 14:25:55.760 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 87
+18/01/14 14:25:55.760 Executor task launch worker for task 87 INFO Executor: Running task 87.0 in stage 0.0 (TID 87)
+18/01/14 14:25:55.778 Executor task launch worker for task 87 INFO Executor: Finished task 87.0 in stage 0.0 (TID 87). 1004 bytes result sent to driver
+18/01/14 14:25:55.780 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 89
+18/01/14 14:25:55.781 Executor task launch worker for task 89 INFO Executor: Running task 89.0 in stage 0.0 (TID 89)
+18/01/14 14:25:55.795 Executor task launch worker for task 89 INFO Executor: Finished task 89.0 in stage 0.0 (TID 89). 1004 bytes result sent to driver
+18/01/14 14:25:55.798 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 91
+18/01/14 14:25:55.798 Executor task launch worker for task 91 INFO Executor: Running task 91.0 in stage 0.0 (TID 91)
+18/01/14 14:25:55.817 Executor task launch worker for task 91 INFO Executor: Finished task 91.0 in stage 0.0 (TID 91). 1004 bytes result sent to driver
+18/01/14 14:25:55.820 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 93
+18/01/14 14:25:55.820 Executor task launch worker for task 93 INFO Executor: Running task 93.0 in stage 0.0 (TID 93)
+18/01/14 14:25:55.838 Executor task launch worker for task 93 INFO Executor: Finished task 93.0 in stage 0.0 (TID 93). 1004 bytes result sent to driver
+18/01/14 14:25:55.841 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 95
+18/01/14 14:25:55.841 Executor task launch worker for task 95 INFO Executor: Running task 95.0 in stage 0.0 (TID 95)
+18/01/14 14:25:55.934 Executor task launch worker for task 95 INFO Executor: Finished task 95.0 in stage 0.0 (TID 95). 1004 bytes result sent to driver
+18/01/14 14:25:55.937 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 98
+18/01/14 14:25:55.937 Executor task launch worker for task 98 INFO Executor: Running task 98.0 in stage 0.0 (TID 98)
+18/01/14 14:25:55.965 Executor task launch worker for task 98 INFO Executor: Finished task 98.0 in stage 0.0 (TID 98). 1047 bytes result sent to driver
+18/01/14 14:25:55.968 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 99
+18/01/14 14:25:55.968 Executor task launch worker for task 99 INFO Executor: Running task 99.0 in stage 0.0 (TID 99)
+18/01/14 14:25:55.984 Executor task launch worker for task 99 INFO Executor: Finished task 99.0 in stage 0.0 (TID 99). 1004 bytes result sent to driver
+18/01/14 14:25:55.987 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 101
+18/01/14 14:25:55.987 Executor task launch worker for task 101 INFO Executor: Running task 101.0 in stage 0.0 (TID 101)
+18/01/14 14:25:56.105 Executor task launch worker for task 101 INFO Executor: Finished task 101.0 in stage 0.0 (TID 101). 1004 bytes result sent to driver
+18/01/14 14:25:56.107 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 110
+18/01/14 14:25:56.107 Executor task launch worker for task 110 INFO Executor: Running task 110.0 in stage 0.0 (TID 110)
+18/01/14 14:25:56.116 Executor task launch worker for task 110 INFO Executor: Finished task 110.0 in stage 0.0 (TID 110). 1004 bytes result sent to driver
+18/01/14 14:25:56.118 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 111
+18/01/14 14:25:56.119 Executor task launch worker for task 111 INFO Executor: Running task 111.0 in stage 0.0 (TID 111)
+18/01/14 14:25:56.133 Executor task launch worker for task 111 INFO Executor: Finished task 111.0 in stage 0.0 (TID 111). 1047 bytes result sent to driver
+18/01/14 14:25:56.135 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 112
+18/01/14 14:25:56.136 Executor task launch worker for task 112 INFO Executor: Running task 112.0 in stage 0.0 (TID 112)
+18/01/14 14:25:56.146 Executor task launch worker for task 112 INFO Executor: Finished task 112.0 in stage 0.0 (TID 112). 1004 bytes result sent to driver
+18/01/14 14:25:56.149 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 113
+18/01/14 14:25:56.149 Executor task launch worker for task 113 INFO Executor: Running task 113.0 in stage 0.0 (TID 113)
+18/01/14 14:25:56.158 Executor task launch worker for task 113 INFO Executor: Finished task 113.0 in stage 0.0 (TID 113). 1004 bytes result sent to driver
+18/01/14 14:25:56.161 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 114
+18/01/14 14:25:56.161 Executor task launch worker for task 114 INFO Executor: Running task 114.0 in stage 0.0 (TID 114)
+18/01/14 14:25:56.171 Executor task launch worker for task 114 INFO Executor: Finished task 114.0 in stage 0.0 (TID 114). 1004 bytes result sent to driver
+18/01/14 14:25:56.173 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 115
+18/01/14 14:25:56.173 Executor task launch worker for task 115 INFO Executor: Running task 115.0 in stage 0.0 (TID 115)
+18/01/14 14:25:56.183 Executor task launch worker for task 115 INFO Executor: Finished task 115.0 in stage 0.0 (TID 115). 1004 bytes result sent to driver
+18/01/14 14:25:56.188 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 116
+18/01/14 14:25:56.188 Executor task launch worker for task 116 INFO Executor: Running task 116.0 in stage 0.0 (TID 116)
+18/01/14 14:25:56.204 Executor task launch worker for task 116 INFO Executor: Finished task 116.0 in stage 0.0 (TID 116). 1047 bytes result sent to driver
+18/01/14 14:25:56.209 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 117
+18/01/14 14:25:56.210 Executor task launch worker for task 117 INFO Executor: Running task 117.0 in stage 0.0 (TID 117)
+18/01/14 14:25:56.219 Executor task launch worker for task 117 INFO Executor: Finished task 117.0 in stage 0.0 (TID 117). 1004 bytes result sent to driver
+18/01/14 14:25:56.223 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 118
+18/01/14 14:25:56.337 Executor task launch worker for task 118 INFO Executor: Running task 118.0 in stage 0.0 (TID 118)
+18/01/14 14:25:56.428 Executor task launch worker for task 118 INFO Executor: Finished task 118.0 in stage 0.0 (TID 118). 1004 bytes result sent to driver
+18/01/14 14:25:56.430 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 124
+18/01/14 14:25:56.431 Executor task launch worker for task 124 INFO Executor: Running task 124.0 in stage 0.0 (TID 124)
+18/01/14 14:25:56.439 Executor task launch worker for task 124 INFO Executor: Finished task 124.0 in stage 0.0 (TID 124). 1004 bytes result sent to driver
+18/01/14 14:25:56.441 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 125
+18/01/14 14:25:56.442 Executor task launch worker for task 125 INFO Executor: Running task 125.0 in stage 0.0 (TID 125)
+18/01/14 14:25:56.451 Executor task launch worker for task 125 INFO Executor: Finished task 125.0 in stage 0.0 (TID 125). 1004 bytes result sent to driver
+18/01/14 14:25:56.453 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 126
+18/01/14 14:25:56.454 Executor task launch worker for task 126 INFO Executor: Running task 126.0 in stage 0.0 (TID 126)
+18/01/14 14:25:56.547 Executor task launch worker for task 126 INFO Executor: Finished task 126.0 in stage 0.0 (TID 126). 1004 bytes result sent to driver
+18/01/14 14:25:56.550 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 129
+18/01/14 14:25:56.551 Executor task launch worker for task 129 INFO Executor: Running task 129.0 in stage 0.0 (TID 129)
+18/01/14 14:25:56.569 Executor task launch worker for task 129 INFO Executor: Finished task 129.0 in stage 0.0 (TID 129). 1004 bytes result sent to driver
+18/01/14 14:25:56.571 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 130
+18/01/14 14:25:56.572 Executor task launch worker for task 130 INFO Executor: Running task 130.0 in stage 0.0 (TID 130)
+18/01/14 14:25:56.589 Executor task launch worker for task 130 INFO Executor: Finished task 130.0 in stage 0.0 (TID 130). 1004 bytes result sent to driver
+18/01/14 14:25:56.593 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 131
+18/01/14 14:25:56.593 Executor task launch worker for task 131 INFO Executor: Running task 131.0 in stage 0.0 (TID 131)
+18/01/14 14:25:56.676 Executor task launch worker for task 131 INFO Executor: Finished task 131.0 in stage 0.0 (TID 131). 1004 bytes result sent to driver
+18/01/14 14:25:56.678 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 136
+18/01/14 14:25:56.679 Executor task launch worker for task 136 INFO Executor: Running task 136.0 in stage 0.0 (TID 136)
+18/01/14 14:25:56.689 Executor task launch worker for task 136 INFO Executor: Finished task 136.0 in stage 0.0 (TID 136). 1004 bytes result sent to driver
+18/01/14 14:25:56.691 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 138
+18/01/14 14:25:56.693 Executor task launch worker for task 138 INFO Executor: Running task 138.0 in stage 0.0 (TID 138)
+18/01/14 14:25:56.711 Executor task launch worker for task 138 INFO Executor: Finished task 138.0 in stage 0.0 (TID 138). 1047 bytes result sent to driver
+18/01/14 14:25:56.714 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 140
+18/01/14 14:25:56.714 Executor task launch worker for task 140 INFO Executor: Running task 140.0 in stage 0.0 (TID 140)
+18/01/14 14:25:56.742 Executor task launch worker for task 140 INFO Executor: Finished task 140.0 in stage 0.0 (TID 140). 1004 bytes result sent to driver
+18/01/14 14:25:56.745 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 141
+18/01/14 14:25:56.745 Executor task launch worker for task 141 INFO Executor: Running task 141.0 in stage 0.0 (TID 141)
+18/01/14 14:25:56.764 Executor task launch worker for task 141 INFO Executor: Finished task 141.0 in stage 0.0 (TID 141). 1004 bytes result sent to driver
+18/01/14 14:25:56.766 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 142
+18/01/14 14:25:56.767 Executor task launch worker for task 142 INFO Executor: Running task 142.0 in stage 0.0 (TID 142)
+18/01/14 14:25:56.779 Executor task launch worker for task 142 INFO Executor: Finished task 142.0 in stage 0.0 (TID 142). 1004 bytes result sent to driver
+18/01/14 14:25:56.782 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 144
+18/01/14 14:25:56.782 Executor task launch worker for task 144 INFO Executor: Running task 144.0 in stage 0.0 (TID 144)
+18/01/14 14:25:56.791 Executor task launch worker for task 144 INFO Executor: Finished task 144.0 in stage 0.0 (TID 144). 1004 bytes result sent to driver
+18/01/14 14:25:56.795 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 145
+18/01/14 14:25:56.796 Executor task launch worker for task 145 INFO Executor: Running task 145.0 in stage 0.0 (TID 145)
+18/01/14 14:25:56.806 Executor task launch worker for task 145 INFO Executor: Finished task 145.0 in stage 0.0 (TID 145). 1004 bytes result sent to driver
+18/01/14 14:25:56.809 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 147
+18/01/14 14:25:56.809 Executor task launch worker for task 147 INFO Executor: Running task 147.0 in stage 0.0 (TID 147)
+18/01/14 14:25:56.822 Executor task launch worker for task 147 INFO Executor: Finished task 147.0 in stage 0.0 (TID 147). 1047 bytes result sent to driver
+18/01/14 14:25:56.825 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 149
+18/01/14 14:25:56.825 Executor task launch worker for task 149 INFO Executor: Running task 149.0 in stage 0.0 (TID 149)
+18/01/14 14:25:56.835 Executor task launch worker for task 149 INFO Executor: Finished task 149.0 in stage 0.0 (TID 149). 1004 bytes result sent to driver
+18/01/14 14:25:56.838 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 151
+18/01/14 14:25:56.838 Executor task launch worker for task 151 INFO Executor: Running task 151.0 in stage 0.0 (TID 151)
+18/01/14 14:25:56.974 Executor task launch worker for task 151 INFO Executor: Finished task 151.0 in stage 0.0 (TID 151). 1004 bytes result sent to driver
+18/01/14 14:25:56.978 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 154
+18/01/14 14:25:56.979 Executor task launch worker for task 154 INFO Executor: Running task 154.0 in stage 0.0 (TID 154)
+18/01/14 14:25:56.998 Executor task launch worker for task 154 INFO Executor: Finished task 154.0 in stage 0.0 (TID 154). 1004 bytes result sent to driver
+18/01/14 14:25:57.000 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 156
+18/01/14 14:25:57.001 Executor task launch worker for task 156 INFO Executor: Running task 156.0 in stage 0.0 (TID 156)
+18/01/14 14:25:57.017 Executor task launch worker for task 156 INFO Executor: Finished task 156.0 in stage 0.0 (TID 156). 1004 bytes result sent to driver
+18/01/14 14:25:57.019 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 158
+18/01/14 14:25:57.020 Executor task launch worker for task 158 INFO Executor: Running task 158.0 in stage 0.0 (TID 158)
+18/01/14 14:25:57.036 Executor task launch worker for task 158 INFO Executor: Finished task 158.0 in stage 0.0 (TID 158). 1004 bytes result sent to driver
+18/01/14 14:25:57.038 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 160
+18/01/14 14:25:57.039 Executor task launch worker for task 160 INFO Executor: Running task 160.0 in stage 0.0 (TID 160)
+18/01/14 14:25:57.051 Executor task launch worker for task 160 INFO Executor: Finished task 160.0 in stage 0.0 (TID 160). 1004 bytes result sent to driver
+18/01/14 14:25:57.053 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 162
+18/01/14 14:25:57.053 Executor task launch worker for task 162 INFO Executor: Running task 162.0 in stage 0.0 (TID 162)
+18/01/14 14:25:57.143 Executor task launch worker for task 162 INFO Executor: Finished task 162.0 in stage 0.0 (TID 162). 1047 bytes result sent to driver
+18/01/14 14:25:57.145 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 166
+18/01/14 14:25:57.146 Executor task launch worker for task 166 INFO Executor: Running task 166.0 in stage 0.0 (TID 166)
+18/01/14 14:25:57.157 Executor task launch worker for task 166 INFO Executor: Finished task 166.0 in stage 0.0 (TID 166). 1004 bytes result sent to driver
+18/01/14 14:25:57.160 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 167
+18/01/14 14:25:57.160 Executor task launch worker for task 167 INFO Executor: Running task 167.0 in stage 0.0 (TID 167)
+18/01/14 14:25:57.216 Executor task launch worker for task 167 INFO Executor: Finished task 167.0 in stage 0.0 (TID 167). 1004 bytes result sent to driver
+18/01/14 14:25:57.218 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 171
+18/01/14 14:25:57.218 Executor task launch worker for task 171 INFO Executor: Running task 171.0 in stage 0.0 (TID 171)
+18/01/14 14:25:57.238 Executor task launch worker for task 171 INFO Executor: Finished task 171.0 in stage 0.0 (TID 171). 1004 bytes result sent to driver
+18/01/14 14:25:57.240 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 173
+18/01/14 14:25:57.256 Executor task launch worker for task 173 INFO Executor: Running task 173.0 in stage 0.0 (TID 173)
+18/01/14 14:25:57.267 Executor task launch worker for task 173 INFO Executor: Finished task 173.0 in stage 0.0 (TID 173). 1004 bytes result sent to driver
+18/01/14 14:25:57.270 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 174
+18/01/14 14:25:57.271 Executor task launch worker for task 174 INFO Executor: Running task 174.0 in stage 0.0 (TID 174)
+18/01/14 14:25:57.281 Executor task launch worker for task 174 INFO Executor: Finished task 174.0 in stage 0.0 (TID 174). 1004 bytes result sent to driver
+18/01/14 14:25:57.283 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 175
+18/01/14 14:25:57.284 Executor task launch worker for task 175 INFO Executor: Running task 175.0 in stage 0.0 (TID 175)
+18/01/14 14:25:57.293 Executor task launch worker for task 175 INFO Executor: Finished task 175.0 in stage 0.0 (TID 175). 1047 bytes result sent to driver
+18/01/14 14:25:57.296 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 176
+18/01/14 14:25:57.296 Executor task launch worker for task 176 INFO Executor: Running task 176.0 in stage 0.0 (TID 176)
+18/01/14 14:25:57.370 Executor task launch worker for task 176 INFO Executor: Finished task 176.0 in stage 0.0 (TID 176). 1004 bytes result sent to driver
+18/01/14 14:25:57.375 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 179
+18/01/14 14:25:57.376 Executor task launch worker for task 179 INFO Executor: Running task 179.0 in stage 0.0 (TID 179)
+18/01/14 14:25:57.398 Executor task launch worker for task 179 INFO Executor: Finished task 179.0 in stage 0.0 (TID 179). 1004 bytes result sent to driver
+18/01/14 14:25:57.401 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 181
+18/01/14 14:25:57.401 Executor task launch worker for task 181 INFO Executor: Running task 181.0 in stage 0.0 (TID 181)
+18/01/14 14:25:57.429 Executor task launch worker for task 181 INFO Executor: Finished task 181.0 in stage 0.0 (TID 181). 1004 bytes result sent to driver
+18/01/14 14:25:57.431 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 184
+18/01/14 14:25:57.437 Executor task launch worker for task 184 INFO Executor: Running task 184.0 in stage 0.0 (TID 184)
+18/01/14 14:25:57.467 Executor task launch worker for task 184 INFO Executor: Finished task 184.0 in stage 0.0 (TID 184). 1004 bytes result sent to driver
+18/01/14 14:25:57.469 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 188
+18/01/14 14:25:57.470 Executor task launch worker for task 188 INFO Executor: Running task 188.0 in stage 0.0 (TID 188)
+18/01/14 14:25:57.570 Executor task launch worker for task 188 INFO Executor: Finished task 188.0 in stage 0.0 (TID 188). 1047 bytes result sent to driver
+18/01/14 14:25:57.572 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 189
+18/01/14 14:25:57.572 Executor task launch worker for task 189 INFO Executor: Running task 189.0 in stage 0.0 (TID 189)
+18/01/14 14:25:57.614 Executor task launch worker for task 189 INFO Executor: Finished task 189.0 in stage 0.0 (TID 189). 1047 bytes result sent to driver
+18/01/14 14:25:57.617 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 192
+18/01/14 14:25:57.617 Executor task launch worker for task 192 INFO Executor: Running task 192.0 in stage 0.0 (TID 192)
+18/01/14 14:25:57.632 Executor task launch worker for task 192 INFO Executor: Finished task 192.0 in stage 0.0 (TID 192). 1004 bytes result sent to driver
+18/01/14 14:25:57.635 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 194
+18/01/14 14:25:57.635 Executor task launch worker for task 194 INFO Executor: Running task 194.0 in stage 0.0 (TID 194)
+18/01/14 14:25:57.699 Executor task launch worker for task 194 INFO Executor: Finished task 194.0 in stage 0.0 (TID 194). 1047 bytes result sent to driver
+18/01/14 14:25:57.701 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 200
+18/01/14 14:25:57.717 Executor task launch worker for task 200 INFO Executor: Running task 200.0 in stage 0.0 (TID 200)
+18/01/14 14:25:57.786 Executor task launch worker for task 200 INFO Executor: Finished task 200.0 in stage 0.0 (TID 200). 1133 bytes result sent to driver
+18/01/14 14:25:57.795 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 202
+18/01/14 14:25:57.796 Executor task launch worker for task 202 INFO Executor: Running task 2.0 in stage 1.0 (TID 202)
+18/01/14 14:25:57.806 Executor task launch worker for task 202 INFO MapOutputTrackerWorker: Updating epoch to 1 and clearing cache
+18/01/14 14:25:57.808 Executor task launch worker for task 202 INFO TorrentBroadcast: Started reading broadcast variable 1
+18/01/14 14:25:57.815 Executor task launch worker for task 202 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 1767.0 B, free 366.3 MB)
+18/01/14 14:25:57.817 Executor task launch worker for task 202 INFO TorrentBroadcast: Reading broadcast variable 1 took 9 ms
+18/01/14 14:25:57.819 Executor task launch worker for task 202 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 2.8 KB, free 366.3 MB)
+18/01/14 14:25:57.840 Executor task launch worker for task 202 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 0, fetching them
+18/01/14 14:25:57.842 Executor task launch worker for task 202 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:65328)
+18/01/14 14:25:57.992 Executor task launch worker for task 202 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:25:58.047 Executor task launch worker for task 202 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.058 Executor task launch worker for task 202 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:65246 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:25:58.061 Executor task launch worker for task 202 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 46 ms
+18/01/14 14:25:58.092 Executor task launch worker for task 202 INFO Executor: Finished task 2.0 in stage 1.0 (TID 202). 1090 bytes result sent to driver
+18/01/14 14:25:58.094 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 204
+18/01/14 14:25:58.095 Executor task launch worker for task 204 INFO Executor: Running task 4.0 in stage 1.0 (TID 204)
+18/01/14 14:25:58.099 Executor task launch worker for task 204 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.100 Executor task launch worker for task 204 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.253 Executor task launch worker for task 204 INFO Executor: Finished task 4.0 in stage 1.0 (TID 204). 1047 bytes result sent to driver
+18/01/14 14:25:58.256 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 205
+18/01/14 14:25:58.282 Executor task launch worker for task 205 INFO Executor: Running task 0.0 in stage 1.0 (TID 205)
+18/01/14 14:25:58.305 Executor task launch worker for task 205 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.306 Executor task launch worker for task 205 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.331 Executor task launch worker for task 205 INFO Executor: Finished task 0.0 in stage 1.0 (TID 205). 1047 bytes result sent to driver
+18/01/14 14:25:58.336 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 211
+18/01/14 14:25:58.337 Executor task launch worker for task 211 INFO Executor: Running task 10.0 in stage 1.0 (TID 211)
+18/01/14 14:25:58.342 Executor task launch worker for task 211 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.342 Executor task launch worker for task 211 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.362 Executor task launch worker for task 211 INFO Executor: Finished task 10.0 in stage 1.0 (TID 211). 1047 bytes result sent to driver
+18/01/14 14:25:58.364 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 212
+18/01/14 14:25:58.364 Executor task launch worker for task 212 INFO Executor: Running task 11.0 in stage 1.0 (TID 212)
+18/01/14 14:25:58.368 Executor task launch worker for task 212 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.368 Executor task launch worker for task 212 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.371 Executor task launch worker for task 212 INFO Executor: Finished task 11.0 in stage 1.0 (TID 212). 1047 bytes result sent to driver
+18/01/14 14:25:58.373 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 213
+18/01/14 14:25:58.374 Executor task launch worker for task 213 INFO Executor: Running task 12.0 in stage 1.0 (TID 213)
+18/01/14 14:25:58.378 Executor task launch worker for task 213 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.378 Executor task launch worker for task 213 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.381 Executor task launch worker for task 213 INFO Executor: Finished task 12.0 in stage 1.0 (TID 213). 1047 bytes result sent to driver
+18/01/14 14:25:58.383 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 214
+18/01/14 14:25:58.383 Executor task launch worker for task 214 INFO Executor: Running task 13.0 in stage 1.0 (TID 214)
+18/01/14 14:25:58.386 Executor task launch worker for task 214 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.386 Executor task launch worker for task 214 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.389 Executor task launch worker for task 214 INFO Executor: Finished task 13.0 in stage 1.0 (TID 214). 1047 bytes result sent to driver
+18/01/14 14:25:58.391 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 215
+18/01/14 14:25:58.391 Executor task launch worker for task 215 INFO Executor: Running task 14.0 in stage 1.0 (TID 215)
+18/01/14 14:25:58.394 Executor task launch worker for task 215 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.394 Executor task launch worker for task 215 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.397 Executor task launch worker for task 215 INFO Executor: Finished task 14.0 in stage 1.0 (TID 215). 1047 bytes result sent to driver
+18/01/14 14:25:58.400 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 216
+18/01/14 14:25:58.400 Executor task launch worker for task 216 INFO Executor: Running task 15.0 in stage 1.0 (TID 216)
+18/01/14 14:25:58.402 Executor task launch worker for task 216 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.403 Executor task launch worker for task 216 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.405 Executor task launch worker for task 216 INFO Executor: Finished task 15.0 in stage 1.0 (TID 216). 1047 bytes result sent to driver
+18/01/14 14:25:58.408 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 217
+18/01/14 14:25:58.409 Executor task launch worker for task 217 INFO Executor: Running task 16.0 in stage 1.0 (TID 217)
+18/01/14 14:25:58.411 Executor task launch worker for task 217 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.411 Executor task launch worker for task 217 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.414 Executor task launch worker for task 217 INFO Executor: Finished task 16.0 in stage 1.0 (TID 217). 1047 bytes result sent to driver
+18/01/14 14:25:58.417 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 218
+18/01/14 14:25:58.417 Executor task launch worker for task 218 INFO Executor: Running task 17.0 in stage 1.0 (TID 218)
+18/01/14 14:25:58.445 Executor task launch worker for task 218 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.445 Executor task launch worker for task 218 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.449 Executor task launch worker for task 218 INFO Executor: Finished task 17.0 in stage 1.0 (TID 218). 1047 bytes result sent to driver
+18/01/14 14:25:58.452 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 219
+18/01/14 14:25:58.452 Executor task launch worker for task 219 INFO Executor: Running task 18.0 in stage 1.0 (TID 219)
+18/01/14 14:25:58.457 Executor task launch worker for task 219 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.457 Executor task launch worker for task 219 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.460 Executor task launch worker for task 219 INFO Executor: Finished task 18.0 in stage 1.0 (TID 219). 1047 bytes result sent to driver
+18/01/14 14:25:58.481 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 222
+18/01/14 14:25:58.484 Executor task launch worker for task 222 INFO Executor: Running task 21.0 in stage 1.0 (TID 222)
+18/01/14 14:25:58.487 Executor task launch worker for task 222 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.487 Executor task launch worker for task 222 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.494 Executor task launch worker for task 222 INFO Executor: Finished task 21.0 in stage 1.0 (TID 222). 1047 bytes result sent to driver
+18/01/14 14:25:58.496 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 223
+18/01/14 14:25:58.496 Executor task launch worker for task 223 INFO Executor: Running task 22.0 in stage 1.0 (TID 223)
+18/01/14 14:25:58.499 Executor task launch worker for task 223 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.499 Executor task launch worker for task 223 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.502 Executor task launch worker for task 223 INFO Executor: Finished task 22.0 in stage 1.0 (TID 223). 1047 bytes result sent to driver
+18/01/14 14:25:58.505 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 224
+18/01/14 14:25:58.505 Executor task launch worker for task 224 INFO Executor: Running task 23.0 in stage 1.0 (TID 224)
+18/01/14 14:25:58.508 Executor task launch worker for task 224 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.509 Executor task launch worker for task 224 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.513 Executor task launch worker for task 224 INFO Executor: Finished task 23.0 in stage 1.0 (TID 224). 1047 bytes result sent to driver
+18/01/14 14:25:58.515 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 225
+18/01/14 14:25:58.515 Executor task launch worker for task 225 INFO Executor: Running task 24.0 in stage 1.0 (TID 225)
+18/01/14 14:25:58.521 Executor task launch worker for task 225 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.521 Executor task launch worker for task 225 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.526 Executor task launch worker for task 225 INFO Executor: Finished task 24.0 in stage 1.0 (TID 225). 1047 bytes result sent to driver
+18/01/14 14:25:58.528 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 226
+18/01/14 14:25:58.528 Executor task launch worker for task 226 INFO Executor: Running task 25.0 in stage 1.0 (TID 226)
+18/01/14 14:25:58.533 Executor task launch worker for task 226 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.533 Executor task launch worker for task 226 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.539 Executor task launch worker for task 226 INFO Executor: Finished task 25.0 in stage 1.0 (TID 226). 1047 bytes result sent to driver
+18/01/14 14:25:58.542 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 227
+18/01/14 14:25:58.542 Executor task launch worker for task 227 INFO Executor: Running task 26.0 in stage 1.0 (TID 227)
+18/01/14 14:25:58.546 Executor task launch worker for task 227 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.547 Executor task launch worker for task 227 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.552 Executor task launch worker for task 227 INFO Executor: Finished task 26.0 in stage 1.0 (TID 227). 1047 bytes result sent to driver
+18/01/14 14:25:58.555 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 228
+18/01/14 14:25:58.555 Executor task launch worker for task 228 INFO Executor: Running task 27.0 in stage 1.0 (TID 228)
+18/01/14 14:25:58.558 Executor task launch worker for task 228 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.559 Executor task launch worker for task 228 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.563 Executor task launch worker for task 228 INFO Executor: Finished task 27.0 in stage 1.0 (TID 228). 1047 bytes result sent to driver
+18/01/14 14:25:58.565 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 229
+18/01/14 14:25:58.565 Executor task launch worker for task 229 INFO Executor: Running task 28.0 in stage 1.0 (TID 229)
+18/01/14 14:25:58.570 Executor task launch worker for task 229 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.571 Executor task launch worker for task 229 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.575 Executor task launch worker for task 229 INFO Executor: Finished task 28.0 in stage 1.0 (TID 229). 1047 bytes result sent to driver
+18/01/14 14:25:58.577 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 230
+18/01/14 14:25:58.578 Executor task launch worker for task 230 INFO Executor: Running task 29.0 in stage 1.0 (TID 230)
+18/01/14 14:25:58.583 Executor task launch worker for task 230 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.585 Executor task launch worker for task 230 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 2 ms
+18/01/14 14:25:58.596 Executor task launch worker for task 230 INFO Executor: Finished task 29.0 in stage 1.0 (TID 230). 1047 bytes result sent to driver
+18/01/14 14:25:58.600 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 231
+18/01/14 14:25:58.746 Executor task launch worker for task 231 INFO Executor: Running task 30.0 in stage 1.0 (TID 231)
+18/01/14 14:25:58.786 Executor task launch worker for task 231 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.786 Executor task launch worker for task 231 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.789 Executor task launch worker for task 231 INFO Executor: Finished task 30.0 in stage 1.0 (TID 231). 1047 bytes result sent to driver
+18/01/14 14:25:58.792 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 246
+18/01/14 14:25:58.793 Executor task launch worker for task 246 INFO Executor: Running task 45.0 in stage 1.0 (TID 246)
+18/01/14 14:25:58.796 Executor task launch worker for task 246 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.796 Executor task launch worker for task 246 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.799 Executor task launch worker for task 246 INFO Executor: Finished task 45.0 in stage 1.0 (TID 246). 1047 bytes result sent to driver
+18/01/14 14:25:58.802 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 247
+18/01/14 14:25:58.802 Executor task launch worker for task 247 INFO Executor: Running task 46.0 in stage 1.0 (TID 247)
+18/01/14 14:25:58.806 Executor task launch worker for task 247 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.806 Executor task launch worker for task 247 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.810 Executor task launch worker for task 247 INFO Executor: Finished task 46.0 in stage 1.0 (TID 247). 1047 bytes result sent to driver
+18/01/14 14:25:58.812 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 248
+18/01/14 14:25:58.813 Executor task launch worker for task 248 INFO Executor: Running task 47.0 in stage 1.0 (TID 248)
+18/01/14 14:25:58.816 Executor task launch worker for task 248 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.816 Executor task launch worker for task 248 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.819 Executor task launch worker for task 248 INFO Executor: Finished task 47.0 in stage 1.0 (TID 248). 1047 bytes result sent to driver
+18/01/14 14:25:58.821 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 249
+18/01/14 14:25:58.822 Executor task launch worker for task 249 INFO Executor: Running task 48.0 in stage 1.0 (TID 249)
+18/01/14 14:25:58.826 Executor task launch worker for task 249 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.827 Executor task launch worker for task 249 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.830 Executor task launch worker for task 249 INFO Executor: Finished task 48.0 in stage 1.0 (TID 249). 1047 bytes result sent to driver
+18/01/14 14:25:58.832 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 250
+18/01/14 14:25:58.833 Executor task launch worker for task 250 INFO Executor: Running task 49.0 in stage 1.0 (TID 250)
+18/01/14 14:25:58.835 Executor task launch worker for task 250 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.835 Executor task launch worker for task 250 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:58.839 Executor task launch worker for task 250 INFO Executor: Finished task 49.0 in stage 1.0 (TID 250). 1047 bytes result sent to driver
+18/01/14 14:25:58.841 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 251
+18/01/14 14:25:58.841 Executor task launch worker for task 251 INFO Executor: Running task 50.0 in stage 1.0 (TID 251)
+18/01/14 14:25:58.846 Executor task launch worker for task 251 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:58.846 Executor task launch worker for task 251 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:58.850 Executor task launch worker for task 251 INFO Executor: Finished task 50.0 in stage 1.0 (TID 251). 1047 bytes result sent to driver
+18/01/14 14:25:58.853 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 252
+18/01/14 14:25:58.991 Executor task launch worker for task 252 INFO Executor: Running task 51.0 in stage 1.0 (TID 252)
+18/01/14 14:25:59.016 Executor task launch worker for task 252 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.016 Executor task launch worker for task 252 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.028 Executor task launch worker for task 252 INFO Executor: Finished task 51.0 in stage 1.0 (TID 252). 1090 bytes result sent to driver
+18/01/14 14:25:59.032 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 258
+18/01/14 14:25:59.032 Executor task launch worker for task 258 INFO Executor: Running task 57.0 in stage 1.0 (TID 258)
+18/01/14 14:25:59.046 Executor task launch worker for task 258 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.046 Executor task launch worker for task 258 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.056 Executor task launch worker for task 258 INFO Executor: Finished task 57.0 in stage 1.0 (TID 258). 1047 bytes result sent to driver
+18/01/14 14:25:59.058 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 259
+18/01/14 14:25:59.064 Executor task launch worker for task 259 INFO Executor: Running task 58.0 in stage 1.0 (TID 259)
+18/01/14 14:25:59.071 Executor task launch worker for task 259 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.072 Executor task launch worker for task 259 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.080 Executor task launch worker for task 259 INFO Executor: Finished task 58.0 in stage 1.0 (TID 259). 1047 bytes result sent to driver
+18/01/14 14:25:59.082 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 260
+18/01/14 14:25:59.083 Executor task launch worker for task 260 INFO Executor: Running task 59.0 in stage 1.0 (TID 260)
+18/01/14 14:25:59.085 Executor task launch worker for task 260 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.085 Executor task launch worker for task 260 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.089 Executor task launch worker for task 260 INFO Executor: Finished task 59.0 in stage 1.0 (TID 260). 1004 bytes result sent to driver
+18/01/14 14:25:59.092 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 261
+18/01/14 14:25:59.093 Executor task launch worker for task 261 INFO Executor: Running task 60.0 in stage 1.0 (TID 261)
+18/01/14 14:25:59.095 Executor task launch worker for task 261 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.095 Executor task launch worker for task 261 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.099 Executor task launch worker for task 261 INFO Executor: Finished task 60.0 in stage 1.0 (TID 261). 1047 bytes result sent to driver
+18/01/14 14:25:59.101 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 262
+18/01/14 14:25:59.226 Executor task launch worker for task 262 INFO Executor: Running task 61.0 in stage 1.0 (TID 262)
+18/01/14 14:25:59.232 Executor task launch worker for task 262 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.232 Executor task launch worker for task 262 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.242 Executor task launch worker for task 262 INFO Executor: Finished task 61.0 in stage 1.0 (TID 262). 1047 bytes result sent to driver
+18/01/14 14:25:59.244 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 273
+18/01/14 14:25:59.245 Executor task launch worker for task 273 INFO Executor: Running task 72.0 in stage 1.0 (TID 273)
+18/01/14 14:25:59.250 Executor task launch worker for task 273 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.250 Executor task launch worker for task 273 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.259 Executor task launch worker for task 273 INFO Executor: Finished task 72.0 in stage 1.0 (TID 273). 1047 bytes result sent to driver
+18/01/14 14:25:59.261 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 274
+18/01/14 14:25:59.262 Executor task launch worker for task 274 INFO Executor: Running task 73.0 in stage 1.0 (TID 274)
+18/01/14 14:25:59.267 Executor task launch worker for task 274 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.267 Executor task launch worker for task 274 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.273 Executor task launch worker for task 274 INFO Executor: Finished task 73.0 in stage 1.0 (TID 274). 1047 bytes result sent to driver
+18/01/14 14:25:59.276 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 275
+18/01/14 14:25:59.276 Executor task launch worker for task 275 INFO Executor: Running task 74.0 in stage 1.0 (TID 275)
+18/01/14 14:25:59.279 Executor task launch worker for task 275 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.279 Executor task launch worker for task 275 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.283 Executor task launch worker for task 275 INFO Executor: Finished task 74.0 in stage 1.0 (TID 275). 1047 bytes result sent to driver
+18/01/14 14:25:59.285 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 276
+18/01/14 14:25:59.286 Executor task launch worker for task 276 INFO Executor: Running task 75.0 in stage 1.0 (TID 276)
+18/01/14 14:25:59.288 Executor task launch worker for task 276 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.288 Executor task launch worker for task 276 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.291 Executor task launch worker for task 276 INFO Executor: Finished task 75.0 in stage 1.0 (TID 276). 1047 bytes result sent to driver
+18/01/14 14:25:59.294 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 277
+18/01/14 14:25:59.294 Executor task launch worker for task 277 INFO Executor: Running task 76.0 in stage 1.0 (TID 277)
+18/01/14 14:25:59.297 Executor task launch worker for task 277 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.297 Executor task launch worker for task 277 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.300 Executor task launch worker for task 277 INFO Executor: Finished task 76.0 in stage 1.0 (TID 277). 1047 bytes result sent to driver
+18/01/14 14:25:59.302 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 278
+18/01/14 14:25:59.303 Executor task launch worker for task 278 INFO Executor: Running task 77.0 in stage 1.0 (TID 278)
+18/01/14 14:25:59.305 Executor task launch worker for task 278 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.305 Executor task launch worker for task 278 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.309 Executor task launch worker for task 278 INFO Executor: Finished task 77.0 in stage 1.0 (TID 278). 1004 bytes result sent to driver
+18/01/14 14:25:59.312 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 279
+18/01/14 14:25:59.312 Executor task launch worker for task 279 INFO Executor: Running task 78.0 in stage 1.0 (TID 279)
+18/01/14 14:25:59.319 Executor task launch worker for task 279 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.320 Executor task launch worker for task 279 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.326 Executor task launch worker for task 279 INFO Executor: Finished task 78.0 in stage 1.0 (TID 279). 1047 bytes result sent to driver
+18/01/14 14:25:59.328 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 280
+18/01/14 14:25:59.330 Executor task launch worker for task 280 INFO Executor: Running task 79.0 in stage 1.0 (TID 280)
+18/01/14 14:25:59.336 Executor task launch worker for task 280 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.336 Executor task launch worker for task 280 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.342 Executor task launch worker for task 280 INFO Executor: Finished task 79.0 in stage 1.0 (TID 280). 1047 bytes result sent to driver
+18/01/14 14:25:59.346 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 281
+18/01/14 14:25:59.346 Executor task launch worker for task 281 INFO Executor: Running task 80.0 in stage 1.0 (TID 281)
+18/01/14 14:25:59.349 Executor task launch worker for task 281 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.349 Executor task launch worker for task 281 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.480 Executor task launch worker for task 281 INFO Executor: Finished task 80.0 in stage 1.0 (TID 281). 1047 bytes result sent to driver
+18/01/14 14:25:59.483 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 291
+18/01/14 14:25:59.487 Executor task launch worker for task 291 INFO Executor: Running task 90.0 in stage 1.0 (TID 291)
+18/01/14 14:25:59.503 Executor task launch worker for task 291 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.504 Executor task launch worker for task 291 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.511 Executor task launch worker for task 291 INFO Executor: Finished task 90.0 in stage 1.0 (TID 291). 1047 bytes result sent to driver
+18/01/14 14:25:59.514 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 292
+18/01/14 14:25:59.514 Executor task launch worker for task 292 INFO Executor: Running task 91.0 in stage 1.0 (TID 292)
+18/01/14 14:25:59.516 Executor task launch worker for task 292 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.517 Executor task launch worker for task 292 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.541 Executor task launch worker for task 292 INFO Executor: Finished task 91.0 in stage 1.0 (TID 292). 1047 bytes result sent to driver
+18/01/14 14:25:59.543 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 293
+18/01/14 14:25:59.544 Executor task launch worker for task 293 INFO Executor: Running task 92.0 in stage 1.0 (TID 293)
+18/01/14 14:25:59.547 Executor task launch worker for task 293 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.547 Executor task launch worker for task 293 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.550 Executor task launch worker for task 293 INFO Executor: Finished task 92.0 in stage 1.0 (TID 293). 1047 bytes result sent to driver
+18/01/14 14:25:59.552 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 294
+18/01/14 14:25:59.553 Executor task launch worker for task 294 INFO Executor: Running task 93.0 in stage 1.0 (TID 294)
+18/01/14 14:25:59.555 Executor task launch worker for task 294 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.555 Executor task launch worker for task 294 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.558 Executor task launch worker for task 294 INFO Executor: Finished task 93.0 in stage 1.0 (TID 294). 1004 bytes result sent to driver
+18/01/14 14:25:59.560 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 295
+18/01/14 14:25:59.561 Executor task launch worker for task 295 INFO Executor: Running task 94.0 in stage 1.0 (TID 295)
+18/01/14 14:25:59.563 Executor task launch worker for task 295 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.563 Executor task launch worker for task 295 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.566 Executor task launch worker for task 295 INFO Executor: Finished task 94.0 in stage 1.0 (TID 295). 1004 bytes result sent to driver
+18/01/14 14:25:59.568 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 296
+18/01/14 14:25:59.568 Executor task launch worker for task 296 INFO Executor: Running task 95.0 in stage 1.0 (TID 296)
+18/01/14 14:25:59.571 Executor task launch worker for task 296 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.571 Executor task launch worker for task 296 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.579 Executor task launch worker for task 296 INFO Executor: Finished task 95.0 in stage 1.0 (TID 296). 1047 bytes result sent to driver
+18/01/14 14:25:59.582 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 297
+18/01/14 14:25:59.583 Executor task launch worker for task 297 INFO Executor: Running task 96.0 in stage 1.0 (TID 297)
+18/01/14 14:25:59.588 Executor task launch worker for task 297 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.588 Executor task launch worker for task 297 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.594 Executor task launch worker for task 297 INFO Executor: Finished task 96.0 in stage 1.0 (TID 297). 1047 bytes result sent to driver
+18/01/14 14:25:59.596 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 298
+18/01/14 14:25:59.596 Executor task launch worker for task 298 INFO Executor: Running task 97.0 in stage 1.0 (TID 298)
+18/01/14 14:25:59.598 Executor task launch worker for task 298 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.598 Executor task launch worker for task 298 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.727 Executor task launch worker for task 298 INFO Executor: Finished task 97.0 in stage 1.0 (TID 298). 1047 bytes result sent to driver
+18/01/14 14:25:59.729 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 310
+18/01/14 14:25:59.730 Executor task launch worker for task 310 INFO Executor: Running task 109.0 in stage 1.0 (TID 310)
+18/01/14 14:25:59.732 Executor task launch worker for task 310 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.732 Executor task launch worker for task 310 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.735 Executor task launch worker for task 310 INFO Executor: Finished task 109.0 in stage 1.0 (TID 310). 1047 bytes result sent to driver
+18/01/14 14:25:59.737 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 311
+18/01/14 14:25:59.737 Executor task launch worker for task 311 INFO Executor: Running task 110.0 in stage 1.0 (TID 311)
+18/01/14 14:25:59.740 Executor task launch worker for task 311 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.740 Executor task launch worker for task 311 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.745 Executor task launch worker for task 311 INFO Executor: Finished task 110.0 in stage 1.0 (TID 311). 1047 bytes result sent to driver
+18/01/14 14:25:59.747 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 312
+18/01/14 14:25:59.748 Executor task launch worker for task 312 INFO Executor: Running task 111.0 in stage 1.0 (TID 312)
+18/01/14 14:25:59.751 Executor task launch worker for task 312 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.752 Executor task launch worker for task 312 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.755 Executor task launch worker for task 312 INFO Executor: Finished task 111.0 in stage 1.0 (TID 312). 1004 bytes result sent to driver
+18/01/14 14:25:59.757 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 313
+18/01/14 14:25:59.758 Executor task launch worker for task 313 INFO Executor: Running task 112.0 in stage 1.0 (TID 313)
+18/01/14 14:25:59.763 Executor task launch worker for task 313 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.764 Executor task launch worker for task 313 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:25:59.766 Executor task launch worker for task 313 INFO Executor: Finished task 112.0 in stage 1.0 (TID 313). 1047 bytes result sent to driver
+18/01/14 14:25:59.768 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 314
+18/01/14 14:25:59.769 Executor task launch worker for task 314 INFO Executor: Running task 113.0 in stage 1.0 (TID 314)
+18/01/14 14:25:59.774 Executor task launch worker for task 314 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.774 Executor task launch worker for task 314 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.778 Executor task launch worker for task 314 INFO Executor: Finished task 113.0 in stage 1.0 (TID 314). 1047 bytes result sent to driver
+18/01/14 14:25:59.781 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 315
+18/01/14 14:25:59.781 Executor task launch worker for task 315 INFO Executor: Running task 114.0 in stage 1.0 (TID 315)
+18/01/14 14:25:59.787 Executor task launch worker for task 315 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.787 Executor task launch worker for task 315 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.790 Executor task launch worker for task 315 INFO Executor: Finished task 114.0 in stage 1.0 (TID 315). 1047 bytes result sent to driver
+18/01/14 14:25:59.792 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 316
+18/01/14 14:25:59.795 Executor task launch worker for task 316 INFO Executor: Running task 115.0 in stage 1.0 (TID 316)
+18/01/14 14:25:59.798 Executor task launch worker for task 316 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.798 Executor task launch worker for task 316 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.801 Executor task launch worker for task 316 INFO Executor: Finished task 115.0 in stage 1.0 (TID 316). 1047 bytes result sent to driver
+18/01/14 14:25:59.806 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 317
+18/01/14 14:25:59.806 Executor task launch worker for task 317 INFO Executor: Running task 116.0 in stage 1.0 (TID 317)
+18/01/14 14:25:59.809 Executor task launch worker for task 317 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.809 Executor task launch worker for task 317 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.812 Executor task launch worker for task 317 INFO Executor: Finished task 116.0 in stage 1.0 (TID 317). 1047 bytes result sent to driver
+18/01/14 14:25:59.814 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 318
+18/01/14 14:25:59.814 Executor task launch worker for task 318 INFO Executor: Running task 117.0 in stage 1.0 (TID 318)
+18/01/14 14:25:59.816 Executor task launch worker for task 318 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.816 Executor task launch worker for task 318 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.819 Executor task launch worker for task 318 INFO Executor: Finished task 117.0 in stage 1.0 (TID 318). 1047 bytes result sent to driver
+18/01/14 14:25:59.821 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 319
+18/01/14 14:25:59.822 Executor task launch worker for task 319 INFO Executor: Running task 118.0 in stage 1.0 (TID 319)
+18/01/14 14:25:59.824 Executor task launch worker for task 319 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.824 Executor task launch worker for task 319 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.827 Executor task launch worker for task 319 INFO Executor: Finished task 118.0 in stage 1.0 (TID 319). 1004 bytes result sent to driver
+18/01/14 14:25:59.829 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 320
+18/01/14 14:25:59.830 Executor task launch worker for task 320 INFO Executor: Running task 119.0 in stage 1.0 (TID 320)
+18/01/14 14:25:59.832 Executor task launch worker for task 320 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.832 Executor task launch worker for task 320 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:25:59.958 Executor task launch worker for task 320 INFO Executor: Finished task 119.0 in stage 1.0 (TID 320). 1047 bytes result sent to driver
+18/01/14 14:25:59.965 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 329
+18/01/14 14:25:59.966 Executor task launch worker for task 329 INFO Executor: Running task 128.0 in stage 1.0 (TID 329)
+18/01/14 14:25:59.980 Executor task launch worker for task 329 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:25:59.980 Executor task launch worker for task 329 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 3 ms
+18/01/14 14:25:59.990 Executor task launch worker for task 329 INFO Executor: Finished task 128.0 in stage 1.0 (TID 329). 1047 bytes result sent to driver
+18/01/14 14:25:59.993 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 332
+18/01/14 14:25:59.994 Executor task launch worker for task 332 INFO Executor: Running task 131.0 in stage 1.0 (TID 332)
+18/01/14 14:26:00.010 Executor task launch worker for task 332 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.010 Executor task launch worker for task 332 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.013 Executor task launch worker for task 332 INFO Executor: Finished task 131.0 in stage 1.0 (TID 332). 1047 bytes result sent to driver
+18/01/14 14:26:00.015 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 333
+18/01/14 14:26:00.016 Executor task launch worker for task 333 INFO Executor: Running task 132.0 in stage 1.0 (TID 333)
+18/01/14 14:26:00.018 Executor task launch worker for task 333 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.018 Executor task launch worker for task 333 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.021 Executor task launch worker for task 333 INFO Executor: Finished task 132.0 in stage 1.0 (TID 333). 1004 bytes result sent to driver
+18/01/14 14:26:00.023 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 334
+18/01/14 14:26:00.024 Executor task launch worker for task 334 INFO Executor: Running task 133.0 in stage 1.0 (TID 334)
+18/01/14 14:26:00.026 Executor task launch worker for task 334 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.026 Executor task launch worker for task 334 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.029 Executor task launch worker for task 334 INFO Executor: Finished task 133.0 in stage 1.0 (TID 334). 1004 bytes result sent to driver
+18/01/14 14:26:00.031 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 335
+18/01/14 14:26:00.031 Executor task launch worker for task 335 INFO Executor: Running task 134.0 in stage 1.0 (TID 335)
+18/01/14 14:26:00.033 Executor task launch worker for task 335 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.033 Executor task launch worker for task 335 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.037 Executor task launch worker for task 335 INFO Executor: Finished task 134.0 in stage 1.0 (TID 335). 1004 bytes result sent to driver
+18/01/14 14:26:00.039 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 336
+18/01/14 14:26:00.039 Executor task launch worker for task 336 INFO Executor: Running task 135.0 in stage 1.0 (TID 336)
+18/01/14 14:26:00.041 Executor task launch worker for task 336 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.042 Executor task launch worker for task 336 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.044 Executor task launch worker for task 336 INFO Executor: Finished task 135.0 in stage 1.0 (TID 336). 1047 bytes result sent to driver
+18/01/14 14:26:00.047 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 337
+18/01/14 14:26:00.047 Executor task launch worker for task 337 INFO Executor: Running task 136.0 in stage 1.0 (TID 337)
+18/01/14 14:26:00.051 Executor task launch worker for task 337 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.051 Executor task launch worker for task 337 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.060 Executor task launch worker for task 337 INFO Executor: Finished task 136.0 in stage 1.0 (TID 337). 1047 bytes result sent to driver
+18/01/14 14:26:00.062 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 338
+18/01/14 14:26:00.062 Executor task launch worker for task 338 INFO Executor: Running task 137.0 in stage 1.0 (TID 338)
+18/01/14 14:26:00.065 Executor task launch worker for task 338 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.066 Executor task launch worker for task 338 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.070 Executor task launch worker for task 338 INFO Executor: Finished task 137.0 in stage 1.0 (TID 338). 1047 bytes result sent to driver
+18/01/14 14:26:00.072 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 339
+18/01/14 14:26:00.072 Executor task launch worker for task 339 INFO Executor: Running task 138.0 in stage 1.0 (TID 339)
+18/01/14 14:26:00.078 Executor task launch worker for task 339 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.078 Executor task launch worker for task 339 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.082 Executor task launch worker for task 339 INFO Executor: Finished task 138.0 in stage 1.0 (TID 339). 1047 bytes result sent to driver
+18/01/14 14:26:00.084 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 340
+18/01/14 14:26:00.085 Executor task launch worker for task 340 INFO Executor: Running task 139.0 in stage 1.0 (TID 340)
+18/01/14 14:26:00.088 Executor task launch worker for task 340 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.088 Executor task launch worker for task 340 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.091 Executor task launch worker for task 340 INFO Executor: Finished task 139.0 in stage 1.0 (TID 340). 1047 bytes result sent to driver
+18/01/14 14:26:00.094 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 341
+18/01/14 14:26:00.094 Executor task launch worker for task 341 INFO Executor: Running task 140.0 in stage 1.0 (TID 341)
+18/01/14 14:26:00.096 Executor task launch worker for task 341 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.096 Executor task launch worker for task 341 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.100 Executor task launch worker for task 341 INFO Executor: Finished task 140.0 in stage 1.0 (TID 341). 1047 bytes result sent to driver
+18/01/14 14:26:00.102 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 342
+18/01/14 14:26:00.230 Executor task launch worker for task 342 INFO Executor: Running task 141.0 in stage 1.0 (TID 342)
+18/01/14 14:26:00.236 Executor task launch worker for task 342 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.237 Executor task launch worker for task 342 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.245 Executor task launch worker for task 342 INFO Executor: Finished task 141.0 in stage 1.0 (TID 342). 1047 bytes result sent to driver
+18/01/14 14:26:00.247 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 348
+18/01/14 14:26:00.248 Executor task launch worker for task 348 INFO Executor: Running task 147.0 in stage 1.0 (TID 348)
+18/01/14 14:26:00.250 Executor task launch worker for task 348 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.251 Executor task launch worker for task 348 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.261 Executor task launch worker for task 348 INFO Executor: Finished task 147.0 in stage 1.0 (TID 348). 1047 bytes result sent to driver
+18/01/14 14:26:00.263 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 349
+18/01/14 14:26:00.264 Executor task launch worker for task 349 INFO Executor: Running task 148.0 in stage 1.0 (TID 349)
+18/01/14 14:26:00.268 Executor task launch worker for task 349 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.268 Executor task launch worker for task 349 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.271 Executor task launch worker for task 349 INFO Executor: Finished task 148.0 in stage 1.0 (TID 349). 1004 bytes result sent to driver
+18/01/14 14:26:00.275 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 350
+18/01/14 14:26:00.275 Executor task launch worker for task 350 INFO Executor: Running task 149.0 in stage 1.0 (TID 350)
+18/01/14 14:26:00.278 Executor task launch worker for task 350 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.278 Executor task launch worker for task 350 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.281 Executor task launch worker for task 350 INFO Executor: Finished task 149.0 in stage 1.0 (TID 350). 1047 bytes result sent to driver
+18/01/14 14:26:00.284 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 351
+18/01/14 14:26:00.284 Executor task launch worker for task 351 INFO Executor: Running task 150.0 in stage 1.0 (TID 351)
+18/01/14 14:26:00.286 Executor task launch worker for task 351 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.287 Executor task launch worker for task 351 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.296 Executor task launch worker for task 351 INFO Executor: Finished task 150.0 in stage 1.0 (TID 351). 1047 bytes result sent to driver
+18/01/14 14:26:00.298 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 353
+18/01/14 14:26:00.298 Executor task launch worker for task 353 INFO Executor: Running task 152.0 in stage 1.0 (TID 353)
+18/01/14 14:26:00.300 Executor task launch worker for task 353 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.300 Executor task launch worker for task 353 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.304 Executor task launch worker for task 353 INFO Executor: Finished task 152.0 in stage 1.0 (TID 353). 1047 bytes result sent to driver
+18/01/14 14:26:00.306 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 354
+18/01/14 14:26:00.306 Executor task launch worker for task 354 INFO Executor: Running task 153.0 in stage 1.0 (TID 354)
+18/01/14 14:26:00.308 Executor task launch worker for task 354 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.308 Executor task launch worker for task 354 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.312 Executor task launch worker for task 354 INFO Executor: Finished task 153.0 in stage 1.0 (TID 354). 1047 bytes result sent to driver
+18/01/14 14:26:00.314 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 356
+18/01/14 14:26:00.314 Executor task launch worker for task 356 INFO Executor: Running task 155.0 in stage 1.0 (TID 356)
+18/01/14 14:26:00.317 Executor task launch worker for task 356 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.317 Executor task launch worker for task 356 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.320 Executor task launch worker for task 356 INFO Executor: Finished task 155.0 in stage 1.0 (TID 356). 1047 bytes result sent to driver
+18/01/14 14:26:00.322 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 357
+18/01/14 14:26:00.323 Executor task launch worker for task 357 INFO Executor: Running task 156.0 in stage 1.0 (TID 357)
+18/01/14 14:26:00.326 Executor task launch worker for task 357 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.326 Executor task launch worker for task 357 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.329 Executor task launch worker for task 357 INFO Executor: Finished task 156.0 in stage 1.0 (TID 357). 1047 bytes result sent to driver
+18/01/14 14:26:00.332 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 358
+18/01/14 14:26:00.332 Executor task launch worker for task 358 INFO Executor: Running task 157.0 in stage 1.0 (TID 358)
+18/01/14 14:26:00.335 Executor task launch worker for task 358 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.335 Executor task launch worker for task 358 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.339 Executor task launch worker for task 358 INFO Executor: Finished task 157.0 in stage 1.0 (TID 358). 1047 bytes result sent to driver
+18/01/14 14:26:00.341 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 360
+18/01/14 14:26:00.341 Executor task launch worker for task 360 INFO Executor: Running task 159.0 in stage 1.0 (TID 360)
+18/01/14 14:26:00.344 Executor task launch worker for task 360 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.344 Executor task launch worker for task 360 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.347 Executor task launch worker for task 360 INFO Executor: Finished task 159.0 in stage 1.0 (TID 360). 1047 bytes result sent to driver
+18/01/14 14:26:00.349 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 361
+18/01/14 14:26:00.350 Executor task launch worker for task 361 INFO Executor: Running task 160.0 in stage 1.0 (TID 361)
+18/01/14 14:26:00.352 Executor task launch worker for task 361 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.352 Executor task launch worker for task 361 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.515 Executor task launch worker for task 361 INFO Executor: Finished task 160.0 in stage 1.0 (TID 361). 1004 bytes result sent to driver
+18/01/14 14:26:00.518 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 370
+18/01/14 14:26:00.519 Executor task launch worker for task 370 INFO Executor: Running task 169.0 in stage 1.0 (TID 370)
+18/01/14 14:26:00.521 Executor task launch worker for task 370 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.521 Executor task launch worker for task 370 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.526 Executor task launch worker for task 370 INFO Executor: Finished task 169.0 in stage 1.0 (TID 370). 1004 bytes result sent to driver
+18/01/14 14:26:00.528 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 371
+18/01/14 14:26:00.528 Executor task launch worker for task 371 INFO Executor: Running task 170.0 in stage 1.0 (TID 371)
+18/01/14 14:26:00.530 Executor task launch worker for task 371 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.531 Executor task launch worker for task 371 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.534 Executor task launch worker for task 371 INFO Executor: Finished task 170.0 in stage 1.0 (TID 371). 1047 bytes result sent to driver
+18/01/14 14:26:00.536 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 372
+18/01/14 14:26:00.536 Executor task launch worker for task 372 INFO Executor: Running task 171.0 in stage 1.0 (TID 372)
+18/01/14 14:26:00.538 Executor task launch worker for task 372 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.538 Executor task launch worker for task 372 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.541 Executor task launch worker for task 372 INFO Executor: Finished task 171.0 in stage 1.0 (TID 372). 1004 bytes result sent to driver
+18/01/14 14:26:00.544 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 373
+18/01/14 14:26:00.544 Executor task launch worker for task 373 INFO Executor: Running task 172.0 in stage 1.0 (TID 373)
+18/01/14 14:26:00.547 Executor task launch worker for task 373 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.547 Executor task launch worker for task 373 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.549 Executor task launch worker for task 373 INFO Executor: Finished task 172.0 in stage 1.0 (TID 373). 1047 bytes result sent to driver
+18/01/14 14:26:00.552 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 374
+18/01/14 14:26:00.552 Executor task launch worker for task 374 INFO Executor: Running task 173.0 in stage 1.0 (TID 374)
+18/01/14 14:26:00.554 Executor task launch worker for task 374 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.554 Executor task launch worker for task 374 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.559 Executor task launch worker for task 374 INFO Executor: Finished task 173.0 in stage 1.0 (TID 374). 1047 bytes result sent to driver
+18/01/14 14:26:00.561 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 375
+18/01/14 14:26:00.561 Executor task launch worker for task 375 INFO Executor: Running task 174.0 in stage 1.0 (TID 375)
+18/01/14 14:26:00.564 Executor task launch worker for task 375 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.564 Executor task launch worker for task 375 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.570 Executor task launch worker for task 375 INFO Executor: Finished task 174.0 in stage 1.0 (TID 375). 1047 bytes result sent to driver
+18/01/14 14:26:00.573 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 376
+18/01/14 14:26:00.573 Executor task launch worker for task 376 INFO Executor: Running task 175.0 in stage 1.0 (TID 376)
+18/01/14 14:26:00.581 Executor task launch worker for task 376 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.581 Executor task launch worker for task 376 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.585 Executor task launch worker for task 376 INFO Executor: Finished task 175.0 in stage 1.0 (TID 376). 1047 bytes result sent to driver
+18/01/14 14:26:00.588 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 377
+18/01/14 14:26:00.588 Executor task launch worker for task 377 INFO Executor: Running task 176.0 in stage 1.0 (TID 377)
+18/01/14 14:26:00.591 Executor task launch worker for task 377 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.591 Executor task launch worker for task 377 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.596 Executor task launch worker for task 377 INFO Executor: Finished task 176.0 in stage 1.0 (TID 377). 1047 bytes result sent to driver
+18/01/14 14:26:00.598 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 378
+18/01/14 14:26:00.598 Executor task launch worker for task 378 INFO Executor: Running task 177.0 in stage 1.0 (TID 378)
+18/01/14 14:26:00.601 Executor task launch worker for task 378 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.601 Executor task launch worker for task 378 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.604 Executor task launch worker for task 378 INFO Executor: Finished task 177.0 in stage 1.0 (TID 378). 1047 bytes result sent to driver
+18/01/14 14:26:00.606 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 379
+18/01/14 14:26:00.606 Executor task launch worker for task 379 INFO Executor: Running task 178.0 in stage 1.0 (TID 379)
+18/01/14 14:26:00.609 Executor task launch worker for task 379 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.609 Executor task launch worker for task 379 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.613 Executor task launch worker for task 379 INFO Executor: Finished task 178.0 in stage 1.0 (TID 379). 1047 bytes result sent to driver
+18/01/14 14:26:00.615 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 381
+18/01/14 14:26:00.615 Executor task launch worker for task 381 INFO Executor: Running task 180.0 in stage 1.0 (TID 381)
+18/01/14 14:26:00.619 Executor task launch worker for task 381 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.619 Executor task launch worker for task 381 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.623 Executor task launch worker for task 381 INFO Executor: Finished task 180.0 in stage 1.0 (TID 381). 1047 bytes result sent to driver
+18/01/14 14:26:00.625 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 383
+18/01/14 14:26:00.625 Executor task launch worker for task 383 INFO Executor: Running task 182.0 in stage 1.0 (TID 383)
+18/01/14 14:26:00.628 Executor task launch worker for task 383 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.628 Executor task launch worker for task 383 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.632 Executor task launch worker for task 383 INFO Executor: Finished task 182.0 in stage 1.0 (TID 383). 1047 bytes result sent to driver
+18/01/14 14:26:00.634 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 385
+18/01/14 14:26:00.634 Executor task launch worker for task 385 INFO Executor: Running task 184.0 in stage 1.0 (TID 385)
+18/01/14 14:26:00.636 Executor task launch worker for task 385 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.636 Executor task launch worker for task 385 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.704 Executor task launch worker for task 385 INFO Executor: Finished task 184.0 in stage 1.0 (TID 385). 1047 bytes result sent to driver
+18/01/14 14:26:00.706 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 395
+18/01/14 14:26:00.706 Executor task launch worker for task 395 INFO Executor: Running task 194.0 in stage 1.0 (TID 395)
+18/01/14 14:26:00.709 Executor task launch worker for task 395 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.709 Executor task launch worker for task 395 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.713 Executor task launch worker for task 395 INFO Executor: Finished task 194.0 in stage 1.0 (TID 395). 1047 bytes result sent to driver
+18/01/14 14:26:00.716 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 397
+18/01/14 14:26:00.716 Executor task launch worker for task 397 INFO Executor: Running task 196.0 in stage 1.0 (TID 397)
+18/01/14 14:26:00.718 Executor task launch worker for task 397 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.719 Executor task launch worker for task 397 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.723 Executor task launch worker for task 397 INFO Executor: Finished task 196.0 in stage 1.0 (TID 397). 1047 bytes result sent to driver
+18/01/14 14:26:00.725 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 399
+18/01/14 14:26:00.726 Executor task launch worker for task 399 INFO Executor: Running task 198.0 in stage 1.0 (TID 399)
+18/01/14 14:26:00.727 Executor task launch worker for task 399 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.728 Executor task launch worker for task 399 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+18/01/14 14:26:00.750 Executor task launch worker for task 399 INFO Executor: Finished task 198.0 in stage 1.0 (TID 399). 1047 bytes result sent to driver
+18/01/14 14:26:00.752 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 401
+18/01/14 14:26:00.752 Executor task launch worker for task 401 INFO Executor: Running task 200.0 in stage 1.0 (TID 401)
+18/01/14 14:26:00.754 Executor task launch worker for task 401 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 201 blocks
+18/01/14 14:26:00.754 Executor task launch worker for task 401 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+18/01/14 14:26:00.757 Executor task launch worker for task 401 INFO Executor: Finished task 200.0 in stage 1.0 (TID 401). 1047 bytes result sent to driver
+18/01/14 14:26:00.904 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:26:00.908 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:26:00.909 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:26:00.909 Thread-1 INFO ShutdownHookManager: Shutdown hook called

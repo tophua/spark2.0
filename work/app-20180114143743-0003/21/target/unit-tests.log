@@ -1,0 +1,4 @@
+18/01/14 14:37:53.569 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 74026@MacBook
+18/01/14 14:37:53.573 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:37:53.574 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:37:53.574 main INFO SignalUtils: Registered signal handler for INT

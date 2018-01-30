@@ -1,0 +1,48 @@
+18/01/14 14:29:06.805 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 72325@MacBook
+18/01/14 14:29:06.808 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:29:06.809 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:29:06.809 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:29:07.389 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:29:07.727 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:29:07.728 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:29:07.728 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:29:07.729 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:29:07.730 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:29:08.092 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:50361 after 114 ms (0 ms spent in bootstraps)
+18/01/14 14:29:08.233 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:29:08.233 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:29:08.233 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:29:08.233 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:29:08.233 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:29:08.270 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:50361 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:29:08.356 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-81434b00-0dd0-4426-b310-f61ae73b7aab/executor-21f08d0b-f655-47b1-92c0-57f5cc6a944d/blockmgr-c1ed3588-7cbe-4f94-9644-1a81a254a16b
+18/01/14 14:29:08.382 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:29:08.738 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:50361
+18/01/14 14:29:08.776 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:29:08.777 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:50364
+18/01/14 14:29:08.780 dispatcher-event-loop-0 INFO Executor: Starting executor ID 0 on host localhost
+18/01/14 14:29:08.792 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:50364 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:29:08.834 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 50379.
+18/01/14 14:29:08.835 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:50379
+18/01/14 14:29:08.838 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:29:08.841 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(0, localhost, 50379, None)
+18/01/14 14:29:08.852 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(0, localhost, 50379, None)
+18/01/14 14:29:08.852 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(0, localhost, 50379, None)
+18/01/14 14:29:08.881 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:29:08.892 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:29:09.021 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:29:09.081 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:50371 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:29:09.171 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1255.0 B, free 546.3 MB)
+18/01/14 14:29:09.185 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 164 ms
+18/01/14 14:29:09.326 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 1872.0 B, free 546.3 MB)
+18/01/14 14:29:09.412 Executor task launch worker for task 0 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 832 bytes result sent to driver
+18/01/14 14:29:09.417 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 3
+18/01/14 14:29:09.417 Executor task launch worker for task 3 INFO Executor: Running task 3.0 in stage 0.0 (TID 3)
+18/01/14 14:29:09.445 Executor task launch worker for task 3 INFO Executor: Finished task 3.0 in stage 0.0 (TID 3). 746 bytes result sent to driver
+18/01/14 14:29:09.457 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:29:09.458 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:29:09.459 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from localhost:50364 disconnected during shutdown
+18/01/14 14:29:09.463 dispatcher-event-loop-1 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:50364. Exiting.
+18/01/14 14:29:09.465 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:29:09.484 Thread-1 INFO ShutdownHookManager: Shutdown hook called
+18/01/14 14:29:09.485 CoarseGrainedExecutorBackend-stop-executor INFO MemoryStore: MemoryStore cleared

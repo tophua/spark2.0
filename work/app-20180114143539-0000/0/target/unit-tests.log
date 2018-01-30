@@ -1,0 +1,101 @@
+18/01/14 14:35:41.190 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73604@MacBook
+18/01/14 14:35:41.193 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:35:41.193 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:35:41.193 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:35:41.723 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:35:42.100 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:35:42.101 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:35:42.101 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:35:42.101 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:35:42.106 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:35:42.472 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52373 after 110 ms (0 ms spent in bootstraps)
+18/01/14 14:35:42.569 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:35:42.569 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:35:42.569 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:35:42.569 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:35:42.569 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:35:42.599 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52373 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:42.655 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-f4553406-e3e0-4378-ad5b-4391170f14d5/blockmgr-fb776fdf-b4f6-401f-b972-99be3c7463d7
+18/01/14 14:35:42.687 main INFO MemoryStore: MemoryStore started with capacity 2.9 KB
+18/01/14 14:35:43.022 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:52373
+18/01/14 14:35:43.025 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:52376
+18/01/14 14:35:43.030 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:52376 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:43.053 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:35:43.055 dispatcher-event-loop-0 INFO Executor: Starting executor ID 0 on host localhost
+18/01/14 14:35:43.106 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 52394.
+18/01/14 14:35:43.107 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:52394
+18/01/14 14:35:43.109 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:35:43.111 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(0, localhost, 52394, None)
+18/01/14 14:35:43.119 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(0, localhost, 52394, None)
+18/01/14 14:35:43.119 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(0, localhost, 52394, None)
+18/01/14 14:35:43.129 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 1
+18/01/14 14:35:43.137 Executor task launch worker for task 1 INFO Executor: Running task 1.0 in stage 0.0 (TID 1)
+18/01/14 14:35:43.267 Executor task launch worker for task 1 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:35:43.395 Executor task launch worker for task 1 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52383 after 7 ms (0 ms spent in bootstraps)
+18/01/14 14:35:43.464 Executor task launch worker for task 1 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 879.0 B, free 2.1 KB)
+18/01/14 14:35:43.488 Executor task launch worker for task 1 INFO TorrentBroadcast: Reading broadcast variable 0 took 221 ms
+18/01/14 14:35:43.664 Executor task launch worker for task 1 INFO MemoryStore: 1 blocks selected for dropping (879.0 B bytes)
+18/01/14 14:35:43.666 Executor task launch worker for task 1 INFO BlockManager: Dropping block broadcast_0_piece0 from memory
+18/01/14 14:35:43.667 Executor task launch worker for task 1 INFO BlockManager: Writing block broadcast_0_piece0 to disk
+18/01/14 14:35:43.676 Executor task launch worker for task 1 INFO MemoryStore: After dropping 1 blocks, free memory is 2.9 KB
+18/01/14 14:35:43.679 Executor task launch worker for task 1 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 1216.0 B, free 1784.0 B)
+18/01/14 14:35:43.733 Executor task launch worker for task 1 INFO MemoryStore: 1 blocks selected for dropping (1216.0 B bytes)
+18/01/14 14:35:43.733 Executor task launch worker for task 1 INFO BlockManager: Dropping block broadcast_0 from memory
+18/01/14 14:35:43.734 Executor task launch worker for task 1 INFO BlockManager: Writing block broadcast_0 to disk
+18/01/14 14:35:44.164 Executor task launch worker for task 1 INFO MemoryStore: After dropping 1 blocks, free memory is 2.9 KB
+18/01/14 14:35:44.186 Executor task launch worker for task 1 INFO MemoryStore: Will not store rdd_0_1
+18/01/14 14:35:44.189 Executor task launch worker for task 1 WARN MemoryStore: Not enough space to cache rdd_0_1 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:44.193 Executor task launch worker for task 1 INFO MemoryStore: Memory use = 0.0 B (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 1812.0 B. Storage limit = 2.9 KB.
+18/01/14 14:35:44.199 Executor task launch worker for task 1 WARN BlockManager: Block rdd_0_1 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:44.200 Executor task launch worker for task 1 WARN BlockManager: Putting block rdd_0_1 failed
+18/01/14 14:35:44.234 Executor task launch worker for task 1 INFO Executor: Finished task 1.0 in stage 0.0 (TID 1). 832 bytes result sent to driver
+18/01/14 14:35:44.250 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 2
+18/01/14 14:35:44.252 Executor task launch worker for task 2 INFO Executor: Running task 0.0 in stage 1.0 (TID 2)
+18/01/14 14:35:44.259 Executor task launch worker for task 2 INFO TorrentBroadcast: Started reading broadcast variable 1
+18/01/14 14:35:44.268 Executor task launch worker for task 2 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 879.0 B, free 2.1 KB)
+18/01/14 14:35:44.270 Executor task launch worker for task 2 INFO TorrentBroadcast: Reading broadcast variable 1 took 11 ms
+18/01/14 14:35:44.273 Executor task launch worker for task 2 INFO MemoryStore: 1 blocks selected for dropping (879.0 B bytes)
+18/01/14 14:35:44.274 Executor task launch worker for task 2 INFO BlockManager: Dropping block broadcast_1_piece0 from memory
+18/01/14 14:35:44.274 Executor task launch worker for task 2 INFO BlockManager: Writing block broadcast_1_piece0 to disk
+18/01/14 14:35:44.277 Executor task launch worker for task 2 INFO MemoryStore: After dropping 1 blocks, free memory is 2.9 KB
+18/01/14 14:35:44.278 Executor task launch worker for task 2 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 1216.0 B, free 1784.0 B)
+18/01/14 14:35:44.287 Executor task launch worker for task 2 INFO MemoryStore: 1 blocks selected for dropping (1216.0 B bytes)
+18/01/14 14:35:44.287 Executor task launch worker for task 2 INFO BlockManager: Dropping block broadcast_1 from memory
+18/01/14 14:35:44.287 Executor task launch worker for task 2 INFO BlockManager: Writing block broadcast_1 to disk
+18/01/14 14:35:44.323 Executor task launch worker for task 2 INFO MemoryStore: After dropping 1 blocks, free memory is 2.9 KB
+18/01/14 14:35:44.332 Executor task launch worker for task 2 INFO MemoryStore: Will not store rdd_0_0
+18/01/14 14:35:44.332 Executor task launch worker for task 2 WARN MemoryStore: Not enough space to cache rdd_0_0 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:44.333 Executor task launch worker for task 2 INFO MemoryStore: Memory use = 0.0 B (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 1812.0 B. Storage limit = 2.9 KB.
+18/01/14 14:35:44.334 Executor task launch worker for task 2 WARN BlockManager: Block rdd_0_0 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:44.334 Executor task launch worker for task 2 WARN BlockManager: Putting block rdd_0_0 failed
+18/01/14 14:35:44.339 Executor task launch worker for task 2 INFO Executor: Finished task 0.0 in stage 1.0 (TID 2). 746 bytes result sent to driver
+18/01/14 14:35:44.353 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 5
+18/01/14 14:35:44.353 Executor task launch worker for task 5 INFO Executor: Running task 1.0 in stage 2.0 (TID 5)
+18/01/14 14:35:44.359 Executor task launch worker for task 5 INFO TorrentBroadcast: Started reading broadcast variable 2
+18/01/14 14:35:44.368 Executor task launch worker for task 5 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 879.0 B, free 2.1 KB)
+18/01/14 14:35:44.372 Executor task launch worker for task 5 INFO TorrentBroadcast: Reading broadcast variable 2 took 12 ms
+18/01/14 14:35:44.375 Executor task launch worker for task 5 INFO MemoryStore: 1 blocks selected for dropping (879.0 B bytes)
+18/01/14 14:35:44.375 Executor task launch worker for task 5 INFO BlockManager: Dropping block broadcast_2_piece0 from memory
+18/01/14 14:35:44.376 Executor task launch worker for task 5 INFO BlockManager: Writing block broadcast_2_piece0 to disk
+18/01/14 14:35:44.380 Executor task launch worker for task 5 INFO MemoryStore: After dropping 1 blocks, free memory is 2.9 KB
+18/01/14 14:35:44.381 Executor task launch worker for task 5 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 1216.0 B, free 1784.0 B)
+18/01/14 14:35:44.390 Executor task launch worker for task 5 INFO MemoryStore: 1 blocks selected for dropping (1216.0 B bytes)
+18/01/14 14:35:44.390 Executor task launch worker for task 5 INFO BlockManager: Dropping block broadcast_2 from memory
+18/01/14 14:35:44.390 Executor task launch worker for task 5 INFO BlockManager: Writing block broadcast_2 to disk
+18/01/14 14:35:44.400 Executor task launch worker for task 5 INFO MemoryStore: After dropping 1 blocks, free memory is 2.9 KB
+18/01/14 14:35:44.426 Executor task launch worker for task 5 INFO MemoryStore: Will not store rdd_0_1
+18/01/14 14:35:44.429 Executor task launch worker for task 5 WARN MemoryStore: Not enough space to cache rdd_0_1 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:44.430 Executor task launch worker for task 5 INFO MemoryStore: Memory use = 0.0 B (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 1812.0 B. Storage limit = 2.9 KB.
+18/01/14 14:35:44.430 Executor task launch worker for task 5 WARN BlockManager: Block rdd_0_1 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:44.430 Executor task launch worker for task 5 WARN BlockManager: Putting block rdd_0_1 failed
+18/01/14 14:35:44.434 Executor task launch worker for task 5 INFO Executor: Finished task 1.0 in stage 2.0 (TID 5). 746 bytes result sent to driver
+18/01/14 14:35:44.470 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:35:44.471 dispatcher-event-loop-0 WARN CoarseGrainedExecutorBackend: An unknown (localhost:52376) driver disconnected.
+18/01/14 14:35:44.472 dispatcher-event-loop-1 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:52376. Exiting.
+18/01/14 14:35:44.474 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:35:44.483 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:35:44.497 CoarseGrainedExecutorBackend-stop-executor INFO MemoryStore: MemoryStore cleared
+18/01/14 14:35:44.499 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:52373 disconnected during shutdown
+18/01/14 14:35:44.500 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:52373 disconnected during shutdown
+18/01/14 14:35:44.501 CoarseGrainedExecutorBackend-stop-executor INFO BlockManager: BlockManager stopped
+18/01/14 14:35:44.509 Thread-1 INFO ShutdownHookManager: Shutdown hook called

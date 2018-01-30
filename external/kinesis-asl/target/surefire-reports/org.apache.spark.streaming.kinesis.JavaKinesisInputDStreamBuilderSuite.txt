@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.spark.streaming.kinesis.JavaKinesisInputDStreamBuilderSuite
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 22.362 sec - in org.apache.spark.streaming.kinesis.JavaKinesisInputDStreamBuilderSuite

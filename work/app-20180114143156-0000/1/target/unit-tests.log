@@ -1,0 +1,174 @@
+18/01/14 14:31:58.733 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 72821@MacBook
+18/01/14 14:31:58.738 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:31:58.739 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:31:58.740 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:31:59.347 main DEBUG MutableMetricsFactory: field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginSuccess with annotation @org.apache.hadoop.metrics2.annotation.Metric(about=, sampleName=Ops, always=false, type=DEFAULT, value=[Rate of successful kerberos logins and latency (milliseconds)], valueName=Time)
+18/01/14 14:31:59.361 main DEBUG MutableMetricsFactory: field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginFailure with annotation @org.apache.hadoop.metrics2.annotation.Metric(about=, sampleName=Ops, always=false, type=DEFAULT, value=[Rate of failed kerberos logins and latency (milliseconds)], valueName=Time)
+18/01/14 14:31:59.361 main DEBUG MutableMetricsFactory: field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.getGroups with annotation @org.apache.hadoop.metrics2.annotation.Metric(about=, sampleName=Ops, always=false, type=DEFAULT, value=[GetGroups], valueName=Time)
+18/01/14 14:31:59.363 main DEBUG MetricsSystemImpl: UgiMetrics, User and group related metrics
+18/01/14 14:31:59.414 main DEBUG KerberosName: Kerberos krb5 configuration not found, setting default realm to empty
+18/01/14 14:31:59.423 main DEBUG Groups:  Creating new Groups object
+18/01/14 14:31:59.429 main DEBUG NativeCodeLoader: Trying to load the custom-built native-hadoop library...
+18/01/14 14:31:59.431 main DEBUG NativeCodeLoader: Failed to load native-hadoop with error: java.lang.UnsatisfiedLinkError: no hadoop in java.library.path
+18/01/14 14:31:59.431 main DEBUG NativeCodeLoader: java.library.path=/Users/apple/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+18/01/14 14:31:59.432 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:31:59.432 main DEBUG PerformanceAdvisory: Falling back to shell based
+18/01/14 14:31:59.436 main DEBUG JniBasedUnixGroupsMappingWithFallback: Group mapping impl=org.apache.hadoop.security.ShellBasedUnixGroupsMapping
+18/01/14 14:31:59.656 main DEBUG Shell: Failed to detect a valid hadoop home directory
+java.io.IOException: Hadoop home directory /Users/apple/Software/hadoop2.7.4 does not exist, is not a directory, or is not an absolute path.
+	at org.apache.hadoop.util.Shell.checkHadoopHome(Shell.java:335)
+	at org.apache.hadoop.util.Shell.<clinit>(Shell.java:350)
+	at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:79)
+	at org.apache.hadoop.security.Groups.parseStaticMapping(Groups.java:116)
+	at org.apache.hadoop.security.Groups.<init>(Groups.java:93)
+	at org.apache.hadoop.security.Groups.<init>(Groups.java:73)
+	at org.apache.hadoop.security.Groups.getUserToGroupsMappingService(Groups.java:293)
+	at org.apache.hadoop.security.UserGroupInformation.initialize(UserGroupInformation.java:283)
+	at org.apache.hadoop.security.UserGroupInformation.setConfiguration(UserGroupInformation.java:311)
+	at org.apache.spark.deploy.SparkHadoopUtil.<init>(SparkHadoopUtil.scala:53)
+	at org.apache.spark.deploy.SparkHadoopUtil$.hadoop$lzycompute(SparkHadoopUtil.scala:424)
+	at org.apache.spark.deploy.SparkHadoopUtil$.hadoop(SparkHadoopUtil.scala:424)
+	at org.apache.spark.deploy.SparkHadoopUtil$.get(SparkHadoopUtil.scala:452)
+	at org.apache.spark.executor.CoarseGrainedExecutorBackend$.run(CoarseGrainedExecutorBackend.scala:188)
+	at org.apache.spark.executor.CoarseGrainedExecutorBackend$.main(CoarseGrainedExecutorBackend.scala:288)
+	at org.apache.spark.executor.CoarseGrainedExecutorBackend.main(CoarseGrainedExecutorBackend.scala)
+18/01/14 14:31:59.765 main DEBUG Shell: setsid is not available on this machine. So not using it.
+18/01/14 14:31:59.765 main DEBUG Shell: setsid exited with exit code 0
+18/01/14 14:31:59.804 main DEBUG Groups: Group mapping impl=org.apache.hadoop.security.JniBasedUnixGroupsMappingWithFallback; cacheTimeout=300000; warningDeltaMs=5000
+18/01/14 14:31:59.808 main DEBUG SparkHadoopUtil: running as user: liush
+18/01/14 14:31:59.814 main DEBUG UserGroupInformation: hadoop login
+18/01/14 14:31:59.815 main DEBUG UserGroupInformation: hadoop login commit
+18/01/14 14:31:59.820 main DEBUG UserGroupInformation: using local user:UnixPrincipal: liush
+18/01/14 14:31:59.820 main DEBUG UserGroupInformation: Using user: "UnixPrincipal: liush" with name liush
+18/01/14 14:31:59.820 main DEBUG UserGroupInformation: User entry: "liush"
+18/01/14 14:31:59.820 main DEBUG UserGroupInformation: UGI loginUser:liush (auth:SIMPLE)
+18/01/14 14:31:59.825 main DEBUG UserGroupInformation: PrivilegedAction as:liush (auth:SIMPLE) from:org.apache.spark.deploy.SparkHadoopUtil.runAsSparkUser(SparkHadoopUtil.scala:68)
+18/01/14 14:31:59.879 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:31:59.880 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:31:59.881 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:31:59.882 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:31:59.882 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:31:59.900 main DEBUG SecurityManager: Created SSL options for fs: SSLOptions{enabled=false, keyStore=None, keyStorePassword=None, trustStore=None, trustStorePassword=None, protocol=None, enabledAlgorithms=Set()}
+18/01/14 14:32:00.160 netty-rpc-connection-0 DEBUG TransportClientFactory: Creating new connection to /192.168.6.44:51171
+18/01/14 14:32:00.321 netty-rpc-connection-0 DEBUG TransportClientFactory: Connection to /192.168.6.44:51171 successful, running bootstraps...
+18/01/14 14:32:00.321 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51171 after 151 ms (0 ms spent in bootstraps)
+18/01/14 14:32:00.500 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:32:00.501 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:32:00.501 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:32:00.501 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:32:00.501 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:32:00.502 main DEBUG SecurityManager: Created SSL options for fs: SSLOptions{enabled=false, keyStore=None, keyStorePassword=None, trustStore=None, trustStorePassword=None, protocol=None, enabledAlgorithms=Set()}
+18/01/14 14:32:00.506 main DEBUG SparkEnv: Using serializer: class org.apache.spark.serializer.JavaSerializer
+18/01/14 14:32:00.529 netty-rpc-connection-0 DEBUG TransportClientFactory: Creating new connection to /192.168.6.44:51171
+18/01/14 14:32:00.531 netty-rpc-connection-0 DEBUG TransportClientFactory: Connection to /192.168.6.44:51171 successful, running bootstraps...
+18/01/14 14:32:00.531 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51171 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:32:00.695 main INFO DiskBlockManager: Created local directory at /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/blockmgr-324948db-6f4b-439e-bebd-a21665de92a8
+18/01/14 14:32:00.702 main DEBUG DiskBlockManager: Adding shutdown hook
+18/01/14 14:32:00.711 main DEBUG ShutdownHookManager: Adding shutdown hook
+18/01/14 14:32:00.749 main INFO MemoryStore: MemoryStore started with capacity 366.3 MB
+18/01/14 14:32:01.273 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:51171
+18/01/14 14:32:01.278 main INFO WorkerWatcher: Connecting to worker spark://Worker@192.168.6.44:51175
+18/01/14 14:32:01.279 netty-rpc-connection-1 DEBUG TransportClientFactory: Creating new connection to /192.168.6.44:51175
+18/01/14 14:32:01.282 netty-rpc-connection-1 DEBUG TransportClientFactory: Connection to /192.168.6.44:51175 successful, running bootstraps...
+18/01/14 14:32:01.283 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51175 after 3 ms (0 ms spent in bootstraps)
+18/01/14 14:32:01.321 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:32:01.325 dispatcher-event-loop-1 INFO Executor: Starting executor ID 1 on host 192.168.6.44
+18/01/14 14:32:01.399 dispatcher-event-loop-1 DEBUG TransportServer: Shuffle server started on port: 51191
+18/01/14 14:32:01.401 dispatcher-event-loop-1 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 51191.
+18/01/14 14:32:01.402 dispatcher-event-loop-1 INFO NettyBlockTransferService: Server created on 192.168.6.44:51191
+18/01/14 14:32:01.408 dispatcher-event-loop-1 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:32:01.412 dispatcher-event-loop-1 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(1, 192.168.6.44, 51191, None)
+18/01/14 14:32:01.449 dispatcher-event-loop-1 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(1, 192.168.6.44, 51191, None)
+18/01/14 14:32:01.450 dispatcher-event-loop-1 INFO BlockManager: Initialized BlockManager: BlockManagerId(1, 192.168.6.44, 51191, None)
+18/01/14 14:32:01.465 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:32:01.474 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:32:01.510 Executor task launch worker for task 0 INFO Executor: Fetching spark://192.168.6.44:51171/jars/my.great.dep_mylib-0.1.jar with timestamp 1515911515469
+18/01/14 14:32:01.632 Executor task launch worker for task 0 DEBUG TransportClientFactory: Creating new connection to /192.168.6.44:51171
+18/01/14 14:32:01.637 Executor task launch worker for task 0 DEBUG TransportClientFactory: Connection to /192.168.6.44:51171 successful, running bootstraps...
+18/01/14 14:32:01.637 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51171 after 5 ms (0 ms spent in bootstraps)
+18/01/14 14:32:01.643 Executor task launch worker for task 0 DEBUG TransportClient: Sending stream request for /jars/my.great.dep_mylib-0.1.jar to /192.168.6.44:51171
+18/01/14 14:32:01.664 Executor task launch worker for task 0 INFO Utils: Fetching spark://192.168.6.44:51171/jars/my.great.dep_mylib-0.1.jar to /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf/fetchFileTemp25096129122434113.tmp
+18/01/14 14:32:01.698 Executor task launch worker for task 0 INFO Utils: Copying /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf/5374638181515911515469_cache to /Users/apple/Idea/workspace/spark/work/app-20180114143156-0000/1/./my.great.dep_mylib-0.1.jar
+18/01/14 14:32:01.726 Executor task launch worker for task 0 INFO Executor: Adding file:/Users/apple/Idea/workspace/spark/work/app-20180114143156-0000/1/./my.great.dep_mylib-0.1.jar to class loader
+18/01/14 14:32:01.726 Executor task launch worker for task 0 INFO Executor: Fetching spark://192.168.6.44:51171/jars/testJar-1515911502149.jar with timestamp 1515911515469
+18/01/14 14:32:01.727 Executor task launch worker for task 0 DEBUG TransportClient: Sending stream request for /jars/testJar-1515911502149.jar to /192.168.6.44:51171
+18/01/14 14:32:01.727 Executor task launch worker for task 0 INFO Utils: Fetching spark://192.168.6.44:51171/jars/testJar-1515911502149.jar to /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf/fetchFileTemp3015829972456134076.tmp
+18/01/14 14:32:01.730 Executor task launch worker for task 0 INFO Utils: Copying /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf/-16097512561515911515469_cache to /Users/apple/Idea/workspace/spark/work/app-20180114143156-0000/1/./testJar-1515911502149.jar
+18/01/14 14:32:01.737 Executor task launch worker for task 0 INFO Executor: Adding file:/Users/apple/Idea/workspace/spark/work/app-20180114143156-0000/1/./testJar-1515911502149.jar to class loader
+18/01/14 14:32:01.738 Executor task launch worker for task 0 INFO Executor: Fetching spark://192.168.6.44:51171/jars/my.great.lib_mylib-0.1.jar with timestamp 1515911515468
+18/01/14 14:32:01.738 Executor task launch worker for task 0 DEBUG TransportClient: Sending stream request for /jars/my.great.lib_mylib-0.1.jar to /192.168.6.44:51171
+18/01/14 14:32:01.739 Executor task launch worker for task 0 INFO Utils: Fetching spark://192.168.6.44:51171/jars/my.great.lib_mylib-0.1.jar to /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf/fetchFileTemp3914735698763734676.tmp
+18/01/14 14:32:01.741 Executor task launch worker for task 0 INFO Utils: Copying /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf/11009812481515911515468_cache to /Users/apple/Idea/workspace/spark/work/app-20180114143156-0000/1/./my.great.lib_mylib-0.1.jar
+18/01/14 14:32:01.751 Executor task launch worker for task 0 INFO Executor: Adding file:/Users/apple/Idea/workspace/spark/work/app-20180114143156-0000/1/./my.great.lib_mylib-0.1.jar to class loader
+18/01/14 14:32:01.786 Executor task launch worker for task 0 DEBUG Executor: Task 0's epoch is 0
+18/01/14 14:32:01.874 Executor task launch worker for task 0 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:01.876 Executor task launch worker for task 0 DEBUG BlockManager: Block broadcast_0 was not found
+18/01/14 14:32:01.878 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:32:02.024 Executor task launch worker for task 0 DEBUG TorrentBroadcast: Reading piece broadcast_0_piece0 of broadcast_0
+18/01/14 14:32:02.027 Executor task launch worker for task 0 DEBUG BlockManager: Getting local block broadcast_0_piece0 as bytes
+18/01/14 14:32:02.053 Executor task launch worker for task 0 DEBUG BlockManager: Getting remote block broadcast_0_piece0
+18/01/14 14:32:02.078 Executor task launch worker for task 0 DEBUG BlockManager: Getting remote block broadcast_0_piece0 from BlockManagerId(driver, 192.168.6.44, 51182, None)
+18/01/14 14:32:02.093 Executor task launch worker for task 0 DEBUG TransportClientFactory: Creating new connection to /192.168.6.44:51182
+18/01/14 14:32:02.095 Executor task launch worker for task 0 DEBUG TransportClientFactory: Connection to /192.168.6.44:51182 successful, running bootstraps...
+18/01/14 14:32:02.100 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51182 after 6 ms (4 ms spent in bootstraps)
+18/01/14 14:32:02.209 shuffle-client-4-1 DEBUG TransportClient: Sending fetch chunk request 0 to /192.168.6.44:51182
+18/01/14 14:32:02.304 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1364.0 B, free 366.3 MB)
+18/01/14 14:32:02.326 Executor task launch worker for task 0 DEBUG BlockManagerMaster: Updated info of block broadcast_0_piece0
+18/01/14 14:32:02.327 Executor task launch worker for task 0 DEBUG BlockManager: Told master about block broadcast_0_piece0
+18/01/14 14:32:02.328 Executor task launch worker for task 0 DEBUG BlockManager: Put block broadcast_0_piece0 locally took  77 ms
+18/01/14 14:32:02.330 Executor task launch worker for task 0 DEBUG BlockManager: Putting block broadcast_0_piece0 without replication took  80 ms
+18/01/14 14:32:02.331 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 453 ms
+18/01/14 14:32:02.527 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 2.1 KB, free 366.3 MB)
+18/01/14 14:32:02.546 Executor task launch worker for task 0 DEBUG BlockManager: Put block broadcast_0 locally took  172 ms
+18/01/14 14:32:02.547 Executor task launch worker for task 0 DEBUG BlockManager: Putting block broadcast_0 without replication took  174 ms
+18/01/14 14:32:02.669 Executor task launch worker for task 0 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 751 bytes result sent to driver
+18/01/14 14:32:02.682 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 2
+18/01/14 14:32:02.682 Executor task launch worker for task 2 INFO Executor: Running task 2.0 in stage 0.0 (TID 2)
+18/01/14 14:32:02.695 Executor task launch worker for task 2 DEBUG Executor: Task 2's epoch is 0
+18/01/14 14:32:02.707 Executor task launch worker for task 2 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.711 Executor task launch worker for task 2 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.743 Executor task launch worker for task 2 INFO Executor: Finished task 2.0 in stage 0.0 (TID 2). 751 bytes result sent to driver
+18/01/14 14:32:02.753 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 3
+18/01/14 14:32:02.756 Executor task launch worker for task 3 INFO Executor: Running task 3.0 in stage 0.0 (TID 3)
+18/01/14 14:32:02.760 Executor task launch worker for task 3 DEBUG Executor: Task 3's epoch is 0
+18/01/14 14:32:02.762 Executor task launch worker for task 3 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.762 Executor task launch worker for task 3 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.767 Executor task launch worker for task 3 INFO Executor: Finished task 3.0 in stage 0.0 (TID 3). 708 bytes result sent to driver
+18/01/14 14:32:02.773 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+18/01/14 14:32:02.776 Executor task launch worker for task 4 INFO Executor: Running task 4.0 in stage 0.0 (TID 4)
+18/01/14 14:32:02.780 Executor task launch worker for task 4 DEBUG Executor: Task 4's epoch is 0
+18/01/14 14:32:02.784 Executor task launch worker for task 4 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.785 Executor task launch worker for task 4 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.790 Executor task launch worker for task 4 INFO Executor: Finished task 4.0 in stage 0.0 (TID 4). 708 bytes result sent to driver
+18/01/14 14:32:02.797 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 5
+18/01/14 14:32:02.797 Executor task launch worker for task 5 INFO Executor: Running task 5.0 in stage 0.0 (TID 5)
+18/01/14 14:32:02.802 Executor task launch worker for task 5 DEBUG Executor: Task 5's epoch is 0
+18/01/14 14:32:02.803 Executor task launch worker for task 5 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.804 Executor task launch worker for task 5 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.807 Executor task launch worker for task 5 INFO Executor: Finished task 5.0 in stage 0.0 (TID 5). 708 bytes result sent to driver
+18/01/14 14:32:02.813 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 6
+18/01/14 14:32:02.814 Executor task launch worker for task 6 INFO Executor: Running task 6.0 in stage 0.0 (TID 6)
+18/01/14 14:32:02.825 Executor task launch worker for task 6 DEBUG Executor: Task 6's epoch is 0
+18/01/14 14:32:02.831 Executor task launch worker for task 6 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.833 Executor task launch worker for task 6 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.841 Executor task launch worker for task 6 INFO Executor: Finished task 6.0 in stage 0.0 (TID 6). 751 bytes result sent to driver
+18/01/14 14:32:02.848 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 7
+18/01/14 14:32:02.852 Executor task launch worker for task 7 INFO Executor: Running task 7.0 in stage 0.0 (TID 7)
+18/01/14 14:32:02.855 Executor task launch worker for task 7 DEBUG Executor: Task 7's epoch is 0
+18/01/14 14:32:02.857 Executor task launch worker for task 7 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.858 Executor task launch worker for task 7 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.862 Executor task launch worker for task 7 INFO Executor: Finished task 7.0 in stage 0.0 (TID 7). 708 bytes result sent to driver
+18/01/14 14:32:02.867 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 8
+18/01/14 14:32:02.869 Executor task launch worker for task 8 INFO Executor: Running task 8.0 in stage 0.0 (TID 8)
+18/01/14 14:32:02.873 Executor task launch worker for task 8 DEBUG Executor: Task 8's epoch is 0
+18/01/14 14:32:02.875 Executor task launch worker for task 8 DEBUG BlockManager: Getting local block broadcast_0
+18/01/14 14:32:02.875 Executor task launch worker for task 8 DEBUG BlockManager: Level for block broadcast_0 is StorageLevel(disk, memory, deserialized, 1 replicas)
+18/01/14 14:32:02.955 Executor task launch worker for task 8 INFO Executor: Finished task 8.0 in stage 0.0 (TID 8). 708 bytes result sent to driver
+18/01/14 14:32:02.997 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:32:03.013 CoarseGrainedExecutorBackend-stop-executor INFO MemoryStore: MemoryStore cleared
+18/01/14 14:32:03.014 CoarseGrainedExecutorBackend-stop-executor INFO BlockManager: BlockManager stopped
+18/01/14 14:32:03.015 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:51175 disconnected during shutdown
+18/01/14 14:32:03.025 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:32:03.015 dispatcher-event-loop-0 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@192.168.6.44:51175. Exiting.
+18/01/14 14:32:03.045 Thread-1 INFO ShutdownHookManager: Shutdown hook called
+18/01/14 14:32:03.047 Thread-1 INFO ShutdownHookManager: Deleting directory /private/var/folders/b0/_07jykcx6dlfsyqdx5stxtfh0000gn/T/spark-e9d8bc10-ea38-44c7-8823-6a78fc787ea9/executor-60a399e4-7140-45a7-b81c-20110d5a9072/spark-2fd52ecb-c4a5-45a4-b13c-b9e4ac9222bf

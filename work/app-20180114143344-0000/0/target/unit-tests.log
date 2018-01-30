@@ -1,0 +1,47 @@
+18/01/14 14:33:46.023 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73285@MacBook
+18/01/14 14:33:46.027 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:33:46.028 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:33:46.028 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:33:46.825 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:33:47.222 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:33:47.223 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:33:47.224 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:33:47.225 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:33:47.226 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:33:47.688 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51821 after 136 ms (0 ms spent in bootstraps)
+18/01/14 14:33:49.003 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:33:49.003 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:33:49.003 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:33:49.003 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:33:49.004 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:33:49.034 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51821 after 3 ms (0 ms spent in bootstraps)
+18/01/14 14:33:49.167 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-ea5b66d4-79ee-42f3-aa4e-2e46d1165253/blockmgr-ee0a112e-027d-48a7-92c9-846c01aa6457
+18/01/14 14:33:49.193 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:33:49.585 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:51821
+18/01/14 14:33:49.603 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:51824
+18/01/14 14:33:49.613 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:51824 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:33:49.621 dispatcher-event-loop-1 INFO WorkerWatcher: Successfully connected to spark://Worker@localhost:51824
+18/01/14 14:33:49.644 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:33:49.646 dispatcher-event-loop-1 INFO Executor: Starting executor ID 0 on host localhost
+18/01/14 14:33:49.715 dispatcher-event-loop-1 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 51842.
+18/01/14 14:33:49.716 dispatcher-event-loop-1 INFO NettyBlockTransferService: Server created on localhost:51842
+18/01/14 14:33:49.725 dispatcher-event-loop-1 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:33:49.728 dispatcher-event-loop-1 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(0, localhost, 51842, None)
+18/01/14 14:33:49.744 dispatcher-event-loop-1 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(0, localhost, 51842, None)
+18/01/14 14:33:49.745 dispatcher-event-loop-1 INFO BlockManager: Initialized BlockManager: BlockManagerId(0, localhost, 51842, None)
+18/01/14 14:33:49.758 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 1
+18/01/14 14:33:49.767 Executor task launch worker for task 1 INFO Executor: Running task 1.0 in stage 0.0 (TID 1)
+18/01/14 14:33:49.905 Executor task launch worker for task 1 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:33:50.083 Executor task launch worker for task 1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:51840 after 8 ms (0 ms spent in bootstraps)
+18/01/14 14:33:50.228 Executor task launch worker for task 1 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1177.0 B, free 546.3 MB)
+18/01/14 14:33:50.241 Executor task launch worker for task 1 INFO TorrentBroadcast: Reading broadcast variable 0 took 336 ms
+18/01/14 14:33:50.417 Executor task launch worker for task 1 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 1744.0 B, free 546.3 MB)
+18/01/14 14:33:50.577 Executor task launch worker for task 1 INFO Executor: Finished task 1.0 in stage 0.0 (TID 1). 837 bytes result sent to driver
+18/01/14 14:33:50.586 dispatcher-event-loop-1 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:51824. Exiting.
+18/01/14 14:33:50.586 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:33:50.586 dispatcher-event-loop-0 WARN CoarseGrainedExecutorBackend: An unknown (localhost:51824) driver disconnected.
+18/01/14 14:33:50.587 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:33:50.602 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:33:50.610 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:51821 disconnected during shutdown
+18/01/14 14:33:50.611 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:51821 disconnected during shutdown
+18/01/14 14:33:50.623 Thread-1 INFO ShutdownHookManager: Shutdown hook called

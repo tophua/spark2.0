@@ -1,0 +1,94 @@
+18/01/14 14:33:29.142 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73237@MacBook
+18/01/14 14:33:29.145 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:33:29.146 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:33:29.146 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:33:29.971 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:33:30.469 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:33:30.469 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:33:30.470 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:33:30.471 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:33:30.472 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:33:30.986 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51736 after 145 ms (0 ms spent in bootstraps)
+18/01/14 14:33:31.143 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:33:31.143 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:33:31.143 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:33:31.143 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:33:31.143 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:33:31.182 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51736 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:33:31.281 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-7aad02e8-a6e2-434e-9f00-a45d4bc8cb4f/blockmgr-50a9e0f5-8301-46dd-91fc-3bbb250241fe
+18/01/14 14:33:31.318 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:33:31.832 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:51736
+18/01/14 14:33:31.837 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:51747
+18/01/14 14:33:31.843 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:51747 after 2 ms (0 ms spent in bootstraps)
+18/01/14 14:33:31.871 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:33:31.875 dispatcher-event-loop-0 INFO Executor: Starting executor ID 2 on host localhost
+18/01/14 14:33:31.957 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 51761.
+18/01/14 14:33:31.959 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:51761
+18/01/14 14:33:31.963 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:33:31.966 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(2, localhost, 51761, None)
+18/01/14 14:33:31.977 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(2, localhost, 51761, None)
+18/01/14 14:33:31.978 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(2, localhost, 51761, None)
+18/01/14 14:33:31.993 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:33:32.005 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:33:32.247 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:33:32.376 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51751 after 7 ms (0 ms spent in bootstraps)
+18/01/14 14:33:32.529 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1478.0 B, free 546.3 MB)
+18/01/14 14:33:32.546 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 299 ms
+18/01/14 14:33:32.792 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 2.2 KB, free 546.3 MB)
+18/01/14 14:33:32.972 Executor task launch worker for task 0 ERROR Executor: Exception in task 0.0 in stage 0.0 (TID 0)
+org.apache.spark.NotSerializableExn
+	at org.apache.spark.DistributedSuite$$anonfun$1$$anonfun$12.apply(DistributedSuite.scala:48)
+	at org.apache.spark.DistributedSuite$$anonfun$1$$anonfun$12.apply(DistributedSuite.scala:48)
+	at scala.collection.Iterator$$anon$11.next(Iterator.scala:409)
+	at org.apache.spark.util.Utils$.getIteratorSize(Utils.scala:1821)
+	at org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:1160)
+	at org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:1160)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:33:33.114 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+18/01/14 14:33:33.114 Executor task launch worker for task 4 INFO Executor: Running task 1.1 in stage 0.0 (TID 4)
+18/01/14 14:33:33.134 Executor task launch worker for task 4 ERROR Executor: Exception in task 1.1 in stage 0.0 (TID 4)
+org.apache.spark.NotSerializableExn
+	at org.apache.spark.DistributedSuite$$anonfun$1$$anonfun$12.apply(DistributedSuite.scala:48)
+	at org.apache.spark.DistributedSuite$$anonfun$1$$anonfun$12.apply(DistributedSuite.scala:48)
+	at scala.collection.Iterator$$anon$11.next(Iterator.scala:409)
+	at org.apache.spark.util.Utils$.getIteratorSize(Utils.scala:1821)
+	at org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:1160)
+	at org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:1160)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:33:33.307 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 10
+18/01/14 14:33:33.308 Executor task launch worker for task 10 INFO Executor: Running task 3.3 in stage 0.0 (TID 10)
+18/01/14 14:33:33.315 Executor task launch worker for task 10 ERROR Executor: Exception in task 3.3 in stage 0.0 (TID 10)
+org.apache.spark.NotSerializableExn
+	at org.apache.spark.DistributedSuite$$anonfun$1$$anonfun$12.apply(DistributedSuite.scala:48)
+	at org.apache.spark.DistributedSuite$$anonfun$1$$anonfun$12.apply(DistributedSuite.scala:48)
+	at scala.collection.Iterator$$anon$11.next(Iterator.scala:409)
+	at org.apache.spark.util.Utils$.getIteratorSize(Utils.scala:1821)
+	at org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:1160)
+	at org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:1160)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:33:33.336 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:33:33.343 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:33:33.352 Thread-1 INFO ShutdownHookManager: Shutdown hook called
+18/01/14 14:33:33.362 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver from localhost:51747 disconnected during shutdown
+18/01/14 14:33:33.362 dispatcher-event-loop-1 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:51747. Exiting.

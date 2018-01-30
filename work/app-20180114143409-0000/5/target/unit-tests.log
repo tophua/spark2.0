@@ -1,0 +1,22 @@
+18/01/14 14:34:19.296 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73381@MacBook
+18/01/14 14:34:19.298 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:34:19.299 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:34:19.299 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:34:19.805 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:34:20.141 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:34:20.142 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:34:20.142 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:34:20.143 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:34:20.143 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:34:20.713 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51932 after 141 ms (0 ms spent in bootstraps)
+18/01/14 14:34:20.834 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:34:20.835 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:34:20.835 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:34:20.835 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:34:20.836 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:34:20.865 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51932 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:34:20.953 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-61cda0c7-45c3-4202-9ce6-a51bdb755d0c/blockmgr-6f2f1b0d-4547-4b9b-a603-2c6b2a7eae7e
+18/01/14 14:34:20.982 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:34:21.112 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:34:21.115 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:34:21.136 Thread-1 INFO ShutdownHookManager: Shutdown hook called

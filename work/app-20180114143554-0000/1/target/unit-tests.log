@@ -1,0 +1,53 @@
+18/01/14 14:35:55.922 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73649@MacBook
+18/01/14 14:35:55.925 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:35:55.926 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:35:55.926 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:35:56.464 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:35:56.859 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:35:56.860 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:35:56.860 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:35:56.861 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:35:56.861 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:35:57.210 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52446 after 109 ms (0 ms spent in bootstraps)
+18/01/14 14:35:57.318 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:35:57.318 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:35:57.319 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:35:57.319 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:35:57.319 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:35:57.350 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52446 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:57.404 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-874f5ca9-5e08-44e0-b033-a25921e463c7/blockmgr-7d22fcf1-c0cc-4f02-87da-086a34c2d7e0
+18/01/14 14:35:57.427 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:35:57.743 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:52446
+18/01/14 14:35:57.745 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:52451
+18/01/14 14:35:57.754 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:52451 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:57.775 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:35:57.778 dispatcher-event-loop-1 INFO Executor: Starting executor ID 1 on host localhost
+18/01/14 14:35:57.834 dispatcher-event-loop-1 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 52467.
+18/01/14 14:35:57.835 dispatcher-event-loop-1 INFO NettyBlockTransferService: Server created on localhost:52467
+18/01/14 14:35:57.836 dispatcher-event-loop-1 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:35:57.837 dispatcher-event-loop-1 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(1, localhost, 52467, None)
+18/01/14 14:35:57.848 dispatcher-event-loop-1 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(1, localhost, 52467, None)
+18/01/14 14:35:57.849 dispatcher-event-loop-1 INFO BlockManager: Initialized BlockManager: BlockManagerId(1, localhost, 52467, None)
+18/01/14 14:35:57.860 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:35:57.867 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:35:57.982 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:35:58.051 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52456 after 5 ms (0 ms spent in bootstraps)
+18/01/14 14:35:58.118 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 884.0 B, free 546.3 MB)
+18/01/14 14:35:58.127 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 145 ms
+18/01/14 14:35:58.282 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 1224.0 B, free 546.3 MB)
+18/01/14 14:35:58.344 Executor task launch worker for task 0 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 832 bytes result sent to driver
+18/01/14 14:35:58.358 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 2
+18/01/14 14:35:58.359 Executor task launch worker for task 2 INFO Executor: Running task 0.0 in stage 1.0 (TID 2)
+18/01/14 14:35:58.367 Executor task launch worker for task 2 INFO TorrentBroadcast: Started reading broadcast variable 1
+18/01/14 14:35:58.378 Executor task launch worker for task 2 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 1204.0 B, free 546.3 MB)
+18/01/14 14:35:58.381 Executor task launch worker for task 2 INFO TorrentBroadcast: Reading broadcast variable 1 took 14 ms
+18/01/14 14:35:58.383 Executor task launch worker for task 2 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 1896.0 B, free 546.3 MB)
+18/01/14 14:35:58.399 Executor task launch worker for task 2 INFO Executor: Finished task 0.0 in stage 1.0 (TID 2). 692 bytes result sent to driver
+18/01/14 14:35:58.411 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+18/01/14 14:35:58.411 Executor task launch worker for task 4 INFO Executor: Running task 0.0 in stage 2.0 (TID 4)
+18/01/14 14:35:58.417 Executor task launch worker for task 4 INFO TorrentBroadcast: Started reading broadcast variable 2
+18/01/14 14:35:58.426 Executor task launch worker for task 4 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 1207.0 B, free 546.3 MB)
+18/01/14 14:35:58.429 Executor task launch worker for task 4 INFO TorrentBroadcast: Reading broadcast variable 2 took 12 ms
+18/01/14 14:35:58.432 Executor task launch worker for task 4 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 1896.0 B, free 546.3 MB)
+18/01/14 14:35:58.437 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:35:58.454 Thread-1 INFO ShutdownHookManager: Shutdown hook called

@@ -1,0 +1,219 @@
+18/01/14 14:39:20.722 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 74289@MacBook
+18/01/14 14:39:20.728 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:39:20.730 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:39:20.730 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:39:21.286 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:39:21.651 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:39:21.652 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:39:21.653 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:39:21.654 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:39:21.655 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:39:22.068 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:53266 after 121 ms (0 ms spent in bootstraps)
+18/01/14 14:39:22.189 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:39:22.189 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:39:22.189 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:39:22.189 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:39:22.190 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:39:22.234 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:53266 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:39:22.341 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-c083270e-d98e-4d00-b3a6-aaa88cdbb1b2/blockmgr-fee2701e-27c3-491f-a886-c4189544d604
+18/01/14 14:39:22.374 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:39:22.740 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:53266
+18/01/14 14:39:22.744 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:53269
+18/01/14 14:39:22.749 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:53269 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:39:22.752 dispatcher-event-loop-1 INFO WorkerWatcher: Successfully connected to spark://Worker@localhost:53269
+18/01/14 14:39:22.779 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:39:22.783 dispatcher-event-loop-0 INFO Executor: Starting executor ID 0 on host localhost
+18/01/14 14:39:22.846 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 53287.
+18/01/14 14:39:22.847 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:53287
+18/01/14 14:39:22.850 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:39:22.853 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(0, localhost, 53287, None)
+18/01/14 14:39:22.862 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(0, localhost, 53287, None)
+18/01/14 14:39:22.863 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(0, localhost, 53287, None)
+18/01/14 14:39:22.877 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:39:22.886 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:39:23.078 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:39:23.161 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:53277 after 2 ms (0 ms spent in bootstraps)
+18/01/14 14:39:23.268 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1686.0 B, free 546.3 MB)
+18/01/14 14:39:23.287 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 209 ms
+18/01/14 14:39:23.448 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 2.6 KB, free 546.3 MB)
+18/01/14 14:39:23.610 Executor task launch worker for task 0 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 974 bytes result sent to driver
+18/01/14 14:39:23.616 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 3
+18/01/14 14:39:23.617 Executor task launch worker for task 3 INFO Executor: Running task 1.0 in stage 1.0 (TID 3)
+18/01/14 14:39:23.636 Executor task launch worker for task 3 INFO TorrentBroadcast: Started reading broadcast variable 1
+18/01/14 14:39:23.650 Executor task launch worker for task 3 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:53288 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:39:23.697 Executor task launch worker for task 3 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 1679.0 B, free 546.3 MB)
+18/01/14 14:39:23.701 Executor task launch worker for task 3 INFO TorrentBroadcast: Reading broadcast variable 1 took 65 ms
+18/01/14 14:39:23.703 Executor task launch worker for task 3 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 2.6 KB, free 546.3 MB)
+18/01/14 14:39:23.715 Executor task launch worker for task 3 INFO Executor: Finished task 1.0 in stage 1.0 (TID 3). 888 bytes result sent to driver
+18/01/14 14:39:23.723 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+18/01/14 14:39:23.724 Executor task launch worker for task 4 INFO Executor: Running task 0.0 in stage 2.0 (TID 4)
+18/01/14 14:39:23.732 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Updating epoch to 2 and clearing cache
+18/01/14 14:39:23.734 Executor task launch worker for task 4 INFO TorrentBroadcast: Started reading broadcast variable 2
+18/01/14 14:39:23.740 Executor task launch worker for task 4 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 1885.0 B, free 546.3 MB)
+18/01/14 14:39:23.744 Executor task launch worker for task 4 INFO TorrentBroadcast: Reading broadcast variable 2 took 9 ms
+18/01/14 14:39:23.746 Executor task launch worker for task 4 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 3.1 KB, free 546.3 MB)
+18/01/14 14:39:23.784 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 0, fetching them
+18/01/14 14:39:23.786 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:23.800 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:23.814 Executor task launch worker for task 4 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:23.823 Executor task launch worker for task 4 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 19 ms
+18/01/14 14:39:23.854 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 1, fetching them
+18/01/14 14:39:23.854 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:23.858 Executor task launch worker for task 4 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:23.859 Executor task launch worker for task 4 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:23.871 Executor task launch worker for task 4 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 13 ms
+18/01/14 14:39:24.019 Executor task launch worker for task 4 INFO Executor: Finished task 0.0 in stage 2.0 (TID 4). 1219 bytes result sent to driver
+18/01/14 14:39:24.030 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 7
+18/01/14 14:39:24.035 Executor task launch worker for task 7 INFO Executor: Running task 1.0 in stage 3.0 (TID 7)
+18/01/14 14:39:24.042 Executor task launch worker for task 7 INFO TorrentBroadcast: Started reading broadcast variable 3
+18/01/14 14:39:24.050 Executor task launch worker for task 7 INFO MemoryStore: Block broadcast_3_piece0 stored as bytes in memory (estimated size 871.0 B, free 546.3 MB)
+18/01/14 14:39:24.058 Executor task launch worker for task 7 INFO TorrentBroadcast: Reading broadcast variable 3 took 16 ms
+18/01/14 14:39:24.063 Executor task launch worker for task 7 INFO MemoryStore: Block broadcast_3 stored as values in memory (estimated size 1216.0 B, free 546.3 MB)
+18/01/14 14:39:24.067 Executor task launch worker for task 7 INFO Executor: Finished task 1.0 in stage 3.0 (TID 7). 746 bytes result sent to driver
+18/01/14 14:39:24.105 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 9
+18/01/14 14:39:24.105 Executor task launch worker for task 9 INFO Executor: Running task 1.0 in stage 4.0 (TID 9)
+18/01/14 14:39:24.109 Executor task launch worker for task 9 INFO TorrentBroadcast: Started reading broadcast variable 4
+18/01/14 14:39:24.116 Executor task launch worker for task 9 INFO MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 1978.0 B, free 546.3 MB)
+18/01/14 14:39:24.129 Executor task launch worker for task 9 INFO TorrentBroadcast: Reading broadcast variable 4 took 19 ms
+18/01/14 14:39:24.134 Executor task launch worker for task 9 INFO MemoryStore: Block broadcast_4 stored as values in memory (estimated size 3.1 KB, free 546.3 MB)
+18/01/14 14:39:24.726 Executor task launch worker for task 9 INFO Executor: Finished task 1.0 in stage 4.0 (TID 9). 1060 bytes result sent to driver
+18/01/14 14:39:24.739 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 11
+18/01/14 14:39:24.739 Executor task launch worker for task 11 INFO Executor: Running task 1.0 in stage 5.0 (TID 11)
+18/01/14 14:39:24.742 Executor task launch worker for task 11 INFO MapOutputTrackerWorker: Updating epoch to 3 and clearing cache
+18/01/14 14:39:24.744 Executor task launch worker for task 11 INFO TorrentBroadcast: Started reading broadcast variable 5
+18/01/14 14:39:24.750 Executor task launch worker for task 11 INFO MemoryStore: Block broadcast_5_piece0 stored as bytes in memory (estimated size 1907.0 B, free 546.3 MB)
+18/01/14 14:39:24.752 Executor task launch worker for task 11 INFO TorrentBroadcast: Reading broadcast variable 5 took 8 ms
+18/01/14 14:39:24.756 Executor task launch worker for task 11 INFO MemoryStore: Block broadcast_5 stored as values in memory (estimated size 3.0 KB, free 546.3 MB)
+18/01/14 14:39:24.772 Executor task launch worker for task 11 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 2, fetching them
+18/01/14 14:39:24.772 Executor task launch worker for task 11 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:24.775 Executor task launch worker for task 11 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:24.776 Executor task launch worker for task 11 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:24.777 Executor task launch worker for task 11 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 1 ms
+18/01/14 14:39:24.811 Executor task launch worker for task 11 INFO MemoryStore: Block rdd_10_1 stored as values in memory (estimated size 240.0 B, free 546.3 MB)
+18/01/14 14:39:24.826 Executor task launch worker for task 11 INFO Executor: Finished task 1.0 in stage 5.0 (TID 11). 1176 bytes result sent to driver
+18/01/14 14:39:24.859 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 12
+18/01/14 14:39:24.859 Executor task launch worker for task 12 INFO Executor: Running task 0.0 in stage 6.0 (TID 12)
+18/01/14 14:39:24.862 Executor task launch worker for task 12 INFO TorrentBroadcast: Started reading broadcast variable 6
+18/01/14 14:39:24.867 Executor task launch worker for task 12 INFO MemoryStore: Block broadcast_6_piece0 stored as bytes in memory (estimated size 871.0 B, free 546.3 MB)
+18/01/14 14:39:24.870 Executor task launch worker for task 12 INFO TorrentBroadcast: Reading broadcast variable 6 took 8 ms
+18/01/14 14:39:24.873 Executor task launch worker for task 12 INFO MemoryStore: Block broadcast_6 stored as values in memory (estimated size 1216.0 B, free 546.3 MB)
+18/01/14 14:39:24.876 Executor task launch worker for task 12 INFO Executor: Finished task 0.0 in stage 6.0 (TID 12). 746 bytes result sent to driver
+18/01/14 14:39:24.897 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 15
+18/01/14 14:39:24.899 Executor task launch worker for task 15 INFO Executor: Running task 1.0 in stage 7.0 (TID 15)
+18/01/14 14:39:24.904 Executor task launch worker for task 15 INFO TorrentBroadcast: Started reading broadcast variable 7
+18/01/14 14:39:24.911 Executor task launch worker for task 15 INFO MemoryStore: Block broadcast_7_piece0 stored as bytes in memory (estimated size 1680.0 B, free 546.3 MB)
+18/01/14 14:39:24.921 Executor task launch worker for task 15 INFO TorrentBroadcast: Reading broadcast variable 7 took 17 ms
+18/01/14 14:39:24.934 Executor task launch worker for task 15 INFO MemoryStore: Block broadcast_7 stored as values in memory (estimated size 2.6 KB, free 546.3 MB)
+18/01/14 14:39:24.971 Executor task launch worker for task 15 INFO Executor: Finished task 1.0 in stage 7.0 (TID 15). 888 bytes result sent to driver
+18/01/14 14:39:24.974 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 17
+18/01/14 14:39:24.974 Executor task launch worker for task 17 INFO Executor: Running task 1.0 in stage 8.0 (TID 17)
+18/01/14 14:39:24.976 Executor task launch worker for task 17 INFO TorrentBroadcast: Started reading broadcast variable 8
+18/01/14 14:39:24.983 Executor task launch worker for task 17 INFO MemoryStore: Block broadcast_8_piece0 stored as bytes in memory (estimated size 1680.0 B, free 546.3 MB)
+18/01/14 14:39:24.986 Executor task launch worker for task 17 INFO TorrentBroadcast: Reading broadcast variable 8 took 10 ms
+18/01/14 14:39:24.988 Executor task launch worker for task 17 INFO MemoryStore: Block broadcast_8 stored as values in memory (estimated size 2.6 KB, free 546.3 MB)
+18/01/14 14:39:24.997 Executor task launch worker for task 17 INFO Executor: Finished task 1.0 in stage 8.0 (TID 17). 888 bytes result sent to driver
+18/01/14 14:39:25.003 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 19
+18/01/14 14:39:25.004 Executor task launch worker for task 19 INFO Executor: Running task 1.0 in stage 9.0 (TID 19)
+18/01/14 14:39:25.005 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Updating epoch to 5 and clearing cache
+18/01/14 14:39:25.007 Executor task launch worker for task 19 INFO TorrentBroadcast: Started reading broadcast variable 9
+18/01/14 14:39:25.014 Executor task launch worker for task 19 INFO MemoryStore: Block broadcast_9_piece0 stored as bytes in memory (estimated size 1902.0 B, free 546.3 MB)
+18/01/14 14:39:25.017 Executor task launch worker for task 19 INFO TorrentBroadcast: Reading broadcast variable 9 took 9 ms
+18/01/14 14:39:25.018 Executor task launch worker for task 19 INFO MemoryStore: Block broadcast_9 stored as values in memory (estimated size 3.1 KB, free 546.3 MB)
+18/01/14 14:39:25.023 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 3, fetching them
+18/01/14 14:39:25.024 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:25.028 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:25.029 Executor task launch worker for task 19 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:25.030 Executor task launch worker for task 19 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 1 ms
+18/01/14 14:39:25.045 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 4, fetching them
+18/01/14 14:39:25.045 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:25.048 Executor task launch worker for task 19 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:25.048 Executor task launch worker for task 19 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:25.050 Executor task launch worker for task 19 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 2 ms
+18/01/14 14:39:25.058 Executor task launch worker for task 19 INFO MemoryStore: Block rdd_18_1 stored as values in memory (estimated size 408.0 B, free 546.3 MB)
+18/01/14 14:39:25.062 Executor task launch worker for task 19 INFO Executor: Finished task 1.0 in stage 9.0 (TID 19). 1176 bytes result sent to driver
+18/01/14 14:39:25.094 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 21
+18/01/14 14:39:25.094 Executor task launch worker for task 21 INFO Executor: Running task 1.0 in stage 10.0 (TID 21)
+18/01/14 14:39:25.099 Executor task launch worker for task 21 INFO TorrentBroadcast: Started reading broadcast variable 10
+18/01/14 14:39:25.106 Executor task launch worker for task 21 INFO MemoryStore: Block broadcast_10_piece0 stored as bytes in memory (estimated size 1981.0 B, free 546.3 MB)
+18/01/14 14:39:25.109 Executor task launch worker for task 21 INFO TorrentBroadcast: Reading broadcast variable 10 took 10 ms
+18/01/14 14:39:25.112 Executor task launch worker for task 21 INFO MemoryStore: Block broadcast_10 stored as values in memory (estimated size 3.1 KB, free 546.3 MB)
+18/01/14 14:39:25.129 Executor task launch worker for task 21 INFO Executor: Finished task 1.0 in stage 10.0 (TID 21). 1017 bytes result sent to driver
+18/01/14 14:39:25.149 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 23
+18/01/14 14:39:25.149 Executor task launch worker for task 23 INFO Executor: Running task 1.0 in stage 11.0 (TID 23)
+18/01/14 14:39:25.151 Executor task launch worker for task 23 INFO MapOutputTrackerWorker: Updating epoch to 6 and clearing cache
+18/01/14 14:39:25.153 Executor task launch worker for task 23 INFO TorrentBroadcast: Started reading broadcast variable 11
+18/01/14 14:39:25.159 Executor task launch worker for task 23 INFO MemoryStore: Block broadcast_11_piece0 stored as bytes in memory (estimated size 1909.0 B, free 546.3 MB)
+18/01/14 14:39:25.161 Executor task launch worker for task 23 INFO TorrentBroadcast: Reading broadcast variable 11 took 8 ms
+18/01/14 14:39:25.162 Executor task launch worker for task 23 INFO MemoryStore: Block broadcast_11 stored as values in memory (estimated size 3.0 KB, free 546.2 MB)
+18/01/14 14:39:25.164 Executor task launch worker for task 23 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 5, fetching them
+18/01/14 14:39:25.164 Executor task launch worker for task 23 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:25.166 Executor task launch worker for task 23 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:25.167 Executor task launch worker for task 23 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:25.167 Executor task launch worker for task 23 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 1 ms
+18/01/14 14:39:25.178 Executor task launch worker for task 23 INFO Executor: Finished task 1.0 in stage 11.0 (TID 23). 1176 bytes result sent to driver
+18/01/14 14:39:25.208 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 25
+18/01/14 14:39:25.208 Executor task launch worker for task 25 INFO Executor: Running task 1.0 in stage 12.0 (TID 25)
+18/01/14 14:39:25.210 Executor task launch worker for task 25 INFO TorrentBroadcast: Started reading broadcast variable 12
+18/01/14 14:39:25.216 Executor task launch worker for task 25 INFO MemoryStore: Block broadcast_12_piece0 stored as bytes in memory (estimated size 871.0 B, free 546.2 MB)
+18/01/14 14:39:25.218 Executor task launch worker for task 25 INFO TorrentBroadcast: Reading broadcast variable 12 took 8 ms
+18/01/14 14:39:25.220 Executor task launch worker for task 25 INFO MemoryStore: Block broadcast_12 stored as values in memory (estimated size 1216.0 B, free 546.2 MB)
+18/01/14 14:39:25.231 Executor task launch worker for task 25 INFO MemoryStore: Block rdd_22_1 stored as values in memory (estimated size 40.0 B, free 546.2 MB)
+18/01/14 14:39:25.235 Executor task launch worker for task 25 INFO Executor: Finished task 1.0 in stage 12.0 (TID 25). 746 bytes result sent to driver
+18/01/14 14:39:25.255 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 27
+18/01/14 14:39:25.256 Executor task launch worker for task 27 INFO Executor: Running task 1.0 in stage 13.0 (TID 27)
+18/01/14 14:39:25.267 Executor task launch worker for task 27 INFO TorrentBroadcast: Started reading broadcast variable 13
+18/01/14 14:39:25.280 Executor task launch worker for task 27 INFO MemoryStore: Block broadcast_13_piece0 stored as bytes in memory (estimated size 871.0 B, free 546.2 MB)
+18/01/14 14:39:25.283 Executor task launch worker for task 27 INFO TorrentBroadcast: Reading broadcast variable 13 took 11 ms
+18/01/14 14:39:25.284 Executor task launch worker for task 27 INFO MemoryStore: Block broadcast_13 stored as values in memory (estimated size 1216.0 B, free 546.2 MB)
+18/01/14 14:39:25.289 Executor task launch worker for task 27 INFO MemoryStore: Block rdd_23_1 stored as values in memory (estimated size 40.0 B, free 546.2 MB)
+18/01/14 14:39:25.293 Executor task launch worker for task 27 INFO Executor: Finished task 1.0 in stage 13.0 (TID 27). 746 bytes result sent to driver
+18/01/14 14:39:25.312 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 28
+18/01/14 14:39:25.312 Executor task launch worker for task 28 INFO Executor: Running task 0.0 in stage 14.0 (TID 28)
+18/01/14 14:39:25.315 Executor task launch worker for task 28 INFO TorrentBroadcast: Started reading broadcast variable 14
+18/01/14 14:39:25.320 Executor task launch worker for task 28 INFO MemoryStore: Block broadcast_14_piece0 stored as bytes in memory (estimated size 1680.0 B, free 546.2 MB)
+18/01/14 14:39:25.323 Executor task launch worker for task 28 INFO TorrentBroadcast: Reading broadcast variable 14 took 8 ms
+18/01/14 14:39:25.324 Executor task launch worker for task 28 INFO MemoryStore: Block broadcast_14 stored as values in memory (estimated size 2.6 KB, free 546.2 MB)
+18/01/14 14:39:25.334 Executor task launch worker for task 28 INFO Executor: Finished task 0.0 in stage 14.0 (TID 28). 888 bytes result sent to driver
+18/01/14 14:39:25.338 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 30
+18/01/14 14:39:25.338 Executor task launch worker for task 30 INFO Executor: Running task 0.0 in stage 15.0 (TID 30)
+18/01/14 14:39:25.342 Executor task launch worker for task 30 INFO TorrentBroadcast: Started reading broadcast variable 15
+18/01/14 14:39:25.348 Executor task launch worker for task 30 INFO MemoryStore: Block broadcast_15_piece0 stored as bytes in memory (estimated size 1680.0 B, free 546.2 MB)
+18/01/14 14:39:25.351 Executor task launch worker for task 30 INFO TorrentBroadcast: Reading broadcast variable 15 took 9 ms
+18/01/14 14:39:25.352 Executor task launch worker for task 30 INFO MemoryStore: Block broadcast_15 stored as values in memory (estimated size 2.6 KB, free 546.2 MB)
+18/01/14 14:39:25.373 Executor task launch worker for task 30 INFO Executor: Finished task 0.0 in stage 15.0 (TID 30). 888 bytes result sent to driver
+18/01/14 14:39:25.386 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 32
+18/01/14 14:39:25.388 Executor task launch worker for task 32 INFO Executor: Running task 0.0 in stage 16.0 (TID 32)
+18/01/14 14:39:25.389 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Updating epoch to 8 and clearing cache
+18/01/14 14:39:25.391 Executor task launch worker for task 32 INFO TorrentBroadcast: Started reading broadcast variable 16
+18/01/14 14:39:25.397 Executor task launch worker for task 32 INFO MemoryStore: Block broadcast_16_piece0 stored as bytes in memory (estimated size 1884.0 B, free 546.2 MB)
+18/01/14 14:39:25.399 Executor task launch worker for task 32 INFO TorrentBroadcast: Reading broadcast variable 16 took 8 ms
+18/01/14 14:39:25.400 Executor task launch worker for task 32 INFO MemoryStore: Block broadcast_16 stored as values in memory (estimated size 3.1 KB, free 546.2 MB)
+18/01/14 14:39:25.403 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 6, fetching them
+18/01/14 14:39:25.403 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:25.405 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:25.406 Executor task launch worker for task 32 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:25.407 Executor task launch worker for task 32 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 1 ms
+18/01/14 14:39:25.409 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 7, fetching them
+18/01/14 14:39:25.409 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = NettyRpcEndpointRef(spark://MapOutputTracker@192.168.6.44:53266)
+18/01/14 14:39:25.412 Executor task launch worker for task 32 INFO MapOutputTrackerWorker: Got the output locations
+18/01/14 14:39:25.413 Executor task launch worker for task 32 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+18/01/14 14:39:25.413 Executor task launch worker for task 32 INFO ShuffleBlockFetcherIterator: Started 1 remote fetches in 0 ms
+18/01/14 14:39:25.428 Executor task launch worker for task 32 INFO Executor: Finished task 0.0 in stage 16.0 (TID 32). 1176 bytes result sent to driver
+18/01/14 14:39:25.449 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 35
+18/01/14 14:39:25.454 Executor task launch worker for task 35 INFO Executor: Running task 1.0 in stage 17.0 (TID 35)
+18/01/14 14:39:25.457 Executor task launch worker for task 35 INFO TorrentBroadcast: Started reading broadcast variable 17
+18/01/14 14:39:25.465 Executor task launch worker for task 35 INFO MemoryStore: Block broadcast_17_piece0 stored as bytes in memory (estimated size 871.0 B, free 546.2 MB)
+18/01/14 14:39:25.467 Executor task launch worker for task 35 INFO TorrentBroadcast: Reading broadcast variable 17 took 10 ms
+18/01/14 14:39:25.470 Executor task launch worker for task 35 INFO MemoryStore: Block broadcast_17 stored as values in memory (estimated size 1216.0 B, free 546.2 MB)
+18/01/14 14:39:25.473 Executor task launch worker for task 35 INFO MemoryStore: Block rdd_31_1 stored as values in memory (estimated size 40.0 B, free 546.2 MB)
+18/01/14 14:39:25.476 Executor task launch worker for task 35 INFO Executor: Finished task 1.0 in stage 17.0 (TID 35). 789 bytes result sent to driver
+18/01/14 14:39:29.644 block-manager-slave-async-thread-pool-1 INFO BlockManager: Removing RDD 22
+18/01/14 14:39:29.649 block-manager-slave-async-thread-pool-0 INFO BlockManager: Removing RDD 23
+18/01/14 14:39:29.655 block-manager-slave-async-thread-pool-0 INFO BlockManager: Removing RDD 31
+18/01/14 14:39:29.674 block-manager-slave-async-thread-pool-0 INFO BlockManager: Removing RDD 18
+18/01/14 14:39:29.685 block-manager-slave-async-thread-pool-1 INFO BlockManager: Removing RDD 10
+18/01/14 14:39:29.773 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:39:29.773 dispatcher-event-loop-0 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:53269. Exiting.
+18/01/14 14:39:29.774 dispatcher-event-loop-1 WARN CoarseGrainedExecutorBackend: An unknown (localhost:53269) driver disconnected.
+18/01/14 14:39:29.778 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:39:29.812 Thread-1 INFO ShutdownHookManager: Shutdown hook called

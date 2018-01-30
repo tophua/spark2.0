@@ -1,0 +1,161 @@
+18/01/14 14:33:57.807 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73314@MacBook
+18/01/14 14:33:57.811 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:33:57.811 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:33:57.812 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:33:58.357 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:33:58.690 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:33:58.690 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:33:58.691 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:33:58.691 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:33:58.692 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:33:59.042 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51868 after 106 ms (0 ms spent in bootstraps)
+18/01/14 14:33:59.135 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:33:59.135 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:33:59.136 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:33:59.136 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:33:59.136 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:33:59.161 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51868 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:33:59.226 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-90d5591e-664b-4c40-a6b7-3caad3e36e74/blockmgr-e04e729e-f49a-40aa-ac25-278ad819190f
+18/01/14 14:33:59.247 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:33:59.565 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:51868
+18/01/14 14:33:59.568 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:51871
+18/01/14 14:33:59.572 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:51871 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:33:59.574 dispatcher-event-loop-0 INFO WorkerWatcher: Successfully connected to spark://Worker@localhost:51871
+18/01/14 14:33:59.598 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:33:59.601 dispatcher-event-loop-0 INFO Executor: Starting executor ID 0 on host localhost
+18/01/14 14:33:59.663 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 51886.
+18/01/14 14:33:59.664 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:51886
+18/01/14 14:33:59.665 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:33:59.667 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(0, localhost, 51886, None)
+18/01/14 14:33:59.675 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(0, localhost, 51886, None)
+18/01/14 14:33:59.676 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(0, localhost, 51886, None)
+18/01/14 14:33:59.686 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:33:59.696 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:33:59.807 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:33:59.872 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:51878 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:33:59.942 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 956.0 B, free 546.3 MB)
+18/01/14 14:33:59.951 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 144 ms
+18/01/14 14:34:00.089 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 1352.0 B, free 546.3 MB)
+18/01/14 14:34:00.135 Executor task launch worker for task 0 ERROR Executor: Exception in task 0.0 in stage 0.0 (TID 0)
+java.lang.ArithmeticException: / by zero
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply$mcVI$sp(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:893)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:34:00.181 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 2
+18/01/14 14:34:00.181 Executor task launch worker for task 2 INFO Executor: Running task 2.0 in stage 0.0 (TID 2)
+18/01/14 14:34:00.202 Executor task launch worker for task 2 ERROR Executor: Exception in task 2.0 in stage 0.0 (TID 2)
+java.lang.ArithmeticException: / by zero
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply$mcVI$sp(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:893)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:34:00.209 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+18/01/14 14:34:00.209 Executor task launch worker for task 4 INFO Executor: Running task 1.1 in stage 0.0 (TID 4)
+18/01/14 14:34:00.224 Executor task launch worker for task 4 ERROR Executor: Exception in task 1.1 in stage 0.0 (TID 4)
+java.lang.ArithmeticException: / by zero
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply$mcVI$sp(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:893)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:34:00.234 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 6
+18/01/14 14:34:00.235 Executor task launch worker for task 6 INFO Executor: Running task 0.2 in stage 0.0 (TID 6)
+18/01/14 14:34:00.249 Executor task launch worker for task 6 ERROR Executor: Exception in task 0.2 in stage 0.0 (TID 6)
+java.lang.ArithmeticException: / by zero
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply$mcVI$sp(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:893)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:34:00.259 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 8
+18/01/14 14:34:00.259 Executor task launch worker for task 8 INFO Executor: Running task 2.2 in stage 0.0 (TID 8)
+18/01/14 14:34:00.274 Executor task launch worker for task 8 ERROR Executor: Exception in task 2.2 in stage 0.0 (TID 8)
+java.lang.ArithmeticException: / by zero
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply$mcVI$sp(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:893)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:34:00.283 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 9
+18/01/14 14:34:00.284 Executor task launch worker for task 9 INFO Executor: Running task 0.3 in stage 0.0 (TID 9)
+18/01/14 14:34:00.289 Executor task launch worker for task 9 ERROR Executor: Exception in task 0.3 in stage 0.0 (TID 9)
+java.lang.ArithmeticException: / by zero
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply$mcVI$sp(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at org.apache.spark.DistributedSuite$$anonfun$22$$anonfun$5$$anonfun$apply$mcV$sp$2.apply(DistributedSuite.scala:116)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:893)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.rdd.RDD$$anonfun$foreach$1$$anonfun$apply$28.apply(RDD.scala:919)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:2064)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:108)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:341)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+18/01/14 14:34:00.295 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 10
+18/01/14 14:34:00.299 dispatcher-event-loop-0 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:51871. Exiting.
+18/01/14 14:34:00.300 dispatcher-event-loop-1 WARN CoarseGrainedExecutorBackend: An unknown (localhost:51871) driver disconnected.
+18/01/14 14:34:00.300 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:34:00.304 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:34:00.308 dispatcher-event-loop-1 INFO Executor: Executor is trying to kill task 2.3 in stage 0.0 (TID 10), reason: Stage cancelled
+18/01/14 14:34:00.311 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:34:00.314 Executor task launch worker for task 10 INFO Executor: Running task 2.3 in stage 0.0 (TID 10)
+18/01/14 14:34:00.320 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:51868 disconnected during shutdown
+18/01/14 14:34:00.320 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:51868 disconnected during shutdown
+18/01/14 14:34:00.323 Thread-1 INFO ShutdownHookManager: Shutdown hook called

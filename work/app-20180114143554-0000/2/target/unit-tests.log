@@ -1,0 +1,48 @@
+18/01/14 14:36:00.046 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73660@MacBook
+18/01/14 14:36:00.050 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:36:00.050 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:36:00.050 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:36:00.689 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:36:01.139 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:36:01.139 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:36:01.140 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:36:01.140 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:36:01.141 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:36:01.569 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52446 after 126 ms (0 ms spent in bootstraps)
+18/01/14 14:36:01.668 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:36:01.669 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:36:01.669 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:36:01.669 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:36:01.669 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:36:01.704 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52446 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:36:01.766 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-6b573ec3-6ed5-438f-83fe-42c24b11693e/blockmgr-383859ac-c840-41bd-8c66-97cd94f60e02
+18/01/14 14:36:01.798 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:36:02.156 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:52446
+18/01/14 14:36:02.159 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:52449
+18/01/14 14:36:02.164 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:52449 after 2 ms (0 ms spent in bootstraps)
+18/01/14 14:36:02.187 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:36:02.190 dispatcher-event-loop-0 INFO Executor: Starting executor ID 2 on host localhost
+18/01/14 14:36:02.248 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 52481.
+18/01/14 14:36:02.249 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:52481
+18/01/14 14:36:02.251 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:36:02.253 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(2, localhost, 52481, None)
+18/01/14 14:36:02.262 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(2, localhost, 52481, None)
+18/01/14 14:36:02.263 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(2, localhost, 52481, None)
+18/01/14 14:36:02.273 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 6
+18/01/14 14:36:02.282 Executor task launch worker for task 6 INFO Executor: Running task 1.1 in stage 2.0 (TID 6)
+18/01/14 14:36:02.420 Executor task launch worker for task 6 INFO TorrentBroadcast: Started reading broadcast variable 2
+18/01/14 14:36:02.599 Executor task launch worker for task 6 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52456 after 4 ms (0 ms spent in bootstraps)
+18/01/14 14:36:02.686 Executor task launch worker for task 6 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 1207.0 B, free 546.3 MB)
+18/01/14 14:36:02.704 Executor task launch worker for task 6 INFO TorrentBroadcast: Reading broadcast variable 2 took 284 ms
+18/01/14 14:36:02.867 Executor task launch worker for task 6 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 1896.0 B, free 546.3 MB)
+18/01/14 14:36:02.953 Executor task launch worker for task 6 INFO Executor: Finished task 1.1 in stage 2.0 (TID 6). 735 bytes result sent to driver
+18/01/14 14:36:03.006 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:36:03.008 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from localhost:52449 disconnected during shutdown
+18/01/14 14:36:03.010 dispatcher-event-loop-0 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:52449. Exiting.
+18/01/14 14:36:03.011 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:36:03.014 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:36:03.033 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:52446 disconnected during shutdown
+18/01/14 14:36:03.033 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from 192.168.6.44:52446 disconnected during shutdown
+18/01/14 14:36:03.034 Thread-1 INFO ShutdownHookManager: Shutdown hook called
+18/01/14 14:36:03.034 CoarseGrainedExecutorBackend-stop-executor INFO MemoryStore: MemoryStore cleared
+18/01/14 14:36:03.035 CoarseGrainedExecutorBackend-stop-executor INFO BlockManager: BlockManager stopped

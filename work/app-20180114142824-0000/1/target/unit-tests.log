@@ -1,0 +1,48 @@
+18/01/14 14:28:26.097 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 72194@MacBook
+18/01/14 14:28:26.101 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:28:26.101 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:28:26.102 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:28:27.006 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:28:27.491 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:28:27.492 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:28:27.493 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:28:27.493 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:28:27.494 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:28:27.980 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:50209 after 140 ms (0 ms spent in bootstraps)
+18/01/14 14:28:28.119 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:28:28.119 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:28:28.119 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:28:28.120 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:28:28.120 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:28:28.157 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:50209 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:28:28.258 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-81434b00-0dd0-4426-b310-f61ae73b7aab/executor-2aaf7bd2-4479-405c-b20c-7450bda90185/blockmgr-bc5d1a0c-e2b6-40ea-aae2-f9b4a67d11a6
+18/01/14 14:28:28.296 main INFO MemoryStore: MemoryStore started with capacity 546.3 MB
+18/01/14 14:28:28.801 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:50209
+18/01/14 14:28:28.816 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:50215
+18/01/14 14:28:28.853 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:50215 after 11 ms (0 ms spent in bootstraps)
+18/01/14 14:28:28.879 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:28:28.883 dispatcher-event-loop-0 INFO Executor: Starting executor ID 1 on host localhost
+18/01/14 14:28:29.036 dispatcher-event-loop-0 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 50227.
+18/01/14 14:28:29.038 dispatcher-event-loop-0 INFO NettyBlockTransferService: Server created on localhost:50227
+18/01/14 14:28:29.043 dispatcher-event-loop-0 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:28:29.047 dispatcher-event-loop-0 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(1, localhost, 50227, None)
+18/01/14 14:28:29.061 dispatcher-event-loop-0 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(1, localhost, 50227, None)
+18/01/14 14:28:29.063 dispatcher-event-loop-0 INFO BlockManager: Initialized BlockManager: BlockManagerId(1, localhost, 50227, None)
+18/01/14 14:28:29.103 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 1
+18/01/14 14:28:29.121 Executor task launch worker for task 1 INFO Executor: Running task 0.0 in stage 3.0 (TID 1)
+18/01/14 14:28:29.123 dispatcher-event-loop-0 INFO Executor: Executor is trying to kill task 0.0 in stage 3.0 (TID 1), reason: Stage cancelled
+18/01/14 14:28:29.195 Executor task launch worker for task 1 INFO Executor: Executor killed task 0.0 in stage 3.0 (TID 1), reason: Stage cancelled
+18/01/14 14:28:29.210 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 3
+18/01/14 14:28:29.212 Executor task launch worker for task 3 INFO Executor: Running task 1.0 in stage 4.0 (TID 3)
+18/01/14 14:28:29.303 Executor task launch worker for task 3 INFO TorrentBroadcast: Started reading broadcast variable 4
+18/01/14 14:28:29.498 Executor task launch worker for task 3 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:50219 after 7 ms (0 ms spent in bootstraps)
+18/01/14 14:28:29.572 Executor task launch worker for task 3 INFO MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 871.0 B, free 546.3 MB)
+18/01/14 14:28:29.601 Executor task launch worker for task 3 INFO TorrentBroadcast: Reading broadcast variable 4 took 298 ms
+18/01/14 14:28:29.866 Executor task launch worker for task 3 INFO MemoryStore: Block broadcast_4 stored as values in memory (estimated size 1216.0 B, free 546.3 MB)
+18/01/14 14:28:29.945 Executor task launch worker for task 3 INFO Executor: Finished task 1.0 in stage 4.0 (TID 3). 832 bytes result sent to driver
+18/01/14 14:28:29.954 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:28:29.959 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:28:29.963 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:28:29.975 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Driver from localhost:50215 disconnected during shutdown
+18/01/14 14:28:29.976 dispatcher-event-loop-1 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:50215. Exiting.
+18/01/14 14:28:29.992 Thread-1 INFO ShutdownHookManager: Shutdown hook called

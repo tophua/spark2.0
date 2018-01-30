@@ -1,0 +1,12 @@
+18/01/14 14:21:37.448 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 70697@MacBook
+18/01/14 14:21:37.454 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:21:37.455 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:21:37.456 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:21:38.196 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:21:38.596 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:21:38.598 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:21:38.599 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:21:38.600 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:21:38.601 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:21:39.056 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:64064 after 116 ms (0 ms spent in bootstraps)
+18/01/14 14:21:39.176 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM

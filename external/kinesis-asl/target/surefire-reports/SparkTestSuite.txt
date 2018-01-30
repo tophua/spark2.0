@@ -1,0 +1,76 @@
+[36mDiscovery starting.[0m
+[36mDiscovery completed in 18 seconds, 711 milliseconds.[0m
+[36mRun starting. Expected test count is: 36[0m
+[32mKinesisInputDStreamBuilderSuite:[0m
+[32m- should raise an exception if the StreamingContext is missing[0m
+[32m- should raise an exception if the stream name is missing[0m
+[32m- should raise an exception if the checkpoint app name is missing[0m
+[32m- should propagate required values to KinesisInputDStream[0m
+[32m- should propagate default values to KinesisInputDStream[0m
+[32m- should propagate custom non-auth values to KinesisInputDStream[0m
+[32mWithoutAggregationKinesisBackedBlockRDDSuite:[0m
+[33m- Basic reading from Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available in both block manager and Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available only in block manager, not in Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available only in Kinesis, not in block manager [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available partially in block manager, rest in Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Test isBlockValid skips block fetching from block manager [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Test whether RDD is valid after removing blocks from block manager [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[32mKinesisReceiverSuite:[0m
+[32m- process records including store and set checkpointer[0m
+[32m- split into multiple processes if a limitation is set[0m
+[32m- shouldn't store and update checkpointer when receiver is stopped[0m
+[32m- shouldn't update checkpointer when exception occurs during store[0m
+[32m- shutdown should checkpoint if the reason is TERMINATE[0m
+[32m- shutdown should not checkpoint if the reason is something other than TERMINATE[0m
+[32m- retry success on first attempt[0m
+[32m- retry success on second attempt after a Kinesis throttling exception[0m
+[32m- retry success on second attempt after a Kinesis dependency exception[0m
+[32m- retry failed after a shutdown exception[0m
+[32m- retry failed after an invalid state exception[0m
+[32m- retry failed after unexpected exception[0m
+[32m- retry failed after exhausting all retries[0m
+[32mWithAggregationKinesisBackedBlockRDDSuite:[0m
+[33m- Basic reading from Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available in both block manager and Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available only in block manager, not in Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available only in Kinesis, not in block manager [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Read data available partially in block manager, rest in Kinesis [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Test isBlockValid skips block fetching from block manager [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Test whether RDD is valid after removing blocks from block manager [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[32mWithAggregationKinesisStreamSuite:[0m
+[32m- KinesisUtils API[0m
+[32m- RDD generation[0m
+[33m- basic operation [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- custom message handling [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[32m- Kinesis read with custom configurations[0m
+[33m- split and merge shards in a stream [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- failure recovery [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Prepare KinesisTestUtils [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[32mKinesisCheckpointerSuite:[0m
+[32m- checkpoint is not called twice for the same sequence number[0m
+[32m- checkpoint is called after sequence number increases[0m
+[32m- should checkpoint if we have exceeded the checkpoint interval[0m
+[32m- shouldn't checkpoint if we have not exceeded the checkpoint interval[0m
+[32m- should not checkpoint for the same sequence number[0m
+[32m- removing checkpointer checkpoints one last time[0m
+[32m- if checkpointing is going on, wait until finished before removing and checkpointing[0m
+[32mSparkAWSCredentialsBuilderSuite:[0m
+[32m- should build DefaultCredentials when given no params[0m
+[32m- should build BasicCredentials[0m
+[32m- should build STSCredentials[0m
+[32m- SparkAWSCredentials classes should be serializable[0m
+[32mWithoutAggregationKinesisStreamSuite:[0m
+[32m- KinesisUtils API[0m
+[32m- RDD generation[0m
+[33m- basic operation [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- custom message handling [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[32m- Kinesis read with custom configurations[0m
+[33m- split and merge shards in a stream [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- failure recovery [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[33m- Prepare KinesisTestUtils [enable by setting env var ENABLE_KINESIS_TESTS=1] !!! IGNORED !!![0m
+[36mRun completed in 25 seconds, 174 milliseconds.[0m
+[36mTotal number of tests run: 36[0m
+[36mSuites: completed 9, aborted 0[0m
+[36mTests: succeeded 36, failed 0, canceled 0, ignored 24, pending 0[0m
+[32mAll tests passed.[0m

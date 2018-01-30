@@ -1,0 +1,358 @@
+18/01/14 14:35:45.778 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 73620@MacBook
+18/01/14 14:35:45.781 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:35:45.782 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:35:45.782 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:35:46.335 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+18/01/14 14:35:46.681 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:35:46.681 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:35:46.682 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:35:46.683 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:35:46.684 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:35:47.037 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52397 after 110 ms (0 ms spent in bootstraps)
+18/01/14 14:35:47.138 main INFO SecurityManager: Changing view acls to: liush
+18/01/14 14:35:47.139 main INFO SecurityManager: Changing modify acls to: liush
+18/01/14 14:35:47.139 main INFO SecurityManager: Changing view acls groups to: 
+18/01/14 14:35:47.139 main INFO SecurityManager: Changing modify acls groups to: 
+18/01/14 14:35:47.139 main INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(liush); groups with view permissions: Set(); users  with modify permissions: Set(liush); groups with modify permissions: Set()
+18/01/14 14:35:47.163 netty-rpc-connection-0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52397 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:47.239 main INFO DiskBlockManager: Created local directory at /Users/apple/Idea/workspace/spark/core/target/tmp/spark-364c3ed4-795c-4e6e-91ea-f66a53ffe3c1/executor-1f98de54-95b4-433c-86a2-466ee789c96a/blockmgr-f9fedcd9-6831-442a-8387-819075217001
+18/01/14 14:35:47.264 main INFO MemoryStore: MemoryStore started with capacity 5.9 KB
+18/01/14 14:35:47.582 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Connecting to driver: spark://CoarseGrainedScheduler@192.168.6.44:52397
+18/01/14 14:35:47.584 main INFO WorkerWatcher: Connecting to worker spark://Worker@localhost:52402
+18/01/14 14:35:47.588 netty-rpc-connection-1 INFO TransportClientFactory: Successfully created connection to localhost/127.0.0.1:52402 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:47.590 dispatcher-event-loop-1 INFO WorkerWatcher: Successfully connected to spark://Worker@localhost:52402
+18/01/14 14:35:47.615 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+18/01/14 14:35:47.618 dispatcher-event-loop-1 INFO Executor: Starting executor ID 1 on host localhost
+18/01/14 14:35:47.675 dispatcher-event-loop-1 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 52415.
+18/01/14 14:35:47.677 dispatcher-event-loop-1 INFO NettyBlockTransferService: Server created on localhost:52415
+18/01/14 14:35:47.679 dispatcher-event-loop-1 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+18/01/14 14:35:47.681 dispatcher-event-loop-1 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(1, localhost, 52415, None)
+18/01/14 14:35:47.689 dispatcher-event-loop-1 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(1, localhost, 52415, None)
+18/01/14 14:35:47.690 dispatcher-event-loop-1 INFO BlockManager: Initialized BlockManager: BlockManagerId(1, localhost, 52415, None)
+18/01/14 14:35:47.701 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+18/01/14 14:35:47.708 Executor task launch worker for task 0 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+18/01/14 14:35:47.854 Executor task launch worker for task 0 INFO TorrentBroadcast: Started reading broadcast variable 0
+18/01/14 14:35:47.928 Executor task launch worker for task 0 INFO TransportClientFactory: Successfully created connection to /192.168.6.44:52407 after 1 ms (0 ms spent in bootstraps)
+18/01/14 14:35:47.990 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 879.0 B, free 5.0 KB)
+18/01/14 14:35:48.000 Executor task launch worker for task 0 INFO TorrentBroadcast: Reading broadcast variable 0 took 146 ms
+18/01/14 14:35:48.183 Executor task launch worker for task 0 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 1216.0 B, free 3.8 KB)
+18/01/14 14:35:48.281 Executor task launch worker for task 0 INFO MemoryStore: Block rdd_0_0 stored as values in memory (estimated size 2016.0 B, free 1889.0 B)
+18/01/14 14:35:48.330 Executor task launch worker for task 0 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 832 bytes result sent to driver
+18/01/14 14:35:48.335 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 2
+18/01/14 14:35:48.336 Executor task launch worker for task 2 INFO Executor: Running task 2.0 in stage 0.0 (TID 2)
+18/01/14 14:35:48.368 Executor task launch worker for task 2 INFO MemoryStore: Will not store rdd_0_2
+18/01/14 14:35:48.370 Executor task launch worker for task 2 WARN MemoryStore: Not enough space to cache rdd_0_2 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.373 Executor task launch worker for task 2 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.378 Executor task launch worker for task 2 WARN BlockManager: Block rdd_0_2 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.379 Executor task launch worker for task 2 WARN BlockManager: Putting block rdd_0_2 failed
+18/01/14 14:35:48.382 Executor task launch worker for task 2 INFO Executor: Finished task 2.0 in stage 0.0 (TID 2). 746 bytes result sent to driver
+18/01/14 14:35:48.388 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+18/01/14 14:35:48.389 Executor task launch worker for task 4 INFO Executor: Running task 4.0 in stage 0.0 (TID 4)
+18/01/14 14:35:48.401 Executor task launch worker for task 4 INFO MemoryStore: Will not store rdd_0_4
+18/01/14 14:35:48.402 Executor task launch worker for task 4 WARN MemoryStore: Not enough space to cache rdd_0_4 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.405 Executor task launch worker for task 4 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.405 Executor task launch worker for task 4 WARN BlockManager: Block rdd_0_4 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.406 Executor task launch worker for task 4 WARN BlockManager: Putting block rdd_0_4 failed
+18/01/14 14:35:48.408 Executor task launch worker for task 4 INFO Executor: Finished task 4.0 in stage 0.0 (TID 4). 746 bytes result sent to driver
+18/01/14 14:35:48.412 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 5
+18/01/14 14:35:48.413 Executor task launch worker for task 5 INFO Executor: Running task 5.0 in stage 0.0 (TID 5)
+18/01/14 14:35:48.433 Executor task launch worker for task 5 INFO MemoryStore: Will not store rdd_0_5
+18/01/14 14:35:48.434 Executor task launch worker for task 5 WARN MemoryStore: Not enough space to cache rdd_0_5 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.436 Executor task launch worker for task 5 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.437 Executor task launch worker for task 5 WARN BlockManager: Block rdd_0_5 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.437 Executor task launch worker for task 5 WARN BlockManager: Putting block rdd_0_5 failed
+18/01/14 14:35:48.439 Executor task launch worker for task 5 INFO Executor: Finished task 5.0 in stage 0.0 (TID 5). 746 bytes result sent to driver
+18/01/14 14:35:48.443 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 7
+18/01/14 14:35:48.444 Executor task launch worker for task 7 INFO Executor: Running task 7.0 in stage 0.0 (TID 7)
+18/01/14 14:35:48.472 Executor task launch worker for task 7 INFO MemoryStore: Will not store rdd_0_7
+18/01/14 14:35:48.473 Executor task launch worker for task 7 WARN MemoryStore: Not enough space to cache rdd_0_7 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.474 Executor task launch worker for task 7 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.481 Executor task launch worker for task 7 WARN BlockManager: Block rdd_0_7 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.482 Executor task launch worker for task 7 WARN BlockManager: Putting block rdd_0_7 failed
+18/01/14 14:35:48.487 Executor task launch worker for task 7 INFO Executor: Finished task 7.0 in stage 0.0 (TID 7). 746 bytes result sent to driver
+18/01/14 14:35:48.491 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 10
+18/01/14 14:35:48.494 Executor task launch worker for task 10 INFO Executor: Running task 10.0 in stage 0.0 (TID 10)
+18/01/14 14:35:48.518 Executor task launch worker for task 10 INFO MemoryStore: Will not store rdd_0_10
+18/01/14 14:35:48.518 Executor task launch worker for task 10 WARN MemoryStore: Not enough space to cache rdd_0_10 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.526 Executor task launch worker for task 10 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.527 Executor task launch worker for task 10 WARN BlockManager: Block rdd_0_10 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.527 Executor task launch worker for task 10 WARN BlockManager: Putting block rdd_0_10 failed
+18/01/14 14:35:48.531 Executor task launch worker for task 10 INFO Executor: Finished task 10.0 in stage 0.0 (TID 10). 746 bytes result sent to driver
+18/01/14 14:35:48.534 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 12
+18/01/14 14:35:48.534 Executor task launch worker for task 12 INFO Executor: Running task 12.0 in stage 0.0 (TID 12)
+18/01/14 14:35:48.557 Executor task launch worker for task 12 INFO MemoryStore: Will not store rdd_0_12
+18/01/14 14:35:48.557 Executor task launch worker for task 12 WARN MemoryStore: Not enough space to cache rdd_0_12 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.558 Executor task launch worker for task 12 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.559 Executor task launch worker for task 12 WARN BlockManager: Block rdd_0_12 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.563 Executor task launch worker for task 12 WARN BlockManager: Putting block rdd_0_12 failed
+18/01/14 14:35:48.571 Executor task launch worker for task 12 INFO Executor: Finished task 12.0 in stage 0.0 (TID 12). 746 bytes result sent to driver
+18/01/14 14:35:48.574 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 14
+18/01/14 14:35:48.575 Executor task launch worker for task 14 INFO Executor: Running task 14.0 in stage 0.0 (TID 14)
+18/01/14 14:35:48.588 Executor task launch worker for task 14 INFO MemoryStore: Will not store rdd_0_14
+18/01/14 14:35:48.589 Executor task launch worker for task 14 WARN MemoryStore: Not enough space to cache rdd_0_14 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.590 Executor task launch worker for task 14 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.591 Executor task launch worker for task 14 WARN BlockManager: Block rdd_0_14 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.591 Executor task launch worker for task 14 WARN BlockManager: Putting block rdd_0_14 failed
+18/01/14 14:35:48.594 Executor task launch worker for task 14 INFO Executor: Finished task 14.0 in stage 0.0 (TID 14). 746 bytes result sent to driver
+18/01/14 14:35:48.600 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 15
+18/01/14 14:35:48.609 Executor task launch worker for task 15 INFO Executor: Running task 15.0 in stage 0.0 (TID 15)
+18/01/14 14:35:48.629 Executor task launch worker for task 15 INFO MemoryStore: Will not store rdd_0_15
+18/01/14 14:35:48.630 Executor task launch worker for task 15 WARN MemoryStore: Not enough space to cache rdd_0_15 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.631 Executor task launch worker for task 15 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.632 Executor task launch worker for task 15 WARN BlockManager: Block rdd_0_15 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.632 Executor task launch worker for task 15 WARN BlockManager: Putting block rdd_0_15 failed
+18/01/14 14:35:48.634 Executor task launch worker for task 15 INFO Executor: Finished task 15.0 in stage 0.0 (TID 15). 746 bytes result sent to driver
+18/01/14 14:35:48.637 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 17
+18/01/14 14:35:48.639 Executor task launch worker for task 17 INFO Executor: Running task 17.0 in stage 0.0 (TID 17)
+18/01/14 14:35:48.647 Executor task launch worker for task 17 INFO MemoryStore: Will not store rdd_0_17
+18/01/14 14:35:48.647 Executor task launch worker for task 17 WARN MemoryStore: Not enough space to cache rdd_0_17 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.648 Executor task launch worker for task 17 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.649 Executor task launch worker for task 17 WARN BlockManager: Block rdd_0_17 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.649 Executor task launch worker for task 17 WARN BlockManager: Putting block rdd_0_17 failed
+18/01/14 14:35:48.651 Executor task launch worker for task 17 INFO Executor: Finished task 17.0 in stage 0.0 (TID 17). 746 bytes result sent to driver
+18/01/14 14:35:48.654 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 18
+18/01/14 14:35:48.662 Executor task launch worker for task 18 INFO Executor: Running task 18.0 in stage 0.0 (TID 18)
+18/01/14 14:35:48.670 Executor task launch worker for task 18 INFO MemoryStore: Will not store rdd_0_18
+18/01/14 14:35:48.670 Executor task launch worker for task 18 WARN MemoryStore: Not enough space to cache rdd_0_18 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:48.672 Executor task launch worker for task 18 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:48.675 Executor task launch worker for task 18 WARN BlockManager: Block rdd_0_18 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:48.676 Executor task launch worker for task 18 WARN BlockManager: Putting block rdd_0_18 failed
+18/01/14 14:35:48.677 Executor task launch worker for task 18 INFO Executor: Finished task 18.0 in stage 0.0 (TID 18). 746 bytes result sent to driver
+18/01/14 14:35:48.695 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 20
+18/01/14 14:35:48.695 Executor task launch worker for task 20 INFO Executor: Running task 0.0 in stage 1.0 (TID 20)
+18/01/14 14:35:48.699 Executor task launch worker for task 20 INFO TorrentBroadcast: Started reading broadcast variable 1
+18/01/14 14:35:48.704 Executor task launch worker for task 20 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 879.0 B, free 1010.0 B)
+18/01/14 14:35:48.707 Executor task launch worker for task 20 INFO TorrentBroadcast: Reading broadcast variable 1 took 8 ms
+18/01/14 14:35:48.708 Executor task launch worker for task 20 INFO MemoryStore: 1 blocks selected for dropping (879.0 B bytes)
+18/01/14 14:35:48.713 Executor task launch worker for task 20 INFO BlockManager: Dropping block broadcast_0_piece0 from memory
+18/01/14 14:35:48.714 Executor task launch worker for task 20 INFO BlockManager: Writing block broadcast_0_piece0 to disk
+18/01/14 14:35:48.722 Executor task launch worker for task 20 INFO MemoryStore: After dropping 1 blocks, free memory is 1889.0 B
+18/01/14 14:35:48.722 Executor task launch worker for task 20 INFO MemoryStore: 1 blocks selected for dropping (2016.0 B bytes)
+18/01/14 14:35:48.723 Executor task launch worker for task 20 INFO BlockManager: Dropping block rdd_0_0 from memory
+18/01/14 14:35:48.725 Executor task launch worker for task 20 INFO MemoryStore: After dropping 1 blocks, free memory is 3.8 KB
+18/01/14 14:35:48.726 Executor task launch worker for task 20 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 1216.0 B, free 2.6 KB)
+18/01/14 14:35:48.740 Executor task launch worker for task 20 INFO MemoryStore: 1 blocks selected for dropping (1216.0 B bytes)
+18/01/14 14:35:48.741 Executor task launch worker for task 20 INFO BlockManager: Dropping block broadcast_0 from memory
+18/01/14 14:35:48.741 Executor task launch worker for task 20 INFO BlockManager: Writing block broadcast_0 to disk
+18/01/14 14:35:49.136 Executor task launch worker for task 20 INFO MemoryStore: After dropping 1 blocks, free memory is 3.8 KB
+18/01/14 14:35:49.247 Executor task launch worker for task 20 INFO MemoryStore: Block rdd_0_0 stored as values in memory (estimated size 2016.0 B, free 1889.0 B)
+18/01/14 14:35:49.253 Executor task launch worker for task 20 INFO Executor: Finished task 0.0 in stage 1.0 (TID 20). 789 bytes result sent to driver
+18/01/14 14:35:49.256 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 22
+18/01/14 14:35:49.256 Executor task launch worker for task 22 INFO Executor: Running task 2.0 in stage 1.0 (TID 22)
+18/01/14 14:35:49.263 Executor task launch worker for task 22 INFO MemoryStore: Will not store rdd_0_2
+18/01/14 14:35:49.264 Executor task launch worker for task 22 WARN MemoryStore: Not enough space to cache rdd_0_2 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.267 Executor task launch worker for task 22 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.267 Executor task launch worker for task 22 WARN BlockManager: Block rdd_0_2 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.268 Executor task launch worker for task 22 WARN BlockManager: Putting block rdd_0_2 failed
+18/01/14 14:35:49.272 Executor task launch worker for task 22 INFO Executor: Finished task 2.0 in stage 1.0 (TID 22). 746 bytes result sent to driver
+18/01/14 14:35:49.275 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 24
+18/01/14 14:35:49.276 Executor task launch worker for task 24 INFO Executor: Running task 4.0 in stage 1.0 (TID 24)
+18/01/14 14:35:49.282 Executor task launch worker for task 24 INFO MemoryStore: Will not store rdd_0_4
+18/01/14 14:35:49.282 Executor task launch worker for task 24 WARN MemoryStore: Not enough space to cache rdd_0_4 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.284 Executor task launch worker for task 24 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.284 Executor task launch worker for task 24 WARN BlockManager: Block rdd_0_4 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.284 Executor task launch worker for task 24 WARN BlockManager: Putting block rdd_0_4 failed
+18/01/14 14:35:49.285 Executor task launch worker for task 24 INFO Executor: Finished task 4.0 in stage 1.0 (TID 24). 746 bytes result sent to driver
+18/01/14 14:35:49.288 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 25
+18/01/14 14:35:49.288 Executor task launch worker for task 25 INFO Executor: Running task 5.0 in stage 1.0 (TID 25)
+18/01/14 14:35:49.295 Executor task launch worker for task 25 INFO MemoryStore: Will not store rdd_0_5
+18/01/14 14:35:49.295 Executor task launch worker for task 25 WARN MemoryStore: Not enough space to cache rdd_0_5 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.296 Executor task launch worker for task 25 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.297 Executor task launch worker for task 25 WARN BlockManager: Block rdd_0_5 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.297 Executor task launch worker for task 25 WARN BlockManager: Putting block rdd_0_5 failed
+18/01/14 14:35:49.298 Executor task launch worker for task 25 INFO Executor: Finished task 5.0 in stage 1.0 (TID 25). 789 bytes result sent to driver
+18/01/14 14:35:49.302 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 27
+18/01/14 14:35:49.302 Executor task launch worker for task 27 INFO Executor: Running task 7.0 in stage 1.0 (TID 27)
+18/01/14 14:35:49.311 Executor task launch worker for task 27 INFO MemoryStore: Will not store rdd_0_7
+18/01/14 14:35:49.312 Executor task launch worker for task 27 WARN MemoryStore: Not enough space to cache rdd_0_7 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.313 Executor task launch worker for task 27 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.313 Executor task launch worker for task 27 WARN BlockManager: Block rdd_0_7 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.313 Executor task launch worker for task 27 WARN BlockManager: Putting block rdd_0_7 failed
+18/01/14 14:35:49.315 Executor task launch worker for task 27 INFO Executor: Finished task 7.0 in stage 1.0 (TID 27). 746 bytes result sent to driver
+18/01/14 14:35:49.318 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 29
+18/01/14 14:35:49.318 Executor task launch worker for task 29 INFO Executor: Running task 9.0 in stage 1.0 (TID 29)
+18/01/14 14:35:49.327 Executor task launch worker for task 29 INFO MemoryStore: Will not store rdd_0_9
+18/01/14 14:35:49.327 Executor task launch worker for task 29 WARN MemoryStore: Not enough space to cache rdd_0_9 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.329 Executor task launch worker for task 29 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.329 Executor task launch worker for task 29 WARN BlockManager: Block rdd_0_9 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.330 Executor task launch worker for task 29 WARN BlockManager: Putting block rdd_0_9 failed
+18/01/14 14:35:49.331 Executor task launch worker for task 29 INFO Executor: Finished task 9.0 in stage 1.0 (TID 29). 746 bytes result sent to driver
+18/01/14 14:35:49.334 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 31
+18/01/14 14:35:49.334 Executor task launch worker for task 31 INFO Executor: Running task 11.0 in stage 1.0 (TID 31)
+18/01/14 14:35:49.341 Executor task launch worker for task 31 INFO MemoryStore: Will not store rdd_0_11
+18/01/14 14:35:49.341 Executor task launch worker for task 31 WARN MemoryStore: Not enough space to cache rdd_0_11 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.342 Executor task launch worker for task 31 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.343 Executor task launch worker for task 31 WARN BlockManager: Block rdd_0_11 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.343 Executor task launch worker for task 31 WARN BlockManager: Putting block rdd_0_11 failed
+18/01/14 14:35:49.344 Executor task launch worker for task 31 INFO Executor: Finished task 11.0 in stage 1.0 (TID 31). 746 bytes result sent to driver
+18/01/14 14:35:49.347 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 32
+18/01/14 14:35:49.347 Executor task launch worker for task 32 INFO Executor: Running task 12.0 in stage 1.0 (TID 32)
+18/01/14 14:35:49.353 Executor task launch worker for task 32 INFO MemoryStore: Will not store rdd_0_12
+18/01/14 14:35:49.353 Executor task launch worker for task 32 WARN MemoryStore: Not enough space to cache rdd_0_12 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.354 Executor task launch worker for task 32 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.355 Executor task launch worker for task 32 WARN BlockManager: Block rdd_0_12 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.355 Executor task launch worker for task 32 WARN BlockManager: Putting block rdd_0_12 failed
+18/01/14 14:35:49.356 Executor task launch worker for task 32 INFO Executor: Finished task 12.0 in stage 1.0 (TID 32). 746 bytes result sent to driver
+18/01/14 14:35:49.359 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 34
+18/01/14 14:35:49.359 Executor task launch worker for task 34 INFO Executor: Running task 14.0 in stage 1.0 (TID 34)
+18/01/14 14:35:49.365 Executor task launch worker for task 34 INFO MemoryStore: Will not store rdd_0_14
+18/01/14 14:35:49.365 Executor task launch worker for task 34 WARN MemoryStore: Not enough space to cache rdd_0_14 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.366 Executor task launch worker for task 34 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.366 Executor task launch worker for task 34 WARN BlockManager: Block rdd_0_14 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.366 Executor task launch worker for task 34 WARN BlockManager: Putting block rdd_0_14 failed
+18/01/14 14:35:49.367 Executor task launch worker for task 34 INFO Executor: Finished task 14.0 in stage 1.0 (TID 34). 746 bytes result sent to driver
+18/01/14 14:35:49.369 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 35
+18/01/14 14:35:49.370 Executor task launch worker for task 35 INFO Executor: Running task 15.0 in stage 1.0 (TID 35)
+18/01/14 14:35:49.375 Executor task launch worker for task 35 INFO MemoryStore: Will not store rdd_0_15
+18/01/14 14:35:49.375 Executor task launch worker for task 35 WARN MemoryStore: Not enough space to cache rdd_0_15 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.376 Executor task launch worker for task 35 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.376 Executor task launch worker for task 35 WARN BlockManager: Block rdd_0_15 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.376 Executor task launch worker for task 35 WARN BlockManager: Putting block rdd_0_15 failed
+18/01/14 14:35:49.378 Executor task launch worker for task 35 INFO Executor: Finished task 15.0 in stage 1.0 (TID 35). 746 bytes result sent to driver
+18/01/14 14:35:49.380 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 36
+18/01/14 14:35:49.381 Executor task launch worker for task 36 INFO Executor: Running task 16.0 in stage 1.0 (TID 36)
+18/01/14 14:35:49.386 Executor task launch worker for task 36 INFO MemoryStore: Will not store rdd_0_16
+18/01/14 14:35:49.387 Executor task launch worker for task 36 WARN MemoryStore: Not enough space to cache rdd_0_16 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.388 Executor task launch worker for task 36 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.388 Executor task launch worker for task 36 WARN BlockManager: Block rdd_0_16 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.389 Executor task launch worker for task 36 WARN BlockManager: Putting block rdd_0_16 failed
+18/01/14 14:35:49.390 Executor task launch worker for task 36 INFO Executor: Finished task 16.0 in stage 1.0 (TID 36). 746 bytes result sent to driver
+18/01/14 14:35:49.393 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 37
+18/01/14 14:35:49.393 Executor task launch worker for task 37 INFO Executor: Running task 17.0 in stage 1.0 (TID 37)
+18/01/14 14:35:49.399 Executor task launch worker for task 37 INFO MemoryStore: Will not store rdd_0_17
+18/01/14 14:35:49.399 Executor task launch worker for task 37 WARN MemoryStore: Not enough space to cache rdd_0_17 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.400 Executor task launch worker for task 37 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.400 Executor task launch worker for task 37 WARN BlockManager: Block rdd_0_17 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.400 Executor task launch worker for task 37 WARN BlockManager: Putting block rdd_0_17 failed
+18/01/14 14:35:49.401 Executor task launch worker for task 37 INFO Executor: Finished task 17.0 in stage 1.0 (TID 37). 746 bytes result sent to driver
+18/01/14 14:35:49.404 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 38
+18/01/14 14:35:49.404 Executor task launch worker for task 38 INFO Executor: Running task 18.0 in stage 1.0 (TID 38)
+18/01/14 14:35:49.410 Executor task launch worker for task 38 INFO MemoryStore: Will not store rdd_0_18
+18/01/14 14:35:49.411 Executor task launch worker for task 38 WARN MemoryStore: Not enough space to cache rdd_0_18 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.412 Executor task launch worker for task 38 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.412 Executor task launch worker for task 38 WARN BlockManager: Block rdd_0_18 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.412 Executor task launch worker for task 38 WARN BlockManager: Putting block rdd_0_18 failed
+18/01/14 14:35:49.414 Executor task launch worker for task 38 INFO Executor: Finished task 18.0 in stage 1.0 (TID 38). 746 bytes result sent to driver
+18/01/14 14:35:49.416 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 39
+18/01/14 14:35:49.416 Executor task launch worker for task 39 INFO Executor: Running task 19.0 in stage 1.0 (TID 39)
+18/01/14 14:35:49.422 Executor task launch worker for task 39 INFO MemoryStore: Will not store rdd_0_19
+18/01/14 14:35:49.423 Executor task launch worker for task 39 WARN MemoryStore: Not enough space to cache rdd_0_19 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.424 Executor task launch worker for task 39 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.425 Executor task launch worker for task 39 WARN BlockManager: Block rdd_0_19 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.425 Executor task launch worker for task 39 WARN BlockManager: Putting block rdd_0_19 failed
+18/01/14 14:35:49.426 Executor task launch worker for task 39 INFO Executor: Finished task 19.0 in stage 1.0 (TID 39). 789 bytes result sent to driver
+18/01/14 14:35:49.437 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 40
+18/01/14 14:35:49.438 Executor task launch worker for task 40 INFO Executor: Running task 0.0 in stage 2.0 (TID 40)
+18/01/14 14:35:49.440 Executor task launch worker for task 40 INFO TorrentBroadcast: Started reading broadcast variable 2
+18/01/14 14:35:49.445 Executor task launch worker for task 40 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 879.0 B, free 1010.0 B)
+18/01/14 14:35:49.447 Executor task launch worker for task 40 INFO TorrentBroadcast: Reading broadcast variable 2 took 7 ms
+18/01/14 14:35:49.448 Executor task launch worker for task 40 INFO MemoryStore: 1 blocks selected for dropping (879.0 B bytes)
+18/01/14 14:35:49.449 Executor task launch worker for task 40 INFO BlockManager: Dropping block broadcast_1_piece0 from memory
+18/01/14 14:35:49.449 Executor task launch worker for task 40 INFO BlockManager: Writing block broadcast_1_piece0 to disk
+18/01/14 14:35:49.452 Executor task launch worker for task 40 INFO MemoryStore: After dropping 1 blocks, free memory is 1889.0 B
+18/01/14 14:35:49.453 Executor task launch worker for task 40 INFO MemoryStore: 1 blocks selected for dropping (2016.0 B bytes)
+18/01/14 14:35:49.453 Executor task launch worker for task 40 INFO BlockManager: Dropping block rdd_0_0 from memory
+18/01/14 14:35:49.456 Executor task launch worker for task 40 INFO MemoryStore: After dropping 1 blocks, free memory is 3.8 KB
+18/01/14 14:35:49.457 Executor task launch worker for task 40 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 1216.0 B, free 2.6 KB)
+18/01/14 14:35:49.461 Executor task launch worker for task 40 INFO MemoryStore: 1 blocks selected for dropping (1216.0 B bytes)
+18/01/14 14:35:49.462 Executor task launch worker for task 40 INFO BlockManager: Dropping block broadcast_1 from memory
+18/01/14 14:35:49.462 Executor task launch worker for task 40 INFO BlockManager: Writing block broadcast_1 to disk
+18/01/14 14:35:49.477 Executor task launch worker for task 40 INFO MemoryStore: After dropping 1 blocks, free memory is 3.8 KB
+18/01/14 14:35:49.478 Executor task launch worker for task 40 INFO MemoryStore: Block rdd_0_0 stored as values in memory (estimated size 2016.0 B, free 1889.0 B)
+18/01/14 14:35:49.483 Executor task launch worker for task 40 INFO Executor: Finished task 0.0 in stage 2.0 (TID 40). 746 bytes result sent to driver
+18/01/14 14:35:49.486 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 42
+18/01/14 14:35:49.486 Executor task launch worker for task 42 INFO Executor: Running task 2.0 in stage 2.0 (TID 42)
+18/01/14 14:35:49.492 Executor task launch worker for task 42 INFO MemoryStore: Will not store rdd_0_2
+18/01/14 14:35:49.492 Executor task launch worker for task 42 WARN MemoryStore: Not enough space to cache rdd_0_2 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.493 Executor task launch worker for task 42 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.493 Executor task launch worker for task 42 WARN BlockManager: Block rdd_0_2 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.494 Executor task launch worker for task 42 WARN BlockManager: Putting block rdd_0_2 failed
+18/01/14 14:35:49.495 Executor task launch worker for task 42 INFO Executor: Finished task 2.0 in stage 2.0 (TID 42). 746 bytes result sent to driver
+18/01/14 14:35:49.497 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 43
+18/01/14 14:35:49.498 Executor task launch worker for task 43 INFO Executor: Running task 3.0 in stage 2.0 (TID 43)
+18/01/14 14:35:49.503 Executor task launch worker for task 43 INFO MemoryStore: Will not store rdd_0_3
+18/01/14 14:35:49.504 Executor task launch worker for task 43 WARN MemoryStore: Not enough space to cache rdd_0_3 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.504 Executor task launch worker for task 43 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.505 Executor task launch worker for task 43 WARN BlockManager: Block rdd_0_3 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.505 Executor task launch worker for task 43 WARN BlockManager: Putting block rdd_0_3 failed
+18/01/14 14:35:49.506 Executor task launch worker for task 43 INFO Executor: Finished task 3.0 in stage 2.0 (TID 43). 789 bytes result sent to driver
+18/01/14 14:35:49.509 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 44
+18/01/14 14:35:49.509 Executor task launch worker for task 44 INFO Executor: Running task 4.0 in stage 2.0 (TID 44)
+18/01/14 14:35:49.515 Executor task launch worker for task 44 INFO MemoryStore: Will not store rdd_0_4
+18/01/14 14:35:49.515 Executor task launch worker for task 44 WARN MemoryStore: Not enough space to cache rdd_0_4 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.516 Executor task launch worker for task 44 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.516 Executor task launch worker for task 44 WARN BlockManager: Block rdd_0_4 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.516 Executor task launch worker for task 44 WARN BlockManager: Putting block rdd_0_4 failed
+18/01/14 14:35:49.518 Executor task launch worker for task 44 INFO Executor: Finished task 4.0 in stage 2.0 (TID 44). 746 bytes result sent to driver
+18/01/14 14:35:49.520 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 45
+18/01/14 14:35:49.521 Executor task launch worker for task 45 INFO Executor: Running task 5.0 in stage 2.0 (TID 45)
+18/01/14 14:35:49.526 Executor task launch worker for task 45 INFO MemoryStore: Will not store rdd_0_5
+18/01/14 14:35:49.526 Executor task launch worker for task 45 WARN MemoryStore: Not enough space to cache rdd_0_5 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.527 Executor task launch worker for task 45 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.527 Executor task launch worker for task 45 WARN BlockManager: Block rdd_0_5 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.527 Executor task launch worker for task 45 WARN BlockManager: Putting block rdd_0_5 failed
+18/01/14 14:35:49.528 Executor task launch worker for task 45 INFO Executor: Finished task 5.0 in stage 2.0 (TID 45). 746 bytes result sent to driver
+18/01/14 14:35:49.531 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 46
+18/01/14 14:35:49.531 Executor task launch worker for task 46 INFO Executor: Running task 6.0 in stage 2.0 (TID 46)
+18/01/14 14:35:49.591 Executor task launch worker for task 46 INFO MemoryStore: Will not store rdd_0_6
+18/01/14 14:35:49.592 Executor task launch worker for task 46 WARN MemoryStore: Not enough space to cache rdd_0_6 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.594 Executor task launch worker for task 46 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.594 Executor task launch worker for task 46 WARN BlockManager: Block rdd_0_6 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.595 Executor task launch worker for task 46 WARN BlockManager: Putting block rdd_0_6 failed
+18/01/14 14:35:49.596 Executor task launch worker for task 46 INFO Executor: Finished task 6.0 in stage 2.0 (TID 46). 746 bytes result sent to driver
+18/01/14 14:35:49.600 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 51
+18/01/14 14:35:49.601 Executor task launch worker for task 51 INFO Executor: Running task 11.0 in stage 2.0 (TID 51)
+18/01/14 14:35:49.610 Executor task launch worker for task 51 INFO MemoryStore: Will not store rdd_0_11
+18/01/14 14:35:49.610 Executor task launch worker for task 51 WARN MemoryStore: Not enough space to cache rdd_0_11 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.611 Executor task launch worker for task 51 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.612 Executor task launch worker for task 51 WARN BlockManager: Block rdd_0_11 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.612 Executor task launch worker for task 51 WARN BlockManager: Putting block rdd_0_11 failed
+18/01/14 14:35:49.613 Executor task launch worker for task 51 INFO Executor: Finished task 11.0 in stage 2.0 (TID 51). 746 bytes result sent to driver
+18/01/14 14:35:49.617 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 53
+18/01/14 14:35:49.617 Executor task launch worker for task 53 INFO Executor: Running task 13.0 in stage 2.0 (TID 53)
+18/01/14 14:35:49.622 Executor task launch worker for task 53 INFO MemoryStore: Will not store rdd_0_13
+18/01/14 14:35:49.623 Executor task launch worker for task 53 WARN MemoryStore: Not enough space to cache rdd_0_13 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.623 Executor task launch worker for task 53 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.624 Executor task launch worker for task 53 WARN BlockManager: Block rdd_0_13 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.624 Executor task launch worker for task 53 WARN BlockManager: Putting block rdd_0_13 failed
+18/01/14 14:35:49.625 Executor task launch worker for task 53 INFO Executor: Finished task 13.0 in stage 2.0 (TID 53). 746 bytes result sent to driver
+18/01/14 14:35:49.628 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 54
+18/01/14 14:35:49.629 Executor task launch worker for task 54 INFO Executor: Running task 14.0 in stage 2.0 (TID 54)
+18/01/14 14:35:49.635 Executor task launch worker for task 54 INFO MemoryStore: Will not store rdd_0_14
+18/01/14 14:35:49.635 Executor task launch worker for task 54 WARN MemoryStore: Not enough space to cache rdd_0_14 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.636 Executor task launch worker for task 54 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.636 Executor task launch worker for task 54 WARN BlockManager: Block rdd_0_14 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.637 Executor task launch worker for task 54 WARN BlockManager: Putting block rdd_0_14 failed
+18/01/14 14:35:49.638 Executor task launch worker for task 54 INFO Executor: Finished task 14.0 in stage 2.0 (TID 54). 746 bytes result sent to driver
+18/01/14 14:35:49.641 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 55
+18/01/14 14:35:49.641 Executor task launch worker for task 55 INFO Executor: Running task 15.0 in stage 2.0 (TID 55)
+18/01/14 14:35:49.648 Executor task launch worker for task 55 INFO MemoryStore: Will not store rdd_0_15
+18/01/14 14:35:49.649 Executor task launch worker for task 55 WARN MemoryStore: Not enough space to cache rdd_0_15 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.649 Executor task launch worker for task 55 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.650 Executor task launch worker for task 55 WARN BlockManager: Block rdd_0_15 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.650 Executor task launch worker for task 55 WARN BlockManager: Putting block rdd_0_15 failed
+18/01/14 14:35:49.651 Executor task launch worker for task 55 INFO Executor: Finished task 15.0 in stage 2.0 (TID 55). 746 bytes result sent to driver
+18/01/14 14:35:49.654 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Got assigned task 57
+18/01/14 14:35:49.654 Executor task launch worker for task 57 INFO Executor: Running task 17.0 in stage 2.0 (TID 57)
+18/01/14 14:35:49.660 Executor task launch worker for task 57 INFO MemoryStore: Will not store rdd_0_17
+18/01/14 14:35:49.660 Executor task launch worker for task 57 WARN MemoryStore: Not enough space to cache rdd_0_17 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.661 Executor task launch worker for task 57 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.661 Executor task launch worker for task 57 WARN BlockManager: Block rdd_0_17 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.661 Executor task launch worker for task 57 WARN BlockManager: Putting block rdd_0_17 failed
+18/01/14 14:35:49.662 Executor task launch worker for task 57 INFO Executor: Finished task 17.0 in stage 2.0 (TID 57). 746 bytes result sent to driver
+18/01/14 14:35:49.665 dispatcher-event-loop-1 INFO CoarseGrainedExecutorBackend: Got assigned task 59
+18/01/14 14:35:49.665 Executor task launch worker for task 59 INFO Executor: Running task 19.0 in stage 2.0 (TID 59)
+18/01/14 14:35:49.670 Executor task launch worker for task 59 INFO MemoryStore: Will not store rdd_0_19
+18/01/14 14:35:49.671 Executor task launch worker for task 59 WARN MemoryStore: Not enough space to cache rdd_0_19 in memory! (computed 2.2 KB so far)
+18/01/14 14:35:49.671 Executor task launch worker for task 59 INFO MemoryStore: Memory use = 4.0 KB (blocks) + 1812.0 B (scratch space shared across 1 tasks(s)) = 5.8 KB. Storage limit = 5.9 KB.
+18/01/14 14:35:49.671 Executor task launch worker for task 59 WARN BlockManager: Block rdd_0_19 could not be removed as it was not found on disk or in memory
+18/01/14 14:35:49.671 Executor task launch worker for task 59 WARN BlockManager: Putting block rdd_0_19 failed
+18/01/14 14:35:49.672 Executor task launch worker for task 59 INFO Executor: Finished task 19.0 in stage 2.0 (TID 59). 746 bytes result sent to driver
+18/01/14 14:35:49.714 dispatcher-event-loop-1 WARN CoarseGrainedExecutorBackend: An unknown (localhost:52402) driver disconnected.
+18/01/14 14:35:49.715 dispatcher-event-loop-1 ERROR WorkerWatcher: Lost connection to worker rpc endpoint spark://Worker@localhost:52402. Exiting.
+18/01/14 14:35:49.718 Thread-1 INFO DiskBlockManager: Shutdown hook called
+18/01/14 14:35:49.719 SIGTERM handler ERROR CoarseGrainedExecutorBackend: RECEIVED SIGNAL TERM
+18/01/14 14:35:49.750 Thread-1 INFO ShutdownHookManager: Shutdown hook called
+18/01/14 14:35:49.751 dispatcher-event-loop-0 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
+18/01/14 14:35:49.756 CoarseGrainedExecutorBackend-stop-executor INFO MemoryStore: MemoryStore cleared
+18/01/14 14:35:49.756 CoarseGrainedExecutorBackend-stop-executor INFO BlockManager: BlockManager stopped

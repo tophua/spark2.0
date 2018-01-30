@@ -1,0 +1,5 @@
+18/01/14 14:37:54.723 main INFO CoarseGrainedExecutorBackend: Started daemon with process name: 74057@MacBook
+18/01/14 14:37:54.731 main INFO SignalUtils: Registered signal handler for TERM
+18/01/14 14:37:54.732 main INFO SignalUtils: Registered signal handler for HUP
+18/01/14 14:37:54.732 main INFO SignalUtils: Registered signal handler for INT
+18/01/14 14:37:55.846 main WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
