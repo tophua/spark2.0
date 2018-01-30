@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jars11" level="project" />
+    <orderEntry type="library" name="jars3" level="project" />
+    <orderEntry type="library" name="leveldbjni-all-1.8" level="project" />
+    <orderEntry type="library" name="jars6" level="project" />
+    <orderEntry type="library" name="hive-v1_2-9df916a2-2595-47a9-9fdc-d97baa3e2e4e" level="project" />
+    <orderEntry type="library" name="slf4j-api-1.7.5" level="project" />
+    <orderEntry type="library" name="hive-v13-4308cba4-6064-45d9-9e0c-82ddb4ef2927" level="project" />
+    <orderEntry type="library" name="jars8" level="project" />
+    <orderEntry type="library" name="hive-v1_1-1757cdba-5aad-4248-b1c5-b52b4a06cfa6" level="project" />
+    <orderEntry type="library" name="hive-v1_0-5f80c25e-7e37-4b1b-bfe5-b7199caf660d" level="project" />
+    <orderEntry type="library" name="guava-14.0.1" level="project" />
+    <orderEntry type="library" name="jackson-annotations-2.1.1" level="project" />
+    <orderEntry type="library" name="jars18" level="project" />
+    <orderEntry type="library" name="jackson-databind-2.1.1" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.1" level="project" />
+    <orderEntry type="library" name="hive-v12-4992c259-15e3-4ef2-8e06-3522f83e12df" level="project" />
+    <orderEntry type="library" name="hive-v14-535d483b-3848-457f-8a8f-b3891b908d10" level="project" />
+  </component>
+</module>
