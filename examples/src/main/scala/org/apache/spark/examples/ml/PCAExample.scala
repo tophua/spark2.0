@@ -22,14 +22,10 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.PCA
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object PCAExample {
+object PCAExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("PCAExample")
-      .getOrCreate()
+
 
     // $example on$
     val data = Array(
@@ -38,15 +34,22 @@ object PCAExample {
       Vectors.dense(4.0, 0.0, 0.0, 6.0, 7.0)
     )
     val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
-
+    //PCA可以将特征向量投影到低维空间,实现对特征向量的降维。
     val pca = new PCA()
       .setInputCol("features")
       .setOutputCol("pcaFeatures")
       .setK(3)
       .fit(df)
-
+/*    +---------------------+-----------------------------------------------------------+
+    |features             |pcaFeatures                                                |
+    +---------------------+-----------------------------------------------------------+
+    |(5,[1,3],[1.0,7.0])  |[1.6485728230883807,-4.013282700516296,-5.524543751369388] |
+    |[2.0,0.0,3.0,4.0,5.0]|[-4.645104331781534,-1.1167972663619026,-5.524543751369387]|
+    |[4.0,0.0,0.0,6.0,7.0]|[-6.428880535676489,-5.337951427775355,-5.524543751369389] |
+    +---------------------+-----------------------------------------------------------+*/
+    pca.transform(df).show(false)
     val result = pca.transform(df).select("pcaFeatures")
-    result.show(false)
+    //result.show(false)
     // $example off$
 
     spark.stop()

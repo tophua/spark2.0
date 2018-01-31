@@ -22,14 +22,9 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.MinMaxScaler
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object MinMaxScalerExample {
+object MinMaxScalerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("MinMaxScalerExample")
-      .getOrCreate()
 
     // $example on$
     val dataFrame = spark.createDataFrame(Seq(
@@ -37,7 +32,10 @@ object MinMaxScalerExample {
       (1, Vectors.dense(2.0, 1.1, 1.0)),
       (2, Vectors.dense(3.0, 10.1, 3.0))
     )).toDF("id", "features")
-
+   // MinMaxScaler作用同样是每一列,即每一维特征,将每一维特征线性地映射到指定的区间,通常是[0, 1]
+   // 它也有两个参数可以设置：
+   // - min: 默认为0,指定区间的下限
+   // - max: 默认为1,指定区间的上限
     val scaler = new MinMaxScaler()
       .setInputCol("features")
       .setOutputCol("scaledFeatures")
@@ -47,7 +45,26 @@ object MinMaxScalerExample {
 
     // rescale each feature to range [min, max].
     val scaledData = scalerModel.transform(dataFrame)
+
+  /*  +---+--------------+--------------+
+    | id|      features|scaledFeatures|
+    +---+--------------+--------------+
+    |  0|[1.0,0.1,-1.0]| [0.0,0.0,0.0]|
+    |  1| [2.0,1.1,1.0]| [0.5,0.1,0.5]|
+    |  2|[3.0,10.1,3.0]| [1.0,1.0,1.0]|
+    +---+--------------+--------------+*/
+    scaledData.show()
+    //Features scaled to range: [0.0, 1.0]
     println(s"Features scaled to range: [${scaler.getMin}, ${scaler.getMax}]")
+      /**
+        +--------------+--------------+
+        |      features|scaledFeatures|
+        +--------------+--------------+
+        |[1.0,0.1,-1.0]| [0.0,0.0,0.0]|
+        | [2.0,1.1,1.0]| [0.5,0.1,0.5]|
+        |[3.0,10.1,3.0]| [1.0,1.0,1.0]|
+        +--------------+--------------+
+      **/
     scaledData.select("features", "scaledFeatures").show()
     // $example off$
 

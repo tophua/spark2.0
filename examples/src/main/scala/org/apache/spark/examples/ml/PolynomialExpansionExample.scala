@@ -22,14 +22,9 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.PolynomialExpansion
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object PolynomialExpansionExample {
+object PolynomialExpansionExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("PolynomialExpansionExample")
-      .getOrCreate()
 
     // $example on$
     val data = Array(
@@ -37,14 +32,25 @@ object PolynomialExpansionExample {
       Vectors.dense(0.0, 0.0),
       Vectors.dense(3.0, -1.0)
     )
-    val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
-
+    val df = sqlContext.createDataFrame(data.map(Tuple1.apply)).toDF("features")
+    //多项式扩展(Polynomial expansion)是将n维的原始特征组合扩展到多项式空间的过程
+    //在输入数据中增加非线性特征可以有效的提高模型的复杂度,简单且常用的方法就是使用多项式特征(polynomial features),可以得到特征的高阶交叉项：
     val polyExpansion = new PolynomialExpansion()
       .setInputCol("features")
       .setOutputCol("polyFeatures")
       .setDegree(3)
 
     val polyDF = polyExpansion.transform(df)
+
+    /**
+      +----------+------------------------------------------+
+      |features  |polyFeatures                              |
+      +----------+------------------------------------------+
+      |[2.0,1.0] |[2.0,4.0,8.0,1.0,2.0,4.0,1.0,2.0,1.0]     |
+      |[0.0,0.0] |[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]     |
+      |[3.0,-1.0]|[3.0,9.0,27.0,-1.0,-3.0,-9.0,1.0,3.0,-1.0]|
+      +----------+------------------------------------------+
+      */
     polyDF.show(false)
     // $example off$
 

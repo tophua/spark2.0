@@ -20,34 +20,42 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.Imputer
 // $example off$
-import org.apache.spark.sql.SparkSession
 
 /**
  * An example demonstrating Imputer.
- * Run with:
- *   bin/run-example ml.ImputerExample
+  * Imputer类可以对缺失值进行均值进行插补
  */
-object ImputerExample {
+object ImputerExample  extends SparkCommant{
 
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession.builder
-      .appName("ImputerExample")
-      .getOrCreate()
 
-    // $example on$
     val df = spark.createDataFrame(Seq(
       (1.0, Double.NaN),
       (2.0, Double.NaN),
       (Double.NaN, 3.0),
       (4.0, 4.0),
+      (5.0, 5.0),
       (5.0, 5.0)
     )).toDF("a", "b")
-
+    //对缺失值进行插补
+    //Imputer类可以对缺失值进行均值进行插补
     val imputer = new Imputer()
       .setInputCols(Array("a", "b"))
       .setOutputCols(Array("out_a", "out_b"))
-
     val model = imputer.fit(df)
+
+    /**
+      * +---+---+-----+-----+
+        |  a|  b|out_a|out_b|
+        +---+---+-----+-----+
+        |1.0|NaN|  1.0| 4.25|
+        |2.0|NaN|  2.0| 4.25|
+        |NaN|3.0|  3.4|  3.0|
+        |4.0|4.0|  4.0|  4.0|
+        |5.0|5.0|  5.0|  5.0|
+        |5.0|5.0|  5.0|  5.0|
+        +---+---+-----+-----+
+      **/
     model.transform(df).show()
     // $example off$
 

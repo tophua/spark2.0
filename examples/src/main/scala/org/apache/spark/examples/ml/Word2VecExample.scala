@@ -23,14 +23,10 @@ import org.apache.spark.ml.feature.Word2Vec
 import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.sql.Row
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object Word2VecExample {
+object Word2VecExample extends SparkCommant{
   def main(args: Array[String]) {
-    val spark = SparkSession
-      .builder
-      .appName("Word2Vec example")
-      .getOrCreate()
+
 
     // $example on$
     // Input data: Each row is a bag of words from a sentence or document.
@@ -41,6 +37,9 @@ object Word2VecExample {
     ).map(Tuple1.apply)).toDF("text")
 
     // Learn a mapping from words to Vectors.
+    //Word2Vec是一个通过词向量来表示文档语义上相似度的Estimator(模型评估器),它会训练出Word2VecModel模型
+    //该模型将(文本的)每个单词映射到一个单独的大小固定的词向量(该文本对应的)上,
+    // Word2VecModel通过文本单词的平均数(条件概率)将每个文档转换为词向量;此向量可以用作特征预测、 文档相似度计算等
     val word2Vec = new Word2Vec()
       .setInputCol("text")
       .setOutputCol("result")

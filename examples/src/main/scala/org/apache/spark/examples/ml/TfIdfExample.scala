@@ -21,15 +21,11 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object TfIdfExample {
+object TfIdfExample extends SparkCommant{
 
   def main(args: Array[String]) {
-    val spark = SparkSession
-      .builder
-      .appName("TfIdfExample")
-      .getOrCreate()
+
 
     // $example on$
     val sentenceData = spark.createDataFrame(Seq(

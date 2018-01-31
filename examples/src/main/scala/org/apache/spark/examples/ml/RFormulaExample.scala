@@ -21,21 +21,17 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.RFormula
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object RFormulaExample {
+object RFormulaExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("RFormulaExample")
-      .getOrCreate()
-
     // $example on$
     val dataset = spark.createDataFrame(Seq(
       (7, "US", 18, 1.0),
       (8, "CA", 12, 0.0),
       (9, "NZ", 15, 0.0)
     )).toDF("id", "country", "hour", "clicked")
+    // RFormula通过R模型公式来选择列
+    //RFormula产生一个向量特征列以及一个double或者字符串标签列
 
     val formula = new RFormula()
       .setFormula("clicked ~ country + hour")
@@ -43,6 +39,16 @@ object RFormulaExample {
       .setLabelCol("label")
 
     val output = formula.fit(dataset).transform(dataset)
+
+    /**
+      * +--------------+-----+
+        |      features|label|
+        +--------------+-----+
+        |[0.0,0.0,18.0]|  1.0|
+        |[1.0,0.0,12.0]|  0.0|
+        |[0.0,1.0,15.0]|  0.0|
+        +--------------+-----+
+      */
     output.select("features", "label").show()
     // $example off$
 

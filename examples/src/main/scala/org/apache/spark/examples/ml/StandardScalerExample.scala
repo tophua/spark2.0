@@ -21,30 +21,28 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.StandardScaler
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object StandardScalerExample {
+object StandardScalerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("StandardScalerExample")
-      .getOrCreate()
-
     // $example on$
     val dataFrame = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
-
+    //StandardScaler处理的对象是每一列，也就是每一维特征，将特征标准化为单位标准差或是0均值，或是0均值单位标准差
+    //withStd默认为真。将数据标准化到单位标准差。
+    //withMean: 默认为假。是否变换为0均值。
+    //StandardScaler需要fit数据，获取每一维的均值和标准差，来缩放每一维特征。
     val scaler = new StandardScaler()
       .setInputCol("features")
       .setOutputCol("scaledFeatures")
-      .setWithStd(true)
-      .setWithMean(false)
+      .setWithStd(true)//数据标准化到单位标准差
+      .setWithMean(false) //变换均值
 
     // Compute summary statistics by fitting the StandardScaler.
     val scalerModel = scaler.fit(dataFrame)
 
     // Normalize each feature to have unit standard deviation.
     val scaledData = scalerModel.transform(dataFrame)
-    scaledData.show()
+
+    scaledData.show(false)
     // $example off$
 
     spark.stop()

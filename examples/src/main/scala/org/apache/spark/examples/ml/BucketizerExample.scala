@@ -21,34 +21,45 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.Bucketizer
 // $example off$
-import org.apache.spark.sql.SparkSession
-
-object BucketizerExample {
+/**
+ * 分箱(分段处理):将连续数值转换为离散类别
+ * 比如特征是年龄,是一个连续数值,需要将其转换为离散类别(未成年人、青年人、中年人、老年人),就要用到Bucketizer了
+ */
+object BucketizerExample  extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("BucketizerExample")
-      .getOrCreate()
-
     // $example on$
+    /**
+    * 分类的标准是自己定义的,在Spark中为split参数,定义如下：
+		*	double[] splits = {0, 18, 35,50, Double.PositiveInfinity}
+		* 将数值年龄分为四类0-18,18-35,35-50,55+四个段
+    */
     val splits = Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity)
 
-    val data = Array(-999.9, -0.5, -0.3, 0.0, 0.2, 999.9)
-    val dataFrame = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
+    val data = Array(-0.5, -0.3, 0.0, 0.5,0.6)//数据
+    val dataFrame = sqlContext.createDataFrame(data.map(Tuple1.apply)).toDF("features")
 
     val bucketizer = new Bucketizer()
-      .setInputCol("features")
-      .setOutputCol("bucketedFeatures")
-      .setSplits(splits)
+      .setInputCol("features")//输入字段
+      .setOutputCol("bucketedFeatures")//输出字段
+      .setSplits(splits)//设置分段标准,注意分隔小于边界值
 
     // Transform original data into its bucket index.
+    //transform()方法将DataFrame转化为另外一个DataFrame的算法
     val bucketedData = bucketizer.transform(dataFrame)
-
-    println(s"Bucketizer output with ${bucketizer.getSplits.length-1} buckets")
+    /**
+    +--------+----------------+
+    |features|bucketedFeatures|
+    +--------+----------------+
+    |    -0.5|             1.0|
+    |    -0.3|             1.0|
+    |     0.0|             2.0|
+    |     0.5|             3.0|
+    |     0.6|             3.0|
+    +--------+----------------+
+     */
     bucketedData.show()
     // $example off$
-
-    spark.stop()
+    sc.stop()
   }
 }
 // scalastyle:on println

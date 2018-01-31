@@ -1,54 +1,53 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.apache.spark.examples.ml
 
-// $example on$
 import org.apache.spark.ml.feature.MaxAbsScaler
-import org.apache.spark.ml.linalg.Vectors
-// $example off$
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.linalg.{Vector, Vectors}
+import org.apache.spark.sql.Row
 
-object MaxAbsScalerExample {
+/**
+  * Created by liush on 17-12-19 
+  */
+object MaxAbsScalerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("MaxAbsScalerExample")
-      .getOrCreate()
 
-    // $example on$
-    val dataFrame = spark.createDataFrame(Seq(
-      (0, Vectors.dense(1.0, 0.1, -8.0)),
-      (1, Vectors.dense(2.0, 1.0, -4.0)),
-      (2, Vectors.dense(4.0, 10.0, 8.0))
-    )).toDF("id", "features")
 
+    val data = Array(
+      Vectors.dense(1, 0, 100),
+      Vectors.dense(2, 0, 0),
+      Vectors.sparse(3, Array(0, 2), Array(-2, -100)),
+      Vectors.sparse(3, Array(0), Array(-1.5)))
+
+    val expected: Array[Vector] = Array(
+      Vectors.dense(0.5, 0, 1),
+      Vectors.dense(1, 0, 0),
+      Vectors.sparse(3, Array(0, 2), Array(-1, -1)),
+      Vectors.sparse(3, Array(0), Array(-0.75)))
+
+   // val sqlCon = new org.apache.spark.sql.SQLContext(spark.sparkContext)
+
+    import spark.implicits._
+    val df = data.zip(expected).toSeq.toDF("features", "expected")
+    //MaxAbsScaler将每一维的特征变换到[-1, 1]闭区间上,通过除以每一维特征上的最大的绝对值,它不会平移整个分布,也不会破坏原来每一个特征向量的稀疏性
     val scaler = new MaxAbsScaler()
       .setInputCol("features")
-      .setOutputCol("scaledFeatures")
+      .setOutputCol("scaled")
 
-    // Compute summary statistics and generate MaxAbsScalerModel
-    val scalerModel = scaler.fit(dataFrame)
-
-    // rescale each feature to range [-1, 1]
-    val scaledData = scalerModel.transform(dataFrame)
-    scaledData.select("features", "scaledFeatures").show()
-    // $example off$
-
-    spark.stop()
+    val model = scaler.fit(df)
+    /**
+    +--------------------+--------------------+--------------------+
+      |            features|            expected|              scaled|
+      +--------------------+--------------------+--------------------+
+      |     [1.0,0.0,100.0]|       [0.5,0.0,1.0]|       [0.5,0.0,1.0]|
+      |       [2.0,0.0,0.0]|       [1.0,0.0,0.0]|       [1.0,0.0,0.0]|
+      |(3,[0,2],[-2.0,-1...|(3,[0,2],[-1.0,-1...|(3,[0,2],[-1.0,-1...|
+      |      (3,[0],[-1.5])|     (3,[0],[-0.75])|     (3,[0],[-0.75])|
+      +--------------------+--------------------+--------------------+
+      **/
+    model.transform(df).show()
+    model.transform(df).select("expected", "scaled").collect()
+      .foreach { case Row(vector1: Vector, vector2: Vector) =>
+        assert(vector1.equals(vector2), s"MaxAbsScaler ut error: $vector2 should be $vector1")
+      }
   }
+
 }

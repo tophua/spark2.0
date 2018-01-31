@@ -21,7 +21,6 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.MinHashLSH
 import org.apache.spark.ml.linalg.Vectors
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.col
 // $example off$
 
@@ -30,13 +29,9 @@ import org.apache.spark.sql.functions.col
  * Run with:
  *   bin/run-example ml.MinHashLSHExample
  */
-object MinHashLSHExample {
+object MinHashLSHExample  extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    // Creates a SparkSession
-    val spark = SparkSession
-      .builder
-      .appName("MinHashLSHExample")
-      .getOrCreate()
+
 
     // $example on$
     val dfA = spark.createDataFrame(Seq(
@@ -52,7 +47,7 @@ object MinHashLSHExample {
     )).toDF("id", "features")
 
     val key = Vectors.sparse(6, Seq((1, 1.0), (3, 1.0)))
-
+    //最小哈希
     val mh = new MinHashLSH()
       .setNumHashTables(5)
       .setInputCol("features")

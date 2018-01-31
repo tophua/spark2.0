@@ -24,16 +24,12 @@ import java.util.Arrays
 import org.apache.spark.ml.attribute.{Attribute, AttributeGroup, NumericAttribute}
 import org.apache.spark.ml.feature.VectorSlicer
 import org.apache.spark.ml.linalg.Vectors
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
 // $example off$
 
-object VectorSlicerExample {
+object VectorSlicerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("VectorSlicerExample")
-      .getOrCreate()
 
     // $example on$
     val data = Arrays.asList(
@@ -46,13 +42,25 @@ object VectorSlicerExample {
     val attrGroup = new AttributeGroup("userFeatures", attrs.asInstanceOf[Array[Attribute]])
 
     val dataset = spark.createDataFrame(data, StructType(Array(attrGroup.toStructField())))
-
+    dataset.show()
+    //VectorSlicer用于从原来的特征向量中切割一部分，形成新的特征向量，
+    // 比如,原来的特征向量长度为10,我们希望切割其中的5~10作为新的特征向量,使用VectorSlicer可以快速实现
     val slicer = new VectorSlicer().setInputCol("userFeatures").setOutputCol("features")
-
+    //dataset.show()
+    //切割2,3列
     slicer.setIndices(Array(1)).setNames(Array("f3"))
     // or slicer.setIndices(Array(1, 2)), or slicer.setNames(Array("f2", "f3"))
 
     val output = slicer.transform(dataset)
+
+    /**
+      +--------------------+-------------+
+      |userFeatures        |features     |
+      +--------------------+-------------+
+      |(3,[0,1],[-2.0,2.3])|(2,[0],[2.3])|
+      |[-2.0,2.3,0.0]      |[2.3,0.0]    |
+      +--------------------+-------------+
+      **/
     output.show(false)
     // $example off$
 

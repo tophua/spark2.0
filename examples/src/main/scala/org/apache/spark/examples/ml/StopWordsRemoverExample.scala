@@ -21,15 +21,9 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.StopWordsRemover
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object StopWordsRemoverExample {
+object StopWordsRemoverExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("StopWordsRemoverExample")
-      .getOrCreate()
-
     // $example on$
     val remover = new StopWordsRemover()
       .setInputCol("raw")
@@ -39,7 +33,7 @@ object StopWordsRemoverExample {
       (0, Seq("I", "saw", "the", "red", "balloon")),
       (1, Seq("Mary", "had", "a", "little", "lamb"))
     )).toDF("id", "raw")
-
+    // StopWordsRemover(的作用是)将输入的字符串(如分词器Tokenizer的输出)中的停用字删除(后输出)
     remover.transform(dataSet).show(false)
     // $example off$
 

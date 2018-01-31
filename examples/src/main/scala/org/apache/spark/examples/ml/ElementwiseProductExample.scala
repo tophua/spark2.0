@@ -22,14 +22,10 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.ElementwiseProduct
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object ElementwiseProductExample {
+object ElementwiseProductExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("ElementwiseProductExample")
-      .getOrCreate()
+
 
     // $example on$
     // Create some vector data; also works for sparse vectors
@@ -38,12 +34,23 @@ object ElementwiseProductExample {
       ("b", Vectors.dense(4.0, 5.0, 6.0)))).toDF("id", "vector")
 
     val transformingVector = Vectors.dense(0.0, 1.0, 2.0)
+    /**
+      * ElementwiseProduct对输入向量的每个元素乘以一个权重向量的每个元素,对输入向量每个元素逐个进行放缩
+      */
     val transformer = new ElementwiseProduct()
       .setScalingVec(transformingVector)
       .setInputCol("vector")
       .setOutputCol("transformedVector")
 
     // Batch transform the vectors to create new column:
+    /**
+      +---+-------------+-----------------+
+      | id|       vector|transformedVector|
+      +---+-------------+-----------------+
+      |  a|[1.0,2.0,3.0]|    [0.0,2.0,6.0]|
+      |  b|[4.0,5.0,6.0]|   [0.0,5.0,12.0]|
+      +---+-------------+-----------------+
+      **/
     transformer.transform(dataFrame).show()
     // $example off$
 

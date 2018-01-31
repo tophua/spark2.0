@@ -1,53 +1,55 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.apache.spark.examples.ml
 
-// $example on$
 import org.apache.spark.ml.feature.QuantileDiscretizer
-// $example off$
-import org.apache.spark.sql.SparkSession
 
-object QuantileDiscretizerExample {
-  def main(args: Array[String]) {
-    val spark = SparkSession
-      .builder
-      .appName("QuantileDiscretizerExample")
-      .getOrCreate()
+/**
+  * Created by liush on 17-12-19 
+  */
+object QuantileDiscretizerExample extends SparkCommant{
+  def main(args: Array[String]): Unit = {
 
-    // $example on$
-    val data = Array((0, 18.0), (1, 19.0), (2, 8.0), (3, 5.0), (4, 2.2))
-    val df = spark.createDataFrame(data).toDF("id", "hour")
-    // $example off$
-    // Output of QuantileDiscretizer for such small datasets can depend on the number of
-    // partitions. Here we force a single partition to ensure consistent results.
-    // Note this is not necessary for normal use cases
-        .repartition(1)
 
-    // $example on$
+    import spark.implicits._
+
+    val numBuckets = 3  //设置分箱数
+    val expectedNumBuckets = 3 //
+    val df = spark.sparkContext.parallelize(Array(1.0, 3.0, 2.0, 4.0, 81.0, 6.0, 3.0, 7.0, 2.0, 9.0, 1.0, 3.0))
+      .map(Tuple1.apply).toDF("input")
+    /**
+      * QuantileDiscretizer分位树为数离散化,和Bucketizer(分箱处理)一样也是：将连续数值特征转换为离散类别特征
+      */
     val discretizer = new QuantileDiscretizer()
-      .setInputCol("hour")
+      .setInputCol("input")
       .setOutputCol("result")
-      .setNumBuckets(3)
-
+      //另外一个参数是精度,如果设置为0,则计算最精确的分位数
+     // .setRelativeError(0.1)//设置precision-控制相对误差
+      //设置分箱数
+      .setNumBuckets(numBuckets)
     val result = discretizer.fit(df).transform(df)
-    result.show()
-    // $example off$
 
-    spark.stop()
+    /**
+      * +-----+------+
+        |input|result|
+        +-----+------+
+        |  1.0|   0.0|
+        |  3.0|   1.0|
+        |  2.0|   1.0|
+        |  4.0|   2.0|
+        | 81.0|   2.0|
+        |  6.0|   2.0|
+        |  3.0|   1.0|
+        |  7.0|   2.0|
+        |  2.0|   1.0|
+        |  9.0|   2.0|
+        |  1.0|   0.0|
+        |  3.0|   1.0|
+        +-----+------+
+      */
+    result.show()
+    /*    val observedNumBuckets = result.select("result").distinct.count
+  assert(observedNumBuckets == expectedNumBuckets,
+       s"Observed number of buckets are not correct." +
+         s" Expected $expectedNumBuckets but found $observedNumBuckets")*/
   }
+
 }

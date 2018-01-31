@@ -20,16 +20,11 @@ package org.apache.spark.examples.ml
 
 // $example on$
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 // $example off$
 
-object TokenizerExample {
+object TokenizerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("TokenizerExample")
-      .getOrCreate()
 
     // $example on$
     val sentenceDataFrame = spark.createDataFrame(Seq(

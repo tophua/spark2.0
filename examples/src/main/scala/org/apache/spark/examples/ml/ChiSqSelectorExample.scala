@@ -22,16 +22,17 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.ChiSqSelector
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object ChiSqSelectorExample {
+object ChiSqSelectorExample  extends SparkCommant{
   def main(args: Array[String]) {
-    val spark = SparkSession
-      .builder
-      .appName("ChiSqSelectorExample")
-      .getOrCreate()
-    import spark.implicits._
 
+    import spark.implicits._
+    /**
+      * 特征提取和转换 卡方选择(ChiSqSelector)
+      * ChiSqSelector代表卡方特征选择,它适用于带有类别特征的标签数据。
+      * ChiSqSelector根据类别的独立卡方2检验来对特征排序,然后选取类别标签主要依赖的特征,
+      * 它类似于选取最有预测能力的特征
+      */
     // $example on$
     val data = Seq(
       (7, Vectors.dense(0.0, 0.0, 18.0, 1.0), 1.0),

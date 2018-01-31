@@ -21,23 +21,21 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.Binarizer
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object BinarizerExample {
+object BinarizerExample  extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("BinarizerExample")
-      .getOrCreate()
 
     // $example on$
-    val data = Array((0, 0.1), (1, 0.8), (2, 0.2))
+    val data = Array((0, 0.1), (1, 0.8), (2, 0.2), (2, 0.5))
     val dataFrame = spark.createDataFrame(data).toDF("id", "feature")
-
+    /**
+      * 特征二值化是把数值特征转化成布尔值的过程
+      * 二元化(Binarization)是通过(选定的)阈值将数值化的特征转换成二进制(0/1)特征
+      */
     val binarizer: Binarizer = new Binarizer()
       .setInputCol("feature")
       .setOutputCol("binarized_feature")
-      .setThreshold(0.5)
+      .setThreshold(0.5) //大于阀值1
 
     val binarizedDataFrame = binarizer.transform(dataFrame)
 

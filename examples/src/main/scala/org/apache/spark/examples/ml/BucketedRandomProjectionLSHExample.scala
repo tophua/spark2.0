@@ -21,7 +21,6 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.BucketedRandomProjectionLSH
 import org.apache.spark.ml.linalg.Vectors
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.col
 // $example off$
 
@@ -30,13 +29,9 @@ import org.apache.spark.sql.functions.col
  * Run with:
  *   bin/run-example ml.BucketedRandomProjectionLSHExample
  */
-object BucketedRandomProjectionLSHExample {
+object BucketedRandomProjectionLSHExample   extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    // Creates a SparkSession
-    val spark = SparkSession
-      .builder
-      .appName("BucketedRandomProjectionLSHExample")
-      .getOrCreate()
+
 
     // $example on$
     val dfA = spark.createDataFrame(Seq(
@@ -54,7 +49,7 @@ object BucketedRandomProjectionLSHExample {
     )).toDF("id", "features")
 
     val key = Vectors.dense(1.0, 0.0)
-
+    //2 桶3哈希表
     val brp = new BucketedRandomProjectionLSH()
       .setBucketLength(2.0)
       .setNumHashTables(3)

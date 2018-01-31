@@ -21,14 +21,9 @@ package org.apache.spark.examples.ml
 // $example on$
 import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object CountVectorizerExample {
+object CountVectorizerExample extends SparkCommant{
   def main(args: Array[String]) {
-    val spark = SparkSession
-      .builder
-      .appName("CountVectorizerExample")
-      .getOrCreate()
 
     // $example on$
     val df = spark.createDataFrame(Seq(
@@ -37,6 +32,13 @@ object CountVectorizerExample {
     )).toDF("id", "words")
 
     // fit a CountVectorizerModel from the corpus
+    /**
+      * CountVectorizer旨在通过计数来将一个文档转换为向量,
+      * Countvectorizer作为Estimator提取词汇进行训练,并生成一个CountVectorizerModel用于存储相应的词汇向量空间。
+      * 该模型产生文档关于词语的稀疏表示,其表示可以传递给其他算法
+      * CountVectorizer将根据语料库中的词频排序从高到低进行选择,词汇表的最大含量由vocabsize超参数来指定,超参数minDF,
+      * 则指定词汇表中的词语至少要在多少个不同文档中出现
+      */
     val cvModel: CountVectorizerModel = new CountVectorizer()
       .setInputCol("words")
       .setOutputCol("features")
@@ -49,6 +51,14 @@ object CountVectorizerExample {
       .setInputCol("words")
       .setOutputCol("features")
 
+    /**
+      +---+---------------+-------------------------+
+      |id |words          |features                 |
+      +---+---------------+-------------------------+
+      |0  |[a, b, c]      |(3,[0,1,2],[1.0,1.0,1.0])|
+      |1  |[a, b, b, c, a]|(3,[0,1,2],[2.0,2.0,1.0])|
+      +---+---------------+-------------------------+
+      */
     cvModel.transform(df).show(false)
     // $example off$
 

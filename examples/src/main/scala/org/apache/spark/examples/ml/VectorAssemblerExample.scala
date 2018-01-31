@@ -22,26 +22,38 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-import org.apache.spark.sql.SparkSession
 
-object VectorAssemblerExample {
+object VectorAssemblerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder
-      .appName("VectorAssemblerExample")
-      .getOrCreate()
 
     // $example on$
     val dataset = spark.createDataFrame(
       Seq((0, 18, 1.0, Vectors.dense(0.0, 10.0, 0.5), 1.0))
     ).toDF("id", "hour", "mobile", "userFeatures", "clicked")
+    dataset.show()
 
+    val dfa = spark.createDataFrame(Seq((1,2,3))).toDF("a", "b", "c")
+
+    val assemblerb = new VectorAssembler()
+      .setInputCols(Array("a", "b", "c"))
+      .setOutputCol("features")
+    assemblerb.transform(dfa).show()
+
+    //VectorAssembler是一个transformer将多列数据转化为单列的向量列
     val assembler = new VectorAssembler()
       .setInputCols(Array("hour", "mobile", "userFeatures"))
       .setOutputCol("features")
 
     val output = assembler.transform(dataset)
     println("Assembled columns 'hour', 'mobile', 'userFeatures' to vector column 'features'")
+
+    /**
+      +-----------------------+-------+
+      |features               |clicked|
+      +-----------------------+-------+
+      |[18.0,1.0,0.0,10.0,0.5]|1.0    |
+      +-----------------------+-------+
+      */
     output.select("features", "clicked").show(false)
     // $example off$
 

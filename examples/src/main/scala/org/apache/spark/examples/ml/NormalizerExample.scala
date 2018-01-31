@@ -24,10 +24,11 @@ import org.apache.spark.ml.linalg.Vectors
 // $example off$
 import org.apache.spark.sql.SparkSession
 
-object NormalizerExample {
+object NormalizerExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder
+      .master("local")
       .appName("NormalizerExample")
       .getOrCreate()
 
@@ -39,6 +40,11 @@ object NormalizerExample {
     )).toDF("id", "features")
 
     // Normalize each Vector using $L^1$ norm.
+    //特征向量正则化
+    //Normalizer是一个转换器,它可以将一组特征向量（通过计算p-范数）规范化。
+    // 参数为p（默认值：2）来指定规范化中使用的p-norm。规范化操作可以使输入数据标准化
+    //
+
     val normalizer = new Normalizer()
       .setInputCol("features")
       .setOutputCol("normFeatures")
@@ -46,11 +52,31 @@ object NormalizerExample {
 
     val l1NormData = normalizer.transform(dataFrame)
     println("Normalized using L^1 norm")
+
+    /**
+        +---+--------------+------------------+
+        | id|      features|      normFeatures|
+        +---+--------------+------------------+
+        |  0|[1.0,0.5,-1.0]|    [0.4,0.2,-0.4]|
+        |  1| [2.0,1.0,1.0]|   [0.5,0.25,0.25]|
+        |  2|[4.0,10.0,2.0]|[0.25,0.625,0.125]|
+        +---+--------------+------------------+
+      */
     l1NormData.show()
 
     // Normalize each Vector using $L^\infty$ norm.
     val lInfNormData = normalizer.transform(dataFrame, normalizer.p -> Double.PositiveInfinity)
     println("Normalized using L^inf norm")
+
+    /**
+      +---+--------------+--------------+
+      | id|      features|  normFeatures|
+      +---+--------------+--------------+
+      |  0|[1.0,0.5,-1.0]|[1.0,0.5,-1.0]|
+      |  1| [2.0,1.0,1.0]| [1.0,0.5,0.5]|
+      |  2|[4.0,10.0,2.0]| [0.4,1.0,0.2]|
+      +---+--------------+--------------+
+      */
     lInfNormData.show()
     // $example off$
 
