@@ -23,7 +23,7 @@ import org.apache.spark.mllib.util.TestingUtils._
 import org.apache.spark.sql.{DataFrame, Row}
 
 class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
-
+  //双精度缺省值为NaN的Imputer
   test("Imputer for Double with default missing Value NaN") {
     val df = spark.createDataFrame( Seq(
       (0, 1.0, 4.0, 1.0, 1.0, 4.0, 4.0),
@@ -37,7 +37,7 @@ class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with Default
       .setOutputCols(Array("out1", "out2"))
     ImputerSuite.iterateStrategyTest(imputer, df)
   }
-
+  //在计算代理值时,Imputer应该处理NaN，如果missingValue不是NaN
   test("Imputer should handle NaNs when computing surrogate value, if missingValue is not NaN") {
     val df = spark.createDataFrame( Seq(
       (0, 1.0, 1.0, 1.0),
@@ -49,7 +49,7 @@ class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with Default
       .setMissingValue(-1.0)
     ImputerSuite.iterateStrategyTest(imputer, df)
   }
-
+  //浮点数值缺失值为-1.0
   test("Imputer for Float with missing Value -1.0") {
     val df = spark.createDataFrame( Seq(
       (0, 1.0F, 1.0F, 1.0F),
@@ -62,7 +62,7 @@ class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with Default
       .setMissingValue(-1)
     ImputerSuite.iterateStrategyTest(imputer, df)
   }
-
+  //Imputer应该包含null以及'missingValue'
   test("Imputer should impute null as well as 'missingValue'") {
     val rawDf = spark.createDataFrame( Seq(
       (0, 4.0, 4.0, 4.0),
@@ -75,7 +75,7 @@ class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with Default
     val imputer = new Imputer().setInputCols(Array("value")).setOutputCols(Array("out"))
     ImputerSuite.iterateStrategyTest(imputer, df)
   }
-
+  //无法计算代理时,Imputer引发异常
   test("Imputer throws exception when surrogate cannot be computed") {
     val df = spark.createDataFrame( Seq(
       (0, Double.NaN, 1.0, 1.0),
@@ -93,7 +93,7 @@ class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with Default
       }
     }
   }
-
+  //Imputer输入和输出列验证
   test("Imputer input & output column validation") {
     val df = spark.createDataFrame( Seq(
       (0, 1.0, 1.0, 1.0),
@@ -132,7 +132,7 @@ class ImputerSuite extends SparkFunSuite with MLlibTestSparkContext with Default
       }
     }
   }
-
+  //
   test("Imputer read/write") {
     val t = new Imputer()
       .setInputCols(Array("myInputCol"))
@@ -161,6 +161,7 @@ object ImputerSuite {
 
   /**
    * Imputation strategy. Available options are ["mean", "median"].
+    * 负责策略,可用的选项是[“mean”，“median”]。
    * @param df DataFrame with columns "id", "value", "expected_mean", "expected_median"
    */
   def iterateStrategyTest(imputer: Imputer, df: DataFrame): Unit = {

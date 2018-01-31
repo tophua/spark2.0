@@ -27,6 +27,10 @@ import org.apache.spark.ml.util.DefaultReadWriteTest
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.functions.col
 
+/**
+  * Interaction交互是一个变换器，它使用向量或双值列，并生成单个向量列，其中包含每个输入列的一个值的所有组合的乘积。
+  * 例如，如果您有两个向量类型列，每个列有3个维度作为输入列，那么您将获得一个9维向量作为输出列。
+  */
 class InteractionSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
@@ -60,7 +64,7 @@ class InteractionSuite extends SparkFunSuite with MLlibTestSparkContext with Def
     intercept[AssertionError] { encode(Array(3), Vectors.dense(-1)) }
     intercept[AssertionError] { encode(Array(3), Vectors.dense(3)) }
   }
-
+  //数字互动
   test("numeric interaction") {
     val data = Seq(
       (2, Vectors.dense(3.0, 4.0)),

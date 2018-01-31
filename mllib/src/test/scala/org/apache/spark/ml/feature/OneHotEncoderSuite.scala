@@ -27,6 +27,11 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types._
 
+/**
+  * 离散<->连续特征或Label相互转换
+  * 独热编码将类别特征（离散的，已经转换为数字编号形式）,映射成独热编码。
+  * 这样在诸如Logistic回归这样需要连续数值值作为特征输入的分类器中也可以使用类别（离散）特征。
+  */
 class OneHotEncoderSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
@@ -82,7 +87,7 @@ class OneHotEncoderSuite
       (3, 1.0, 0.0), (4, 1.0, 0.0), (5, 0.0, 1.0))
     assert(output === expected)
   }
-
+  //具有ML属性的输入列
   test("input column with ML attribute") {
     val attr = NominalAttribute.defaultAttr.withValues("small", "medium", "large")
     val df = Seq(0.0, 1.0, 2.0, 1.0).map(Tuple1.apply).toDF("size")
@@ -96,7 +101,7 @@ class OneHotEncoderSuite
     assert(group.getAttr(0) === BinaryAttribute.defaultAttr.withName("small").withIndex(0))
     assert(group.getAttr(1) === BinaryAttribute.defaultAttr.withName("medium").withIndex(1))
   }
-
+  //没有ML属性的输入列
   test("input column without ML attribute") {
     val df = Seq(0.0, 1.0, 2.0, 1.0).map(Tuple1.apply).toDF("index")
     val encoder = new OneHotEncoder()
@@ -116,7 +121,7 @@ class OneHotEncoderSuite
       .setDropLast(false)
     testDefaultReadWrite(t)
   }
-
+  //不同的类型
   test("OneHotEncoder with varying types") {
     val df = stringIndexed()
     val dfWithTypes = df

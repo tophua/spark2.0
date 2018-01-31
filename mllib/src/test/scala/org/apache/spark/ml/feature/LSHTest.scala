@@ -65,14 +65,17 @@ private[ml] object LSHTest {
     MLTestingUtils.checkCopyAndUids(lsh, model)
 
     // Check output column type
+    //检查输出列的类型
     SchemaUtils.checkColumnType(
       transformedData.schema, model.getOutputCol, DataTypes.createArrayType(new VectorUDT))
 
     // Check output column dimensions
+    //检查输出列的尺寸
     val headHashValue = transformedData.select(outputCol).head().get(0).asInstanceOf[Seq[Vector]]
     assert(headHashValue.length == model.getNumHashTables)
 
     // Perform a cross join and label each pair of same_bucket and distance
+    //执行交叉连接并标记每对same_bucket和距离
     val pairs = transformedData.as("a").crossJoin(transformedData.as("b"))
     val distUDF = udf((x: Vector, y: Vector) => model.keyDistance(x, y), DataTypes.DoubleType)
     val sameBucket = udf((x: Seq[Vector], y: Seq[Vector]) => model.hashDistance(x, y) == 0.0,
@@ -82,6 +85,7 @@ private[ml] object LSHTest {
       .withColumn("distance", distUDF(col(s"a.$inputCol"), col(s"b.$inputCol")))
 
     // Compute the probabilities based on the join result
+    //根据连接结果计算概率
     val positive = result.filter(col("same_bucket"))
     val negative = result.filter(!col("same_bucket"))
     val falsePositiveCount = positive.filter(col("distance") > distFP).count().toDouble
@@ -91,6 +95,7 @@ private[ml] object LSHTest {
 
   /**
    * Compute the precision and recall of approximate nearest neighbors
+    * 计算近似最近邻的精度和召回率
    * @param lsh The lsh instance
    * @param dataset the dataset to look for the key
    * @param key The key to hash for the item
@@ -124,12 +129,14 @@ private[ml] object LSHTest {
     }
 
     // Compute precision and recall
+    //计算精度和召回
     val correctCount = expected.join(actual, model.getInputCol).count().toDouble
     (correctCount / actual.count(), correctCount / expected.count())
   }
 
   /**
    * Compute the precision and recall of approximate similarity join
+    * 计算近似相似度加入的精度和召回率
    * @param lsh The lsh instance
    * @param datasetA One of the datasets to join
    * @param datasetB Another dataset to join

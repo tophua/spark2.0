@@ -25,6 +25,14 @@ import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTestingUtils}
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.types.DoubleType
 
+/**
+    公式选择由R模型公式指定的列。 目前，我们支持R运算符的有限子集，包括'〜'，'。'，'：'，'+'和' - '。 基本操作有：
+    〜单独的目标和条件
+    +连字词，“+ 0”表示删除截取
+    - 删除术语，“ - 1”表示删除拦截
+    ：交互（数字乘法或二值化分类值）
+    . 所有列除了目标
+  */
 class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
@@ -32,7 +40,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
   test("params") {
     ParamsSuite.checkParams(new RFormula())
   }
-
+  //转换数字数据
   test("transform numeric data") {
     val formula = new RFormula().setFormula("id ~ v1 + v2")
     val original = Seq((0, 1.0, 3.0), (2, 2.0, 5.0)).toDF("id", "v1", "v2")
@@ -49,7 +57,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(resultSchema == expected.schema)
     assert(result.collect() === expected.collect())
   }
-
+  //特征列已经存在
   test("features column already exists") {
     val formula = new RFormula().setFormula("y ~ x").setFeaturesCol("x")
     val original = Seq((0, 1.0), (2, 2.0)).toDF("x", "y")
@@ -57,7 +65,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       formula.fit(original)
     }
   }
-
+  //标签列已经存在,并且forceIndexLabel被设置为false
   test("label column already exists and forceIndexLabel was set with false") {
     val formula = new RFormula().setFormula("y ~ x").setLabelCol("y")
     val original = Seq((0, 1.0), (2, 2.0)).toDF("x", "y")
@@ -66,7 +74,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(resultSchema.length == 3)
     assert(resultSchema.toString == model.transform(original).schema.toString)
   }
-
+  //标签列已经存在,但forceIndexLabel被设置为true
   test("label column already exists but forceIndexLabel was set with true") {
     val formula = new RFormula().setFormula("y ~ x").setLabelCol("y").setForceIndexLabel(true)
     val original = spark.createDataFrame(Seq((0, 1.0), (2, 2.0))).toDF("x", "y")
@@ -74,7 +82,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       formula.fit(original)
     }
   }
-
+  //标签列已经存在,但不是数字类型
   test("label column already exists but is not numeric type") {
     val formula = new RFormula().setFormula("y ~ x").setLabelCol("y")
     val original = Seq((0, true), (2, false)).toDF("x", "y")
@@ -86,7 +94,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       model.transform(original)
     }
   }
-
+  //允许缺少测试数据集的标签列
   test("allow missing label column for test datasets") {
     val formula = new RFormula().setFormula("y ~ x").setLabelCol("label")
     val original = Seq((0, 1.0), (2, 2.0)).toDF("x", "_not_y")
@@ -96,7 +104,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(!resultSchema.exists(_.name == "label"))
     assert(resultSchema.toString == model.transform(original).schema.toString)
   }
-
+  //允许空标签
   test("allow empty label") {
     val original = Seq((1, 2.0, 3.0), (4, 5.0, 6.0), (7, 8.0, 9.0)).toDF("id", "a", "b")
     val formula = new RFormula().setFormula("~ a + b")
@@ -111,7 +119,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(result.schema.toString == resultSchema.toString)
     assert(result.collect() === expected.collect())
   }
-
+  //编码字符串术语
   test("encodes string terms") {
     val formula = new RFormula().setFormula("id ~ a + b")
     val original = Seq((1, "foo", 4), (2, "bar", 4), (3, "bar", 5), (4, "baz", 5))
@@ -128,7 +136,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(result.schema.toString == resultSchema.toString)
     assert(result.collect() === expected.collect())
   }
-
+  //使用字符串索引器顺序类型对字符串项进行编码
   test("encodes string terms with string indexer order type") {
     val formula = new RFormula().setFormula("id ~ a + b")
     val original = Seq((1, "foo", 4), (2, "bar", 4), (3, "bar", 5), (4, "aaz", 5))
@@ -171,7 +179,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       idx += 1
     }
   }
-
+  //在编码字符串项时测试与R的一致性
   test("test consistency with R when encoding string terms") {
     /*
      R code:
@@ -212,7 +220,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(result.schema.toString == resultSchema.toString)
     assert(result.collect() === expected.collect())
   }
-
+  //公式w / o截取，编码字符串时应输出引用类别
   test("formula w/o intercept, we should output reference category when encoding string terms") {
     /*
      R code:
@@ -267,12 +275,14 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(attrs1 === expectedAttrs1)
 
     // There is no impact for string terms interaction.
+    //字符串术语交互没有影响
     val formula2 = new RFormula().setFormula("id ~ a:b + c - 1")
       .setStringIndexerOrderType(StringIndexer.alphabetDesc)
     val model2 = formula2.fit(original)
     val result2 = model2.transform(original)
     val resultSchema2 = model2.transformSchema(original.schema)
     // Note the column order is different between R and Spark.
+    //注意R和Spark的列顺序不同
     val expected2 = Seq(
       (1, "foo", "zq", 4, Vectors.sparse(7, Array(1, 6), Array(1.0, 4.0)), 1.0),
       (2, "bar", "zz", 4, Vectors.sparse(7, Array(4, 6), Array(1.0, 4.0)), 2.0),
@@ -295,7 +305,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
         new NumericAttribute(Some("c"), Some(7))))
     assert(attrs2 === expectedAttrs2)
   }
-
+  //索引字符串标签
   test("index string label") {
     val formula = new RFormula().setFormula("id ~ a + b")
     val original =
@@ -312,7 +322,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     // assert(result.schema.toString == resultSchema.toString)
     assert(result.collect() === expected.collect())
   }
-
+  //强制索引标签甚至是数字类型
   test("force to index label even it is numeric type") {
     val formula = new RFormula().setFormula("id ~ a + b").setForceIndexLabel(true)
     val original = spark.createDataFrame(
@@ -329,7 +339,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     ).toDF("id", "a", "b", "features", "label")
     assert(result.collect() === expected.collect())
   }
-
+  //属性生成
   test("attribute generation") {
     val formula = new RFormula().setFormula("id ~ a + b")
     val original = Seq((1, "foo", 4), (2, "bar", 4), (3, "bar", 5), (4, "baz", 5))
@@ -345,7 +355,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
         new NumericAttribute(Some("b"), Some(3))))
     assert(attrs === expectedAttrs)
   }
-
+  //向量属性生成
   test("vector attribute generation") {
     val formula = new RFormula().setFormula("id ~ vec")
     val original = Seq((1, Vectors.dense(0.0, 1.0)), (2, Vectors.dense(1.0, 2.0)))
@@ -360,7 +370,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
         new NumericAttribute(Some("vec_1"), Some(2))))
     assert(attrs === expectedAttrs)
   }
-
+  //向量属性生成与未命名的输入attrs
   test("vector attribute generation with unnamed input attrs") {
     val formula = new RFormula().setFormula("id ~ vec2")
     val base = Seq((1, Vectors.dense(0.0, 1.0)), (2, Vectors.dense(1.0, 2.0)))
@@ -381,7 +391,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
         new NumericAttribute(Some("vec2_1"), Some(2))))
     assert(attrs === expectedAttrs)
   }
-
+  //数字交互
   test("numeric interaction") {
     val formula = new RFormula().setFormula("a ~ b:c:d")
     val original = Seq((1, 2, 4, 2), (2, 3, 4, 1)).toDF("a", "b", "c", "d")
@@ -398,7 +408,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       Array[Attribute](new NumericAttribute(Some("b:c:d"), Some(1))))
     assert(attrs === expectedAttrs)
   }
-
+  //因素数字交互
   test("factor numeric interaction") {
     val formula = new RFormula().setFormula("id ~ a:b")
     val original =
@@ -424,7 +434,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
         new NumericAttribute(Some("a_foo:b"), Some(3))))
     assert(attrs === expectedAttrs)
   }
-
+  //因素互动
   test("factor factor interaction") {
     val formula = new RFormula().setFormula("id ~ a:b")
     val original =
@@ -482,7 +492,7 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     val newModel = testDefaultReadWrite(model)
     checkModelData(model, newModel)
   }
-
+  //应该支持所有的NumericType标签
   test("should support all NumericType labels") {
     val formula = new RFormula().setFormula("label ~ features")
       .setLabelCol("x")
@@ -501,12 +511,13 @@ class RFormulaSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       assert(expected.resolvedFormula.hasIntercept === actual.resolvedFormula.hasIntercept)
     }
   }
-
+  //处理看不见的功能或标签
   test("handle unseen features or labels") {
     val df1 = Seq((1, "foo", "zq"), (2, "bar", "zq"), (3, "bar", "zz")).toDF("id", "a", "b")
     val df2 = Seq((1, "foo", "zq"), (2, "bar", "zq"), (3, "bar", "zy")).toDF("id", "a", "b")
 
     // Handle unseen features.
+    //处理看不见的功能
     val formula1 = new RFormula().setFormula("id ~ a + b")
     intercept[SparkException] {
       formula1.fit(df1).transform(df2).collect()

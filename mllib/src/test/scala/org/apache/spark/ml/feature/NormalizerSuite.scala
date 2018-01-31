@@ -24,7 +24,10 @@ import org.apache.spark.ml.util.TestingUtils._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.{DataFrame, Row}
 
-
+/**
+  * Normalizer是一个变换器，用于变换向量行的数据集，规范每个向量以具有单位范数。 它采用参数p，其指定用于归一化的p范数。
+  * （默认情况下p = 2）。这种归一化可以帮助标准化输入数据并改进学习算法的行为。
+  */
 class NormalizerSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
@@ -88,7 +91,7 @@ class NormalizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       vector1 ~== vector2 absTol 1E-5
     }, "The vector value is not correct after normalization.")
   }
-
+  //使用默认参数进行标准化
   test("Normalization with default parameter") {
     val result = collectResult(normalizer.transform(dataFrame))
 
@@ -96,7 +99,7 @@ class NormalizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
 
     assertValues(result, l2Normalized)
   }
-
+  //用setter进行规范化
   test("Normalization with setter") {
     normalizer.setP(1)
 

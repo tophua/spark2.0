@@ -23,10 +23,15 @@ import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTestingUtils}
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Row
 
+/**
+  * 最大-最小规范化：将所有特征向量线性变换到用户指定最大-最小值之间。
+  * 但注意在计算时还是一个一个特征向量分开计算的（见下面公式）通常将最大，最小值设置为1和0，这样就归一化到[0,1]。
+  * Spark中可以对min和max进行设置，默认就是[0,1]。
+  */
 class MinMaxScalerSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
-
+  //基本情况
   test("MinMaxScaler fit basic case") {
     val data = Array(
       Vectors.dense(1, 0, Long.MinValue),
@@ -55,7 +60,7 @@ class MinMaxScalerSuite extends SparkFunSuite with MLlibTestSparkContext with De
 
     MLTestingUtils.checkCopyAndUids(scaler, model)
   }
-
+  //参数max必须大于min
   test("MinMaxScaler arguments max must be larger than min") {
     withClue("arguments max must be larger than min") {
       val dummyDF = Seq((1, Vectors.dense(1.0, 2.0))).toDF("id", "features")
@@ -90,7 +95,7 @@ class MinMaxScalerSuite extends SparkFunSuite with MLlibTestSparkContext with De
     assert(newInstance.originalMin === instance.originalMin)
     assert(newInstance.originalMax === instance.originalMax)
   }
-
+  //应该保持NaN值
   test("MinMaxScaler should remain NaN value") {
     val data = Array(
       Vectors.dense(1, Double.NaN, 2.0, 2.0),

@@ -22,10 +22,13 @@ import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTestingUtils}
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Row
 
+/**
+  * MaxAbsScaler转换Vector行的数据集，通过划分每个要素中的最大绝对值，将每个要素重新缩放到range [-1，1]
+  */
 class MaxAbsScalerSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
-
+  //基本情况
   test("MaxAbsScaler fit basic case") {
     val data = Array(
       Vectors.dense(1, 0, 100),

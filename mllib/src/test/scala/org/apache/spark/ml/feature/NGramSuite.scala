@@ -27,11 +27,16 @@ import org.apache.spark.sql.{Dataset, Row}
 @BeanInfo
 case class NGramTestData(inputTokens: Array[String], wantedNGrams: Array[String])
 
+/**
+  * n-gram代表由n个字组成的句子。利用上下文中相邻词间的搭配信息，在需要把连续无空格的拼音、笔划，或代表字母或笔划的数字，转换成汉字串(即句子)时，
+  * 可以计算出具有最大概率的句子，从而实现到汉字的自动转换，无需用户手动选择，避开了许多汉字对应一个相同的拼音(或笔划串，或数字串)的重码问题。
+  * 该模型基于这样一种假设，第N个词的出现只与前面N-1个词相关，而与其它任何词都不相关，整句的概率就是各个词出现概率的乘积。
+  */
 class NGramSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import org.apache.spark.ml.feature.NGramSuite._
   import testImplicits._
-
+  //默认行为产生两个特征
   test("default behavior yields bigram features") {
     val nGram = new NGram()
       .setInputCol("inputTokens")
@@ -54,7 +59,7 @@ class NGramSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultRe
     )).toDF()
     testNGram(nGram, dataset)
   }
-
+  //空输入产生空输出
   test("empty input yields empty output") {
     val nGram = new NGram()
       .setInputCol("inputTokens")

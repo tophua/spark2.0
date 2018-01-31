@@ -23,7 +23,7 @@ import org.apache.spark.ml.param.ParamsSuite
 import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTestingUtils}
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Dataset
-
+//minhash主要是用来降维,且为LSH提供的条件
 class MinHashLSHSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   @transient var dataset: Dataset[_] = _
@@ -42,7 +42,7 @@ class MinHashLSHSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
     val model = new MinHashLSHModel("mh", randCoefficients = Array((1, 0)))
     ParamsSuite.checkParams(model)
   }
-
+  //默认参数
   test("MinHashLSH: default params") {
     val rp = new MinHashLSH
     assert(rp.getNumHashTables === 1.0)
@@ -56,7 +56,7 @@ class MinHashLSHSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
     val settings = Map("inputCol" -> "keys", "outputCol" -> "values")
     testEstimatorAndModelReadWrite(mh, dataset, settings, settings, checkModelData)
   }
-
+  //模型复制和uid检查
   test("Model copy and uid checks") {
     val mh = new MinHashLSH()
       .setInputCol("keys")
