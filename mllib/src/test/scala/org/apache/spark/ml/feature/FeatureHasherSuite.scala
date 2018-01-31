@@ -41,7 +41,7 @@ class FeatureHasherSuite extends SparkFunSuite
   test("params") {
     ParamsSuite.checkParams(new FeatureHasher)
   }
-
+  //使用可变参数或数组指定输入列
   test("specify input cols using varargs or array") {
     val featureHasher1 = new FeatureHasher()
       .setInputCols("int", "double", "float", "stringNum", "string")
@@ -49,7 +49,7 @@ class FeatureHasherSuite extends SparkFunSuite
       .setInputCols(Array("int", "double", "float", "stringNum", "string"))
     assert(featureHasher1.getInputCols === featureHasher2.getInputCols)
   }
-
+  //
   test("feature hashing") {
     val df = Seq(
       (2.0, true, "1", "foo"),
@@ -67,8 +67,10 @@ class FeatureHasherSuite extends SparkFunSuite
 
     val features = output.select("features").as[Vector].collect()
     // Assume perfect hash on field names
+    //假设字段名称完美的散列
     def idx: Any => Int = murmur3FeatureIdx(n)
     // check expected indices
+    //检查预期索引
     val expected = Seq(
       Vectors.sparse(n, Seq((idx("real"), 2.0), (idx("bool=true"), 1.0),
         (idx("stringNum=1"), 1.0), (idx("string=foo"), 1.0))),
@@ -77,7 +79,7 @@ class FeatureHasherSuite extends SparkFunSuite
     )
     assert(features.zip(expected).forall { case (e, a) => e ~== a absTol 1e-14 })
   }
-
+  //哈希适用于所有数字类型
   test("hashing works for all numeric types") {
     val df = Seq(5.0, 10.0, 15.0).toDF("real")
 
@@ -87,6 +89,7 @@ class FeatureHasherSuite extends SparkFunSuite
 
     val expectedResult = hasher.transform(df).select("features").as[Vector].collect()
     // check all numeric types work as expected. String & boolean types are tested in default case
+    //检查所有数字类型按预期工作,字符串和布尔类型在默认情况下被测试
     val types =
       Seq(ShortType, LongType, IntegerType, FloatType, ByteType, DoubleType, DecimalType(10, 0))
     types.foreach { t =>
@@ -99,7 +102,7 @@ class FeatureHasherSuite extends SparkFunSuite
       }
     }
   }
-
+  //无效的输入类型应该失败
   test("invalid input type should fail") {
     val df = Seq(
       Vectors.dense(1),
@@ -110,7 +113,7 @@ class FeatureHasherSuite extends SparkFunSuite
       new FeatureHasher().setInputCols("vec").transform(df)
     }
   }
-
+  //哈希碰撞总和特征值
   test("hash collisions sum feature values") {
     val df = Seq(
       (1.0, "foo", "foo"),
@@ -126,6 +129,7 @@ class FeatureHasherSuite extends SparkFunSuite
     val features = hasher.transform(df).select("features").as[Vector].collect()
     def idx: Any => Int = murmur3FeatureIdx(n)
     // everything should hash into one field
+    //一切应该散列到一个领域
     assert(idx("real") === idx("string1=foo"))
     assert(idx("string1=foo") === idx("string2=foo"))
     assert(idx("string2=foo") === idx("string1=bar"))
@@ -136,7 +140,7 @@ class FeatureHasherSuite extends SparkFunSuite
     )
     assert(features.zip(expected).forall { case (e, a) => e ~== a absTol 1e-14 })
   }
-
+  //忽略特征散列中的空值
   test("ignores null values in feature hashing") {
     import org.apache.spark.sql.functions._
 
@@ -163,7 +167,7 @@ class FeatureHasherSuite extends SparkFunSuite
     )
     assert(features.zip(expected).forall { case (e, a) => e ~== a absTol 1e-14 })
   }
-
+  //unicode列名和值
   test("unicode column names and values") {
     // scalastyle:off nonascii
     val df = Seq((2.0, "中文")).toDF("中文", "unicode")

@@ -25,6 +25,10 @@ import org.apache.spark.ml.util.TestingUtils._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.{Dataset, Row}
 
+/**
+  * ChiSqSelector代表卡方特征选择。它适用于带有类别特征的标签数据,
+  * ChiSqSelector根据独立卡方检验，然后选取类别标签主要依赖的特征
+  */
 class ChiSqSelectorSuite extends SparkFunSuite with MLlibTestSparkContext
   with DefaultReadWriteTest {
 
@@ -115,26 +119,26 @@ class ChiSqSelectorSuite extends SparkFunSuite with MLlibTestSparkContext
       new org.apache.spark.mllib.feature.ChiSqSelectorModel(Array(1, 3, 4)))
     ParamsSuite.checkParams(model)
   }
-
+  //numTopFeatures：通过卡方检验选取最具有预测能力的Top(num)个特征
   test("Test Chi-Square selector: numTopFeatures") {
     val selector = new ChiSqSelector()
       .setOutputCol("filtered").setSelectorType("numTopFeatures").setNumTopFeatures(1)
     val model = ChiSqSelectorSuite.testSelector(selector, dataset)
     MLTestingUtils.checkCopyAndUids(selector, model)
   }
-
+  //percentile：类似于上一种方法，但是选取一小部分特征而不是固定(num)个特征；
   test("Test Chi-Square selector: percentile") {
     val selector = new ChiSqSelector()
       .setOutputCol("filtered").setSelectorType("percentile").setPercentile(0.17)
     ChiSqSelectorSuite.testSelector(selector, dataset)
   }
-
+//fpr:选择P值低于门限值的特征，这样就可以控制false positive rate来进行特征选择；
   test("Test Chi-Square selector: fpr") {
     val selector = new ChiSqSelector()
       .setOutputCol("filtered").setSelectorType("fpr").setFpr(0.02)
     ChiSqSelectorSuite.testSelector(selector, dataset)
   }
-
+//
   test("Test Chi-Square selector: fdr") {
     val selector = new ChiSqSelector()
       .setOutputCol("filtered").setSelectorType("fdr").setFdr(0.12)
@@ -155,7 +159,7 @@ class ChiSqSelectorSuite extends SparkFunSuite with MLlibTestSparkContext
     testEstimatorAndModelReadWrite(nb, dataset, ChiSqSelectorSuite.allParamSettings,
       ChiSqSelectorSuite.allParamSettings, checkModelData)
   }
-
+  //应该支持所有numerictype标签和不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val css = new ChiSqSelector()
     MLTestingUtils.checkNumericTypes[ChiSqSelectorModel, ChiSqSelector](

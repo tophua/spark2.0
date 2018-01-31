@@ -109,6 +109,7 @@ object TestingUtils {
 
     /**
      * Comparison using relative tolerance.
+      * 相对误差比较
      */
     def relTol(eps: Double): CompareDoubleRightSide =
       CompareDoubleRightSide(RelativeErrorComparison, x, eps, REL_TOL_MSG)

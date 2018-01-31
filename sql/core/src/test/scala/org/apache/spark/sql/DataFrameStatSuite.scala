@@ -32,10 +32,16 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
   import testImplicits._
 
   private def toLetter(i: Int): String = (i + 97).toChar.toString
-  //样品与替换
+  //样品与放回的抽样
   test("sample with replacement") {
     val n = 100
     val data = sparkContext.parallelize(1 to n, 2).toDF("id")
+    //放回的抽样
+    val df= data.sample(withReplacement = true, 0.05, seed = 13)
+    df.show(5,false)
+    val dff= data.sample(withReplacement = true, 0.95, seed = 13)
+    dff.show(100,false)
+    println("dff count"+dff.count)
     checkAnswer(
       data.sample(withReplacement = true, 0.05, seed = 13),
       Seq(5, 10, 52, 73).map(Row(_))
@@ -79,9 +85,11 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
       assert(splits.flatMap(_.collect()).toSet == data.collect().toSet)
 
       // Verify that the splits don't overlap
+      //验证拆分不重叠
       assert(splits(0).collect().toSeq.intersect(splits(1).collect().toSeq).isEmpty)
 
       // Verify that the results are deterministic across multiple runs
+      //验证结果在多个运行中是确定的
       val firstRun = splits.toSeq.map(_.collect().toSeq)
       val secondRun = data.randomSplit(Array[Double](2, 3), seed = 1).toSeq.map(_.collect().toSeq)
       assert(firstRun == secondRun)
@@ -90,6 +98,7 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
     // This test ensures that randomSplit does not create overlapping splits even when the
     // underlying dataframe (such as the one below) doesn't guarantee a deterministic ordering of
     // rows in each partition.
+    //这种测试确保randomsplit不造成重叠的分裂甚至当底层数据框（如下图）并不能保证一个确定的顺序在每个分区中的行。
     val dataWithInts = sparkContext.parallelize(1 to 600, 2)
       .mapPartitions(scala.util.Random.shuffle(_)).toDF("int")
     val dataWithMaps = sparkContext.parallelize(1 to 600, 2)
@@ -152,6 +161,7 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
       val Array(single1) = df.stat.approxQuantile("singles", Array(q1), epsilon)
       val Array(double2) = df.stat.approxQuantile("doubles", Array(q2), epsilon)
       // Also make sure there is no regression by computing multiple quantiles at once.
+      //同时确保没有通过计算多个位数立刻回归。
       val Array(d1, d2) = df.stat.approxQuantile("doubles", Array(q1, q2), epsilon)
       val Array(s1, s2) = df.stat.approxQuantile("singles", Array(q1, q2), epsilon)
 
@@ -166,6 +176,7 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
       assert(math.abs(d2 - 2 * q2 * n) < error_double)
 
       // Multiple columns
+      //多个列
       val Array(Array(ms1, ms2), Array(md1, md2)) =
         df.stat.approxQuantile(Array("singles", "doubles"), Array(q1, q2), epsilon)
 
@@ -176,12 +187,14 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
     }
 
     // quantile should be in the range [0.0, 1.0]
+    //分位数应该在[ 0，1 ]的范围内
     val e = intercept[IllegalArgumentException] {
       df.stat.approxQuantile(Array("singles", "doubles"), Array(q1, q2, -0.1), epsilons.head)
     }
     assert(e.getMessage.contains("quantile should be in the range [0.0, 1.0]"))
 
     // relativeError should be non-negative
+    //相对应的非负
     val e2 = intercept[IllegalArgumentException] {
       df.stat.approxQuantile(Array("singles", "doubles"), Array(q1, q2), -1.0)
     }
@@ -408,7 +421,7 @@ class DataFrameStatSuite extends QueryTest with SharedSQLContext {
 
   // This test only verifies some basic requirements, more correctness tests can be found in
   // `BloomFilterSuite` in project spark-sketch.
-  //布隆过滤器
+  //布尔过滤器
   test("Bloom filter") {
     val df = spark.range(1000)
 
@@ -447,6 +460,7 @@ class DataFrameStatPerfSuite extends QueryTest with SharedSQLContext with Loggin
       }
       logDebug("execute...")
       // Do it 10 times and report median
+      //做10次,报告中位数
       val times = (1 to 10).map { i =>
         val start = System.nanoTime()
         f

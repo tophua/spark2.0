@@ -24,7 +24,7 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
 
 class ElementwiseProductSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
-
+//对输入向量的每个元素乘以一个权重向量的每个元素,对输入向量每个元素逐个进行放缩
   test("read/write") {
     val ep = new ElementwiseProduct()
       .setInputCol("myInputCol")

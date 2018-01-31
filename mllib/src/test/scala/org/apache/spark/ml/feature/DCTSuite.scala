@@ -35,14 +35,14 @@ case class DCTTestData(vec: Vector, wantedVec: Vector)
 class DCTSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
-  //计数矢量模型常见的情况
+  //正向离散余弦变换jtransforms比赛结果
   test("forward transform of discrete cosine matches jTransforms result") {
     val data = Vectors.dense((0 until 128).map(_ => 2D * math.random - 1D).toArray)
     val inverse = false
 
     testDCT(data, inverse)
   }
-  //离散余弦逆变换匹配jTransforms结果
+  //逆离散余弦变换jtransforms比赛结果
   test("inverse transform of discrete cosine matches jTransforms result") {
     val data = Vectors.dense((0 until 128).map(_ => 2D * math.random - 1D).toArray)
     val inverse = true
@@ -73,7 +73,7 @@ class DCTSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultRead
       .setInputCol("vec")
       .setOutputCol("resultVec")
       .setInverse(inverse)
-
+    //transform()方法将DataFrame转化为另外一个DataFrame的算法
     transformer.transform(dataset)
       .select("resultVec", "wantedVec")
       .collect()

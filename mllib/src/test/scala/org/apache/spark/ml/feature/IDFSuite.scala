@@ -26,7 +26,11 @@ import org.apache.spark.mllib.feature.{IDFModel => OldIDFModel}
 import org.apache.spark.mllib.linalg.VectorImplicits._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Row
-
+/**
+  * HashTF从一个文档中计算出给定大小的词频向量。为了将词和向量顺序对应起来,所以使用了哈希。
+  * HashingTF使用每个单词对所需向量的长度S取模得出的哈希值,把所有单词映射到一个0到S-1之间的数字上。
+  * 由此可以保证生成一个S维的向量。随后当构建好词频向量后,使用IDF来计算逆文档频率,然后将它们与词频相乘计算TF-IDF
+  */
 class IDFSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
@@ -49,7 +53,7 @@ class IDFSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultRead
     val model = new IDFModel("idf", new OldIDFModel(Vectors.dense(1.0)))
     ParamsSuite.checkParams(model)
   }
-
+  //默认参数计算IDF
   test("compute IDF with default parameter") {
     val numOfFeatures = 4
     val data = Array(
@@ -62,7 +66,7 @@ class IDFSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultRead
       math.log((numOfData + 1.0) / (x + 1.0))
     })
     val expected = scaleDataWithIDF(data, idf)
-
+    //计算逆词频 idf
     val df = data.zip(expected).toSeq.toDF("features", "expected")
 
     val idfEst = new IDF()
@@ -77,7 +81,7 @@ class IDFSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultRead
         assert(x ~== y absTol 1e-5, "Transformed vector is different with expected vector.")
     }
   }
-
+  //设置IDF计算
   test("compute IDF with setter") {
     val numOfFeatures = 4
     val data = Array(

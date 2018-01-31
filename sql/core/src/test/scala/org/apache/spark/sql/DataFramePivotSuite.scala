@@ -67,6 +67,7 @@ class DataFramePivotSuite extends QueryTest with SharedSQLContext {
   //透视课程没有价值
   test("pivot courses with no values") {
     // Note Java comes before dotNet in sorted order
+    //注意java之前,按排序顺序
     checkAnswer(
       courseSales.groupBy("year").pivot("course").agg(sum($"earnings")),
       Row(2012, 20000.0, 15000.0) :: Row(2013, 30000.0, 48000.0) :: Nil

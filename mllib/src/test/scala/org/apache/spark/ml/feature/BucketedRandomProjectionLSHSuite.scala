@@ -27,7 +27,7 @@ import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTestingUtils}
 import org.apache.spark.ml.util.TestingUtils._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Dataset
-
+  //欧式距离
 class BucketedRandomProjectionLSHSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
