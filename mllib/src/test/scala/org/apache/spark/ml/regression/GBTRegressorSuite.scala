@@ -40,6 +40,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
   import testImplicits._
 
   // Combinations for estimators, learning rates and subsamplingRate
+  //组合估计，利率和subsamplingrate学习
   private val testCombinations =
     Array((10, 1.0, 1.0), (10, 0.1, 1.0), (10, 0.5, 0.75), (10, 0.1, 0.75))
 
@@ -58,7 +59,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
       sc.parallelize(EnsembleTestHelper.generateOrderedLabeledPoints(numFeatures = 20, 80), 2)
         .map(_.asML)
   }
-
+  //连续特征回归
   test("Regression with continuous features") {
     val categoricalFeatures = Map.empty[Int, Int]
     GBTRegressor.supportedLossTypes.foreach { loss =>
@@ -75,7 +76,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
       }
     }
   }
-
+  //gbtregressor玩具数据合理的行为
   test("GBTRegressor behaves reasonably on toy data") {
     val df = Seq(
       LabeledPoint(10, Vectors.dense(1, 2, 3, 4)),
@@ -97,7 +98,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
     assert(predictions.max() > 2)
     assert(predictions.min() < -1)
   }
-
+  //检查点
   test("Checkpointing") {
     val tempDir = Utils.createTempDir()
     val path = tempDir.toURI.toString
@@ -115,7 +116,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
     sc.checkpointDir = None
     Utils.deleteRecursively(tempDir)
   }
-
+  //应该支持所有numerictype标签和不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val gbt = new GBTRegressor().setMaxDepth(1)
     MLTestingUtils.checkNumericTypes[GBTRegressionModel, GBTRegressor](
@@ -145,6 +146,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
   /////////////////////////////////////////////////////////////////////////////
   // Tests of feature importance
   /////////////////////////////////////////////////////////////////////////////
+  //用玩具数据进行特征重要性
   test("Feature importance with toy data") {
     val gbt = new GBTRegressor()
       .setMaxDepth(3)
@@ -154,6 +156,7 @@ class GBTRegressorSuite extends SparkFunSuite with MLlibTestSparkContext
       .setSeed(123)
 
     // In this data, feature 1 is very important.
+    //在这个数据中,特征1是非常重要的
     val data: RDD[LabeledPoint] = TreeTests.featureImportanceData(sc)
     val categoricalFeatures = Map.empty[Int, Int]
     val df: DataFrame = TreeTests.setMetadata(data, categoricalFeatures, 0)

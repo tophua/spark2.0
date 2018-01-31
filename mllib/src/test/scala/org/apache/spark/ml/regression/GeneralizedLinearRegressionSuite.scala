@@ -292,7 +292,7 @@ class GeneralizedLinearRegressionSuite
       }
     }
   }
-
+  //广义线性回归：高斯家庭对glmnet
   test("generalized linear regression: gaussian family against glmnet") {
     /*
        R code:
@@ -337,7 +337,7 @@ class GeneralizedLinearRegressionSuite
       idx += 1
     }
   }
-
+  //广义线性回归：二项式家庭对GLM
   test("generalized linear regression: binomial family against glm") {
     /*
        R code:
@@ -408,7 +408,7 @@ class GeneralizedLinearRegressionSuite
       }
     }
   }
-
+  //广义线性回归：泊松家庭对GLM
   test("generalized linear regression: poisson family against glm") {
     /*
        R code:

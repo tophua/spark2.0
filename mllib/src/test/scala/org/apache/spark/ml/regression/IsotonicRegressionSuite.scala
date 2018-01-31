@@ -37,7 +37,7 @@ class IsotonicRegressionSuite
   private def generatePredictionInput(features: Seq[Double]): DataFrame = {
     features.map(Tuple1.apply).toDF("features")
   }
-
+  //保序回归预测
   test("isotonic regression predictions") {
     val dataset = generateIsotonicInput(Seq(1, 2, 3, 1, 6, 17, 16, 17, 18))
     val ir = new IsotonicRegression().setIsotonic(true)
@@ -56,7 +56,7 @@ class IsotonicRegressionSuite
     assert(model.predictions === Vectors.dense(1, 2, 2, 6, 16.5, 16.5, 17.0, 18.0))
     assert(model.getIsotonic)
   }
-
+  //逆序回归预测
   test("antitonic regression predictions") {
     val dataset = generateIsotonicInput(Seq(7, 5, 3, 5, 1))
     val ir = new IsotonicRegression().setIsotonic(false)
@@ -72,7 +72,7 @@ class IsotonicRegressionSuite
 
     assert(predictions === Array(7, 7, 6, 5.5, 5, 4, 1))
   }
-
+  //参数验证
   test("params validation") {
     val dataset = generateIsotonicInput(Seq(1, 2, 3))
     val ir = new IsotonicRegression
@@ -80,7 +80,7 @@ class IsotonicRegressionSuite
     val model = ir.fit(dataset)
     ParamsSuite.checkParams(model)
   }
-
+  //默认参数
   test("default params") {
     val dataset = generateIsotonicInput(Seq(1, 2, 3))
     val ir = new IsotonicRegression()
@@ -107,7 +107,7 @@ class IsotonicRegressionSuite
     assert(model.getFeatureIndex === 0)
     assert(model.hasParent)
   }
-
+  //设置参数
   test("set parameters") {
     val isotonicRegression = new IsotonicRegression()
       .setIsotonic(false)
@@ -122,7 +122,7 @@ class IsotonicRegressionSuite
     assert(isotonicRegression.getLabelCol === "l")
     assert(isotonicRegression.getPredictionCol === "p")
   }
-
+  //缺少列
   test("missing column") {
     val dataset = generateIsotonicInput(Seq(1, 2, 3))
 
@@ -142,7 +142,7 @@ class IsotonicRegressionSuite
       new IsotonicRegression().fit(dataset).setFeaturesCol("f").transform(dataset)
     }
   }
-
+  //具有特征索引的向量特征列
   test("vector features column with feature index") {
     val dataset = Seq(
       (4.0, Vectors.dense(0.0, 1.0)),
@@ -179,7 +179,7 @@ class IsotonicRegressionSuite
     testEstimatorAndModelReadWrite(ir, dataset, IsotonicRegressionSuite.allParamSettings,
       IsotonicRegressionSuite.allParamSettings, checkModelData)
   }
-
+  //应该支持所有numerictype标签和重量,而不支持其他类型
   test("should support all NumericType labels and weights, and not support other types") {
     val ir = new IsotonicRegression()
     MLTestingUtils.checkNumericTypes[IsotonicRegressionModel, IsotonicRegression](

@@ -114,6 +114,7 @@ class LinearRegressionSuite
    * Enable the ignored test to export the dataset into CSV format,
    * so we can validate the training accuracy compared with R's glmnet package.
    */
+  //将测试数据导出为CSV格式
   ignore("export test data into CSV format") {
     datasetWithDenseFeature.rdd.map { case Row(label: Double, features: Vector) =>
       label + "," + features.toArray.mkString(",")
@@ -165,9 +166,10 @@ class LinearRegressionSuite
     val numFeatures = datasetWithDenseFeature.select("features").first().getAs[Vector](0).size
     assert(model.numFeatures === numFeatures)
   }
-
+  //线性回归处理奇异矩阵
   test("linear regression handles singular matrices") {
     // check for both constant columns with intercept (zero std) and collinear
+    //检查具有截距（零STD）和共线的常数列
     val singularDataConstantColumn = sc.parallelize(Seq(
       Instance(17.0, 1.0, Vectors.dense(1.0, 5.0).toSparse),
       Instance(19.0, 2.0, Vectors.dense(1.0, 7.0)),
@@ -201,11 +203,12 @@ class LinearRegressionSuite
       assert(model.summary.objectiveHistory !== Array(0.0))
     }
   }
-
+  //无正则化截距线性回归
   test("linear regression with intercept without regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = new LinearRegression().setSolver(solver)
       // The result should be the same regardless of standardization without regularization
+      //不管标准化,没有正规化,结果应该是一样的
       val trainer2 = (new LinearRegression).setStandardization(false).setSolver(solver)
       val model1 = trainer1.fit(datasetWithDenseFeature)
       val model2 = trainer2.fit(datasetWithDenseFeature)
@@ -238,6 +241,7 @@ class LinearRegressionSuite
           val prediction2 =
             features(0) * model1.coefficients(0) + features(1) * model1.coefficients(1) +
               model1.intercept
+          //0.00001 1E-5
           assert(prediction1 ~== prediction2 relTol 1E-5)
       }
     }

@@ -53,7 +53,9 @@ class AFTSurvivalRegressionSuite
 
   /**
    * Enable the ignored test to export the dataset into CSV format,
+    * 启用被忽略的测试,将数据集导出为CSV格式
    * so we can validate the training accuracy compared with R's survival package.
+    * 因此,与R的生存包相比,我们可以验证培训的准确性
    */
   ignore("export test data into CSV format") {
     datasetUnivariate.rdd.map { case Row(features: Vector, label: Double, censor: Double) =>
@@ -69,7 +71,7 @@ class AFTSurvivalRegressionSuite
     val model = new AFTSurvivalRegressionModel("aftSurvReg", Vectors.dense(0.0), 0.0, 0.0)
     ParamsSuite.checkParams(model)
   }
-
+  //后生存回归：默认参数
   test("aft survival regression: default params") {
     val aftr = new AFTSurvivalRegression
     assert(aftr.getLabelCol === "label")
@@ -129,7 +131,7 @@ class AFTSurvivalRegressionSuite
 
     y.zip(x).map { p => AFTPoint(Vectors.dense(p._2), p._1._1, censor(p._1._1, p._1._2)) }
   }
-
+  //
   test("aft survival regression with univariate") {
     val quantileProbabilities = Array(0.1, 0.5, 0.9)
     val trainer = new AFTSurvivalRegression()
@@ -198,7 +200,7 @@ class AFTSurvivalRegressionSuite
           assert(quantiles ~== model.predictQuantiles(features) relTol 1E-5)
     }
   }
-
+  //多元回归生存
   test("aft survival regression with multivariate") {
     val quantileProbabilities = Array(0.1, 0.5, 0.9)
     val trainer = new AFTSurvivalRegression()
@@ -268,7 +270,7 @@ class AFTSurvivalRegressionSuite
           assert(quantiles ~== model.predictQuantiles(features) relTol 1E-5)
     }
   }
-
+  //AFT生存回归W／O截距
   test("aft survival regression w/o intercept") {
     val quantileProbabilities = Array(0.1, 0.5, 0.9)
     val trainer = new AFTSurvivalRegression()
@@ -352,7 +354,7 @@ class AFTSurvivalRegressionSuite
           assert(prediction ~== model.predict(features) relTol 1E-5)
     }
   }
-
+  //应该支持所有numerictype标签，不支持其他类型
   test("should support all NumericType labels, and not support other types") {
     val aft = new AFTSurvivalRegression().setMaxIter(1)
     MLTestingUtils.checkNumericTypes[AFTSurvivalRegressionModel, AFTSurvivalRegression](
@@ -361,7 +363,7 @@ class AFTSurvivalRegressionSuite
         assert(expected.coefficients === actual.coefficients)
       }
   }
-
+  //应该支持所有numerictype审查,不支持其他类型
   test("should support all NumericType censors, and not support other types") {
     val df = spark.createDataFrame(Seq(
       (1, Vectors.dense(1)),
@@ -390,7 +392,7 @@ class AFTSurvivalRegressionSuite
     assert(thrown.getMessage.contains(
       "Column censor must be of type NumericType but was actually of type StringType"))
   }
-
+  //标准化的数值稳定性
   test("numerical stability of standardization") {
     val trainer = new AFTSurvivalRegression()
     val model1 = trainer.fit(datasetUnivariate)

@@ -60,20 +60,20 @@ class RandomForestRegressorSuite extends SparkFunSuite with MLlibTestSparkContex
       .setSeed(123)
     compareAPIs(orderedLabeledPoints50_1000, newRF, categoricalFeaturesInfo)
   }
-
+  //连续特征回归,
   test("Regression with continuous features:" +
     " comparing DecisionTree vs. RandomForest(numTrees = 1)") {
     val rf = new RandomForestRegressor()
     regressionTestWithContinuousFeatures(rf)
   }
-
+  //具有连续特征和节点id缓存的回归
   test("Regression with continuous features and node Id cache :" +
     " comparing DecisionTree vs. RandomForest(numTrees = 1)") {
     val rf = new RandomForestRegressor()
       .setCacheNodeIds(true)
     regressionTestWithContinuousFeatures(rf)
   }
-
+  //用玩具数据进行特征重要性
   test("Feature importance with toy data") {
     val rf = new RandomForestRegressor()
       .setImpurity("variance")
@@ -84,6 +84,7 @@ class RandomForestRegressorSuite extends SparkFunSuite with MLlibTestSparkContex
       .setSeed(123)
 
     // In this data, feature 1 is very important.
+    //在这个数据中,特征1是非常重要的
     val data: RDD[LabeledPoint] = TreeTests.featureImportanceData(sc)
     val categoricalFeatures = Map.empty[Int, Int]
     val df: DataFrame = TreeTests.setMetadata(data, categoricalFeatures, 0)
@@ -98,7 +99,7 @@ class RandomForestRegressorSuite extends SparkFunSuite with MLlibTestSparkContex
     assert(importances.toArray.sum === 1.0)
     assert(importances.toArray.forall(_ >= 0.0))
   }
-
+  //应该支持所有numerictype标签和不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val rf = new RandomForestRegressor().setMaxDepth(1)
     MLTestingUtils.checkNumericTypes[RandomForestRegressionModel, RandomForestRegressor](

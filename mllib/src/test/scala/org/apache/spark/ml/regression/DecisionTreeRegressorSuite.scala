@@ -46,7 +46,7 @@ class DecisionTreeRegressorSuite
   /////////////////////////////////////////////////////////////////////////////
   // Tests calling train()
   /////////////////////////////////////////////////////////////////////////////
-
+  //与三元回归树(有序)的类别特征
   test("Regression stump with 3-ary (ordered) categorical features") {
     val dt = new DecisionTreeRegressor()
       .setImpurity("variance")
@@ -56,7 +56,7 @@ class DecisionTreeRegressorSuite
     val categoricalFeatures = Map(0 -> 3, 1 -> 3)
     compareAPIs(categoricalDataPointsRDD, dt, categoricalFeatures)
   }
-
+  //具有二元(有序)分类特征的回归桩
   test("Regression stump with binary (ordered) categorical features") {
     val dt = new DecisionTreeRegressor()
       .setImpurity("variance")
@@ -65,7 +65,7 @@ class DecisionTreeRegressorSuite
     val categoricalFeatures = Map(0 -> 2, 1 -> 2)
     compareAPIs(categoricalDataPointsRDD, dt, categoricalFeatures)
   }
-
+  //复制的模型必须具有相同的父级
   test("copied model must have the same parent") {
     val categoricalFeatures = Map(0 -> 2, 1 -> 2)
     val df = TreeTests.setMetadata(categoricalDataPointsRDD, categoricalFeatures, numClasses = 0)
@@ -76,7 +76,7 @@ class DecisionTreeRegressorSuite
     val model = dtr.fit(df)
     MLTestingUtils.checkCopyAndUids(dtr, model)
   }
-
+  //预测方差
   test("predictVariance") {
     val dt = new DecisionTreeRegressor()
       .setImpurity("variance")
@@ -94,6 +94,7 @@ class DecisionTreeRegressorSuite
       .collect()
 
     predictions.foreach { case Row(features: Vector, variance: Double) =>
+      //期望方差
       val expectedVariance = model.rootNode.predictImpl(features).impurityStats.calculate()
       assert(variance === expectedVariance,
         s"Expected variance $expectedVariance but got $variance.")
@@ -118,7 +119,7 @@ class DecisionTreeRegressorSuite
       assert(actual ~== expected absTol 1e-3)
     }
   }
-
+  //用玩具数据进行特征重要性
   test("Feature importance with toy data") {
     val dt = new DecisionTreeRegressor()
       .setImpurity("variance")
@@ -126,6 +127,7 @@ class DecisionTreeRegressorSuite
       .setSeed(123)
 
     // In this data, feature 1 is very important.
+    //在这个数据中,特征1是非常重要的
     val data: RDD[LabeledPoint] = TreeTests.featureImportanceData(sc)
     val categoricalFeatures = Map.empty[Int, Int]
     val df: DataFrame = TreeTests.setMetadata(data, categoricalFeatures, 0)
@@ -138,7 +140,7 @@ class DecisionTreeRegressorSuite
     assert(importances.toArray.sum === 1.0)
     assert(importances.toArray.forall(_ >= 0.0))
   }
-
+  //应该支持所有numerictype标签和不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val dt = new DecisionTreeRegressor().setMaxDepth(1)
     MLTestingUtils.checkNumericTypes[DecisionTreeRegressionModel, DecisionTreeRegressor](
@@ -163,18 +165,21 @@ class DecisionTreeRegressorSuite
     val rdd = TreeTests.getTreeReadWriteData(sc)
 
     // Categorical splits with tree depth 2
+    //树深度2的分类分裂
     val categoricalData: DataFrame =
       TreeTests.setMetadata(rdd, Map(0 -> 2, 1 -> 3), numClasses = 0)
     testEstimatorAndModelReadWrite(dt, categoricalData,
       TreeTests.allParamSettings, TreeTests.allParamSettings, checkModelData)
 
     // Continuous splits with tree depth 2
+    //树深连续分裂2
     val continuousData: DataFrame =
       TreeTests.setMetadata(rdd, Map.empty[Int, Int], numClasses = 0)
     testEstimatorAndModelReadWrite(dt, continuousData,
       TreeTests.allParamSettings, TreeTests.allParamSettings, checkModelData)
 
     // Continuous splits with tree depth 0
+    //树深连续分裂0
     testEstimatorAndModelReadWrite(dt, continuousData,
       TreeTests.allParamSettings ++ Map("maxDepth" -> 0),
       TreeTests.allParamSettings ++ Map("maxDepth" -> 0), checkModelData)
