@@ -22,17 +22,19 @@ import org.apache.spark.ml.feature.{RFormula, RFormulaModel}
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 
 class RWrapperUtilsSuite extends SparkFunSuite with MLlibTestSparkContext {
-
+  //避免libsvm数据列名称冲突
   test("avoid libsvm data column name conflicting") {
     val rFormula = new RFormula().setFormula("label ~ features")
     val data = spark.read.format("libsvm").load("../data/mllib/sample_libsvm_data.txt")
 
     // if not checking column name, then IllegalArgumentException
+    //如果不检查列名,则IllegalArgumentException
     intercept[IllegalArgumentException] {
       rFormula.fit(data)
     }
 
     // after checking, model build is ok
+    //在检查之后,模型建立是好的
     RWrapperUtils.checkDataColumns(rFormula, data)
 
     assert(rFormula.getLabelCol == "label")

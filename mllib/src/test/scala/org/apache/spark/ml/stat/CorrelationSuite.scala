@@ -26,7 +26,7 @@ import org.apache.spark.ml.util.TestingUtils._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.{DataFrame, Row}
 
-
+//相关套件
 class CorrelationSuite extends SparkFunSuite with MLlibTestSparkContext with Logging {
 
   val xData = Array(1.0, 0.0, -2.0)
@@ -46,7 +46,7 @@ class CorrelationSuite extends SparkFunSuite with MLlibTestSparkContext with Log
     mat.asBreeze.toDenseMatrix
   }
 
-
+  //相关corr（X）默认,皮尔森
   test("corr(X) default, pearson") {
     val defaultMat = Correlation.corr(X, "features")
     val pearsonMat = Correlation.corr(X, "features", "pearson")
@@ -61,7 +61,7 @@ class CorrelationSuite extends SparkFunSuite with MLlibTestSparkContext with Log
     assert(Matrices.fromBreeze(extract(defaultMat)) ~== expected absTol 1e-4)
     assert(Matrices.fromBreeze(extract(pearsonMat)) ~== expected absTol 1e-4)
   }
-
+  //斯皮尔曼相关
   test("corr(X) spearman") {
     val spearmanMat = Correlation.corr(X, "features", "spearman")
     // scalastyle:off

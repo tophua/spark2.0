@@ -50,6 +50,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     super.beforeAll()
 
     // NOTE: Intercept should be small for generating equal 0s and 1s
+    //注意：拦截应该很小，以产生相等的0和1
     val A = 0.01
     val B = -1.5
     val C = 1.0
@@ -67,6 +68,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
 
   /**
    * Enable the ignored test to export the dataset into CSV format,
+    * 启用忽略测试将数据集导出为CSV格式
    * so we can validate the training accuracy compared with R's e1071 package.
    */
   ignore("export test data into CSV format") {
@@ -74,7 +76,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
       label + "," + features.toArray.mkString(",")
     }.repartition(1).saveAsTextFile("target/tmp/LinearSVC/binaryDataset")
   }
-
+  //线性SVC二进制分类
   test("Linear SVC binary classification") {
     val svm = new LinearSVC()
     val model = svm.fit(smallBinaryDataset)
@@ -83,7 +85,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val sparseModel = svm.fit(smallSparseBinaryDataset)
     checkModels(model, sparseModel)
   }
-
+  //带正则化的线性SVC二进制分类
   test("Linear SVC binary classification with regularization") {
     val svm = new LinearSVC()
     val model = svm.setRegParam(0.1).fit(smallBinaryDataset)
@@ -98,7 +100,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val model = new LinearSVCModel("linearSVC", Vectors.dense(0.0), 0.0)
     ParamsSuite.checkParams(model)
   }
-
+  //线性svc：默认参数
   test("linear svc: default params") {
     val lsvc = new LinearSVC()
     assert(lsvc.getRegParam === 0.0)
@@ -127,7 +129,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
 
     MLTestingUtils.checkCopyAndUids(lsvc, model)
   }
-
+  //阈值作用于原始预测
   test("LinearSVC threshold acts on rawPrediction") {
     val lsvc =
       new LinearSVCModel(uid = "myLSVCM", coefficients = Vectors.dense(1.0), intercept = 0.0)
@@ -149,6 +151,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
 
     def checkResults(threshold: Double, expected: Set[(Int, Double)]): Unit = {
       // Check via code path using Classifier.raw2prediction
+      //使用Classifier.raw2prediction通过代码路径进行检查
       lsvc.setRawPredictionCol("rawPrediction")
       checkOneResult(lsvc, threshold, expected)
       // Check via code path using Classifier.predict
@@ -160,7 +163,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     checkResults(Double.PositiveInfinity, Set((1, 0.0), (0, 0.0), (-1, 0.0)))
     checkResults(Double.NegativeInfinity, Set((1, 1.0), (0, 1.0), (-1, 1.0)))
   }
-
+  //当fitIntercept关闭时,线性svc不适合截取
   test("linear svc doesn't fit intercept when fitIntercept is off") {
     val lsvc = new LinearSVC().setFitIntercept(false).setMaxIter(5)
     val model = lsvc.fit(smallBinaryDataset)
@@ -170,7 +173,7 @@ class LinearSVCSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val model2 = lsvc2.fit(smallBinaryDataset)
     assert(model2.intercept !== 0.0)
   }
-
+  //HingeAggregator中的稀疏系数
   test("sparse coefficients in HingeAggregator") {
     val bcCoefficients = spark.sparkContext.broadcast(Vectors.sparse(2, Array(0), Array(1.0)))
     val bcFeaturesStd = spark.sparkContext.broadcast(Array(1.0))
@@ -284,6 +287,7 @@ object LinearSVCSuite {
   )
 
   // Generate noisy input of the form Y = signum(x.dot(weights) + intercept + noise)
+  //生成形式为Y = signum（x.dot（权重）+截距+噪声）的噪声输入
   def generateSVMInput(
       intercept: Double,
       weights: Array[Double],

@@ -123,7 +123,7 @@ class LogisticRegressionSuite
    * Enable the ignored test to export the dataset into CSV format,
    * so we can validate the training accuracy compared with R's glmnet package.
    */
-  ignore("export test data into CSV format") {
+  ignore("export test data into CSV format") {//将测试数据导出为CSV格式
     binaryDataset.rdd.map { case Row(label: Double, features: Vector, weight: Double) =>
       label + "," + weight + "," + features.toArray.mkString(",")
     }.repartition(1).saveAsTextFile("target/tmp/LogisticRegressionSuite/binaryDataset")
@@ -142,7 +142,7 @@ class LogisticRegressionSuite
     val model = new LogisticRegressionModel("logReg", Vectors.dense(0.0), 0.0)
     ParamsSuite.checkParams(model)
   }
-
+  //逻辑回归：默认参数
   test("logistic regression: default params") {
     val lr = new LogisticRegression
     assert(lr.getLabelCol === "label")
@@ -173,7 +173,7 @@ class LogisticRegressionSuite
     model.setSummary(None)
     assert(!model.hasSummary)
   }
-
+  //逻辑回归：非法参数
   test("logistic regression: illegal params") {
     val lowerBoundsOnCoefficients = Matrices.dense(1, 4, Array(1.0, 0.0, 1.0, 0.0))
     val upperBoundsOnCoefficients1 = Matrices.dense(1, 4, Array(0.0, 1.0, 1.0, 0.0))
@@ -181,10 +181,11 @@ class LogisticRegressionSuite
     val lowerBoundsOnIntercepts = Vectors.dense(1.0)
 
     // Work well when only set bound in one side.
+    //只在一边绑定时，工作得很好。
     new LogisticRegression()
       .setLowerBoundsOnCoefficients(lowerBoundsOnCoefficients)
       .fit(binaryDataset)
-
+    //约束约束优化只支持L2正则化
     withClue("bound constrained optimization only supports L2 regularization") {
       intercept[IllegalArgumentException] {
         new LogisticRegression()
@@ -193,7 +194,7 @@ class LogisticRegressionSuite
           .fit(binaryDataset)
       }
     }
-
+    //lowerBoundsOnCoefficients应该小于或等于upperBoundsOnCoefficients
     withClue("lowerBoundsOnCoefficients should less than or equal to upperBoundsOnCoefficients") {
       intercept[IllegalArgumentException] {
         new LogisticRegression()
@@ -202,7 +203,7 @@ class LogisticRegressionSuite
           .fit(binaryDataset)
       }
     }
-
+    //系数界限矩阵与形状（1，特征数量）不匹配
     withClue("the coefficients bound matrix mismatched with shape (1, number of features)") {
       intercept[IllegalArgumentException] {
         new LogisticRegression()
@@ -211,7 +212,7 @@ class LogisticRegressionSuite
           .fit(binaryDataset)
       }
     }
-
+    //如果没有拦截的话，不应该设置拦截界限
     withClue("bounds on intercepts should not be set if fitting without intercept") {
       intercept[IllegalArgumentException] {
         new LogisticRegression()
@@ -221,7 +222,7 @@ class LogisticRegressionSuite
       }
     }
   }
-
+  //空概率Col或预测Col
   test("empty probabilityCol or predictionCol") {
     val lr = new LogisticRegression().setMaxIter(1)
     val datasetFieldNames = smallBinaryDataset.schema.fieldNames.toSet
@@ -232,6 +233,7 @@ class LogisticRegressionSuite
       columns.foreach { c => assert(fieldNames.exists(_.startsWith(c))) }
     }
     // check that the summary model adds the appropriate columns
+    //检查摘要模型是否添加了适当的列
     Seq(("binomial", smallBinaryDataset), ("multinomial", smallMultinomialDataset)).foreach {
       case (family, dataset) =>
         lr.setFamily(family)
@@ -248,7 +250,7 @@ class LogisticRegressionSuite
         checkSummarySchema(modelNoPredNoProb, Seq("prediction_", "probability_"))
     }
   }
-
+  //检查二进制和多类的摘要类型
   test("check summary types for binary and multiclass") {
     val lr = new LogisticRegression()
       .setFamily("binomial")
@@ -267,6 +269,7 @@ class LogisticRegressionSuite
         mlorModel.binarySummary
       }
     }
+    //不能将摘要转换成二进制摘要的多类模型
     withClue("cannot cast summary to binary summary multiclass model") {
       intercept[RuntimeException] {
         mlorModel.summary.asBinary
@@ -294,18 +297,20 @@ class LogisticRegressionSuite
     }
     // Set via threshold.
     // Intuition: Large threshold or large thresholds(1) makes class 0 more likely.
+    //较大的阈值或较大的阈值（1）使等级0更可能。
     lr.setThreshold(1.0)
     assert(lr.getThresholds === Array(0.0, 1.0))
     lr.setThreshold(0.0)
     assert(lr.getThresholds === Array(1.0, 0.0))
     lr.setThreshold(0.5)
     assert(lr.getThresholds === Array(0.5, 0.5))
-    // Set via thresholds
+    // Set via thresholds 通过阈值设置
     val lr2 = new LogisticRegression().setFamily("binomial")
     lr2.setThresholds(Array(0.3, 0.7))
     val expectedThreshold = 1.0 / (1.0 + 0.3 / 0.7)
     assert(lr2.getThreshold ~== expectedThreshold relTol 1E-7)
     // thresholds and threshold must be consistent
+    //阈值和阈值必须一致
     lr2.setThresholds(Array(0.1, 0.2, 0.3))
     withClue("getThreshold should throw error if thresholds has length != 2.") {
       intercept[IllegalArgumentException] {
@@ -313,12 +318,14 @@ class LogisticRegressionSuite
       }
     }
     // thresholds and threshold must be consistent: values
+    //阈值和阈值必须一致：值
     withClue("fit with ParamMap should throw error if threshold, thresholds do not match.") {
       intercept[IllegalArgumentException] {
         lr2.fit(smallBinaryDataset,
           lr2.thresholds -> Array(0.3, 0.7), lr2.threshold -> (expectedThreshold / 2.0))
       }
     }
+    //如果阈值，阈值不匹配，则与ParamMap匹配应该抛出错误
     withClue("fit with ParamMap should throw error if threshold, thresholds do not match.") {
       intercept[IllegalArgumentException] {
         val lr2model = lr2.fit(smallBinaryDataset,
@@ -327,7 +334,7 @@ class LogisticRegressionSuite
       }
     }
   }
-
+  //阈值预测
   test("thresholds prediction") {
     val blr = new LogisticRegression().setFamily("binomial")
     val binaryModel = blr.fit(smallBinaryDataset)
@@ -347,22 +354,23 @@ class LogisticRegressionSuite
     val model = mlr.fit(smallMultinomialDataset)
     val basePredictions = model.transform(smallMultinomialDataset).select("prediction").collect()
 
-    // should predict all zeros
+    // should predict all zeros 应该预测全零
     model.setThresholds(Array(1, 1000, 1000))
     val zeroPredictions = model.transform(smallMultinomialDataset).select("prediction").collect()
     assert(zeroPredictions.forall(_.getDouble(0) === 0.0))
 
-    // should predict all ones
+    // should predict all ones 应该预测所有的
     model.setThresholds(Array(1000, 1, 1000))
     val onePredictions = model.transform(smallMultinomialDataset).select("prediction").collect()
     assert(onePredictions.forall(_.getDouble(0) === 1.0))
 
-    // should predict all twos
+    // should predict all twos 应该预测所有的两个
     model.setThresholds(Array(1000, 1000, 1))
     val twoPredictions = model.transform(smallMultinomialDataset).select("prediction").collect()
     assert(twoPredictions.forall(_.getDouble(0) === 2.0))
 
     // constant threshold scaling is the same as no thresholds
+    //常量阈值缩放与无阈值相同
     model.setThresholds(Array(1000, 1000, 1000))
     val scaledPredictions = model.transform(smallMultinomialDataset).select("prediction").collect()
     assert(scaledPredictions.zip(basePredictions).forall { case (scaled, base) =>
@@ -370,12 +378,13 @@ class LogisticRegressionSuite
     })
 
     // force it to use the predict method
+    //迫使其使用预测方法
     model.setRawPredictionCol("").setProbabilityCol("").setThresholds(Array(0, 1, 1))
     val predictionsWithPredict =
       model.transform(smallMultinomialDataset).select("prediction").collect()
     assert(predictionsWithPredict.forall(_.getDouble(0) === 0.0))
   }
-
+  //当fitIntercept关闭时，逻辑回归不适合截取
   test("logistic regression doesn't fit intercept when fitIntercept is off") {
     val lr = new LogisticRegression().setFamily("binomial")
     lr.setFitIntercept(false)
@@ -387,9 +396,10 @@ class LogisticRegressionSuite
     val mlrModel = mlr.fit(smallMultinomialDataset)
     assert(mlrModel.interceptVector === Vectors.sparse(3, Seq()))
   }
-
+  //用setter进行逻辑回归
   test("logistic regression with setters") {
     // Set params, train, and check as many params as we can.
+    //设置参数,训练,并检查尽可能多的参数,我们可以
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(1.0)
@@ -403,6 +413,7 @@ class LogisticRegressionSuite
     assert(model.getThreshold === 0.6)
 
     // Modify model params, and check that the params worked.
+    //修改模型参数,并检查参数是否工作
     model.setThreshold(1.0)
     val predAllZero = model.transform(smallBinaryDataset)
       .select("prediction", "myProbability")
@@ -412,6 +423,7 @@ class LogisticRegressionSuite
       s"With threshold=1.0, expected predictions to be all 0, but only" +
       s" ${predAllZero.count(_ === 0)} of ${smallBinaryDataset.count()} were 0.")
     // Call transform with params, and check that the params worked.
+    //用params调用变换,并检查参数是否工作
     val predNotAllZero =
       model.transform(smallBinaryDataset, model.threshold -> 0.0,
         model.probabilityCol -> "myProb")
@@ -421,6 +433,7 @@ class LogisticRegressionSuite
     assert(predNotAllZero.exists(_ !== 0.0))
 
     // Call fit() with new params, and check as many params as we can.
+    //用新的参数调用fit（）,然后检查尽可能多的参数
     lr.setThresholds(Array(0.6, 0.4))
     val model2 = lr.fit(smallBinaryDataset, lr.maxIter -> 5, lr.regParam -> 0.1,
       lr.probabilityCol -> "theProb")
@@ -431,7 +444,7 @@ class LogisticRegressionSuite
     assert(model2.getThreshold === 0.4)
     assert(model2.getProbabilityCol === "theProb")
   }
-
+  //多项式逻辑回归：预测器，分类器方法
   test("multinomial logistic regression: Predictor, Classifier methods") {
     val sqlContext = smallMultinomialDataset.sqlContext
     import sqlContext.implicits._
@@ -444,6 +457,7 @@ class LogisticRegressionSuite
 
     val results = model.transform(smallMultinomialDataset)
     // check that raw prediction is coefficients dot features + intercept
+    //检查原始预测是系数点特征+拦截
     results.select("rawPrediction", "features").collect().foreach {
       case Row(raw: Vector, features: Vector) =>
         assert(raw.size === 3)
@@ -459,6 +473,7 @@ class LogisticRegressionSuite
     }
 
     // Compare rawPrediction with probability
+    //将原始预测与概率进行比较
     results.select("rawPrediction", "probability").collect().foreach {
       case Row(raw: Vector, prob: Vector) =>
         assert(raw.size === 3)
@@ -474,13 +489,14 @@ class LogisticRegressionSuite
     }
 
     // Compare prediction with probability
+    //预测与概率比较
     results.select("prediction", "probability").collect().foreach {
       case Row(pred: Double, prob: Vector) =>
         val predFromProb = prob.toArray.zipWithIndex.maxBy(_._1)._2
         assert(pred == predFromProb)
     }
 
-    // force it to use raw2prediction
+    // force it to use raw2prediction 迫使它使用raw2预测
     model.setRawPredictionCol("rawPrediction").setProbabilityCol("")
     val resultsUsingRaw2Predict =
       model.transform(smallMultinomialDataset).select("prediction").as[Double].collect()
@@ -496,7 +512,7 @@ class LogisticRegressionSuite
       case (pred1, pred2) => assert(pred1 === pred2)
     }
 
-    // force it to use predict
+    // force it to use predict 迫使其使用预测
     model.setRawPredictionCol("").setProbabilityCol("")
     val resultsUsingPredict =
       model.transform(smallMultinomialDataset).select("prediction").as[Double].collect()
@@ -507,7 +523,7 @@ class LogisticRegressionSuite
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, LogisticRegressionModel](model, smallMultinomialDataset)
   }
-
+  //二元逻辑回归：预测器,分类器方法
   test("binary logistic regression: Predictor, Classifier methods") {
     val sqlContext = smallBinaryDataset.sqlContext
     import sqlContext.implicits._
@@ -521,6 +537,7 @@ class LogisticRegressionSuite
     val results = model.transform(smallBinaryDataset)
 
     // Compare rawPrediction with probability
+    //比较rawPrediction与概率
     results.select("rawPrediction", "probability").collect().foreach {
       case Row(raw: Vector, prob: Vector) =>
         assert(raw.size === 2)
@@ -530,14 +547,14 @@ class LogisticRegressionSuite
         assert(prob(0) ~== 1.0 - probFromRaw1 relTol eps)
     }
 
-    // Compare prediction with probability
+    // Compare prediction with probability 预测与概率比较
     results.select("prediction", "probability").collect().foreach {
       case Row(pred: Double, prob: Vector) =>
         val predFromProb = prob.toArray.zipWithIndex.maxBy(_._1)._2
         assert(pred == predFromProb)
     }
 
-    // force it to use raw2prediction
+    // force it to use raw2prediction 迫使它使用raw2prediction
     model.setRawPredictionCol("rawPrediction").setProbabilityCol("")
     val resultsUsingRaw2Predict =
       model.transform(smallBinaryDataset).select("prediction").as[Double].collect()
@@ -545,7 +562,7 @@ class LogisticRegressionSuite
       case (pred1, pred2) => assert(pred1 === pred2)
     }
 
-    // force it to use probability2prediction
+    // force it to use probability2prediction 迫使它使用probability2prediction
     model.setRawPredictionCol("").setProbabilityCol("probability")
     val resultsUsingProb2Predict =
       model.transform(smallBinaryDataset).select("prediction").as[Double].collect()
@@ -553,7 +570,7 @@ class LogisticRegressionSuite
       case (pred1, pred2) => assert(pred1 === pred2)
     }
 
-    // force it to use predict
+    // force it to use predict 迫使其使用预测
     model.setRawPredictionCol("").setProbabilityCol("")
     val resultsUsingPredict =
       model.transform(smallBinaryDataset).select("prediction").as[Double].collect()
@@ -564,7 +581,7 @@ class LogisticRegressionSuite
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, LogisticRegressionModel](model, smallBinaryDataset)
   }
-
+  //系数和拦截方法
   test("coefficients and intercept methods") {
     val mlr = new LogisticRegression().setMaxIter(1).setFamily("multinomial")
     val mlrModel = mlr.fit(smallMultinomialDataset)
@@ -582,7 +599,7 @@ class LogisticRegressionSuite
     assert(blrModel.coefficients.size === 1)
     assert(blrModel.intercept !== 0.0)
   }
-
+  //LogisticAggregator中的稀疏系数
   test("sparse coefficients in LogisticAggregator") {
     val bcCoefficientsBinary = spark.sparkContext.broadcast(Vectors.sparse(2, Array(0), Array(1.0)))
     val bcFeaturesStd = spark.sparkContext.broadcast(Array(1.0))
@@ -608,7 +625,7 @@ class LogisticRegressionSuite
     bcFeaturesStd.destroy(blocking = false)
     bcCoefficientsMulti.destroy(blocking = false)
   }
-
+  //对多类的溢出预测
   test("overflow prediction for multiclass") {
     val model = new LogisticRegressionModel("mLogReg",
       Matrices.dense(3, 2, Array(0.0, 0.0, 0.0, 1.0, 2.0, 3.0)),
@@ -620,18 +637,20 @@ class LogisticRegressionSuite
     val results = model.transform(overFlowData).select("rawPrediction", "probability").collect()
 
     // probabilities are correct when margins have to be adjusted
+    //必须调整利润率时,概率是正确的
     val raw1 = results(0).getAs[Vector](0)
     val prob1 = results(0).getAs[Vector](1)
     assert(raw1 === Vectors.dense(1000.0, 2000.0, 3000.0))
     assert(prob1 ~== Vectors.dense(0.0, 0.0, 1.0) absTol eps)
 
     // probabilities are correct when margins don't have to be adjusted
+    //当利润率不必调整时,概率是正确的
     val raw2 = results(1).getAs[Vector](0)
     val prob2 = results(1).getAs[Vector](1)
     assert(raw2 === Vectors.dense(-1.0, -2.0, -3.0))
     assert(prob2 ~== Vectors.dense(0.66524096, 0.24472847, 0.09003057) relTol eps)
   }
-
+  //多分类描述
   test("MultiClassSummarizer") {
     val summarizer1 = (new MultiClassSummarizer)
       .add(0.0).add(3.0).add(4.0).add(3.0).add(6.0)
@@ -675,7 +694,7 @@ class LogisticRegressionSuite
     assert(summarizerB.countInvalid === 5)
     assert(summarizerB.numClasses === 5)
   }
-
+  //多分类描述加权样本
   test("MultiClassSummarizer with weighted samples") {
     val summarizer1 = (new MultiClassSummarizer)
       .add(label = 0.0, weight = 0.2).add(3.0, 0.8).add(4.0, 3.2).add(3.0, 1.3).add(6.0, 3.1)
@@ -697,7 +716,7 @@ class LogisticRegressionSuite
     assert(summarizer.countInvalid === 0)
     assert(summarizer.numClasses === 7)
   }
-
+  //二进制逻辑回归与拦截无正则化
   test("binary logistic regression with intercept without regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true).setStandardization(true)
       .setWeightCol("weight")
@@ -734,12 +753,14 @@ class LogisticRegressionSuite
     assert(model1.coefficients ~= coefficientsR relTol 1E-3)
 
     // Without regularization, with or without standardization will converge to the same solution.
+    //没有正规化,有或没有标准化将会聚合到相同的解决方案
     assert(model2.intercept ~== interceptR relTol 1E-3)
     assert(model2.coefficients ~= coefficientsR relTol 1E-3)
   }
-
+  //二进制逻辑回归与截距无正则化与约束
   test("binary logistic regression with intercept without regularization with bound") {
     // Bound constrained optimization with bound on one side.
+    //边界约束的约束优化
     val upperBoundsOnCoefficients = Matrices.dense(1, 4, Array(1.0, 0.0, 1.0, 0.0))
     val upperBoundsOnIntercepts = Vectors.dense(1.0)
 
@@ -767,10 +788,12 @@ class LogisticRegressionSuite
     assert(model1.coefficients ~= coefficientsExpected1 relTol 1E-3)
 
     // Without regularization, with or without standardization will converge to the same solution.
+    //没有正规化,有或没有标准化将会聚合到相同的解决方案
     assert(model2.intercept ~== interceptExpected1 relTol 1E-3)
     assert(model2.coefficients ~= coefficientsExpected1 relTol 1E-3)
 
     // Bound constrained optimization with bound on both side.
+    //边界约束约束优化
     val lowerBoundsOnCoefficients = Matrices.dense(1, 4, Array(0.0, -1.0, 0.0, -1.0))
     val lowerBoundsOnIntercepts = Vectors.dense(0.0)
 
@@ -802,10 +825,12 @@ class LogisticRegressionSuite
     assert(model3.coefficients ~= coefficientsExpected3 relTol 1E-3)
 
     // Without regularization, with or without standardization will converge to the same solution.
+    //没有正规化,有或没有标准化将会聚合到相同的解决方案
     assert(model4.intercept ~== interceptExpected3 relTol 1E-3)
     assert(model4.coefficients ~= coefficientsExpected3 relTol 1E-3)
 
     // Bound constrained optimization with infinite bound on both side.
+    //边界约束无限边界约束优化
     val trainer5 = new LogisticRegression()
       .setUpperBoundsOnCoefficients(Matrices.dense(1, 4, Array.fill(4)(Double.PositiveInfinity)))
       .setUpperBoundsOnIntercepts(Vectors.dense(Double.PositiveInfinity))
@@ -875,10 +900,11 @@ class LogisticRegressionSuite
     assert(model1.coefficients ~= coefficientsR relTol 1E-2)
 
     // Without regularization, with or without standardization should converge to the same solution.
+    //没有正规化,有无标准化应该会聚到同一个解决方案
     assert(model2.intercept ~== 0.0 relTol 1E-3)
     assert(model2.coefficients ~= coefficientsR relTol 1E-2)
   }
-
+  //二进制逻辑回归无截距不带正则化的约束
   test("binary logistic regression without intercept without regularization with bound") {
     val upperBoundsOnCoefficients = Matrices.dense(1, 4, Array(1.0, 0.0, 1.0, 0.0)).toSparse
 
@@ -903,10 +929,11 @@ class LogisticRegressionSuite
     assert(model1.coefficients ~= coefficientsExpected relTol 1E-3)
 
     // Without regularization, with or without standardization will converge to the same solution.
+    //没有正规化,有或没有标准化将会聚合到相同的解决方案
     assert(model2.intercept ~== 0.0 relTol 1E-3)
     assert(model2.coefficients ~= coefficientsExpected relTol 1E-3)
   }
-
+  //二元逻辑回归截取L1正则化
   test("binary logistic regression with intercept with L1 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true)
       .setElasticNetParam(1.0).setRegParam(0.12).setStandardization(true).setWeightCol("weight")
@@ -970,7 +997,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== interceptR relTol 1E-2)
     assert(model2.coefficients ~== coefficientsR absTol 1E-3)
   }
-
+  //二元逻辑回归无L1截距正则化
   test("binary logistic regression without intercept with L1 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(false)
       .setElasticNetParam(1.0).setRegParam(0.12).setStandardization(true).setWeightCol("weight")
@@ -1020,7 +1047,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== 0.0 absTol 1E-3)
     assert(model2.coefficients ~= coefficientsR absTol 1E-3)
   }
-
+  //二元逻辑回归与截距二正则化
   test("binary logistic regression with intercept with L2 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true)
       .setElasticNetParam(0.0).setRegParam(1.37).setStandardization(true).setWeightCol("weight")
@@ -1071,7 +1098,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== interceptR relTol 1E-3)
     assert(model2.coefficients ~= coefficientsR relTol 1E-3)
   }
-
+  //带有界限的L2正则化的二进制逻辑回归
   test("binary logistic regression with intercept with L2 regularization with bound") {
     val upperBoundsOnCoefficients = Matrices.dense(1, 4, Array(1.0, 0.0, 1.0, 0.0))
     val upperBoundsOnIntercepts = Vectors.dense(1.0)
@@ -1105,7 +1132,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== interceptExpected relTol 1E-3)
     assert(model2.coefficients ~= coefficientsExpected relTol 1E-3)
   }
-
+  //二进制逻辑回归，不用截取L2正则化
   test("binary logistic regression without intercept with L2 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(false)
       .setElasticNetParam(0.0).setRegParam(1.37).setStandardization(true).setWeightCol("weight")
@@ -1154,7 +1181,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== 0.0 absTol 1E-3)
     assert(model2.coefficients ~= coefficientsR relTol 1E-2)
   }
-
+  //二进制逻辑回归，不受截断L2正则化的约束
   test("binary logistic regression without intercept with L2 regularization with bound") {
     val upperBoundsOnCoefficients = Matrices.dense(1, 4, Array(1.0, 0.0, 1.0, 0.0))
 
@@ -1183,7 +1210,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== 0.0 relTol 1E-3)
     assert(model2.coefficients ~= coefficientsExpected relTol 1E-3)
   }
-
+  //二进制逻辑回归与ElasticNet正则化截取
   test("binary logistic regression with intercept with ElasticNet regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true).setMaxIter(200)
       .setElasticNetParam(0.38).setRegParam(0.21).setStandardization(true).setWeightCol("weight")
@@ -1234,7 +1261,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== interceptR relTol 6E-3)
     assert(model2.coefficients ~= coefficientsR absTol 1E-3)
   }
-
+  //二进制逻辑回归没有拦截ElasticNet正则化
   test("binary logistic regression without intercept with ElasticNet regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(false)
       .setElasticNetParam(0.38).setRegParam(0.21).setStandardization(true).setWeightCol("weight")
@@ -1283,7 +1310,7 @@ class LogisticRegressionSuite
     assert(model2.intercept ~== 0.0 absTol 1E-3)
     assert(model2.coefficients ~= coefficientsR absTol 1E-3)
   }
-
+  //二元逻辑回归与强L1正则化截取
   test("binary logistic regression with intercept with strong L1 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true).setWeightCol("weight")
       .setElasticNetParam(1.0).setRegParam(6.0).setStandardization(true)
@@ -1350,7 +1377,7 @@ class LogisticRegressionSuite
     assert(model1.intercept ~== interceptR relTol 1E-5)
     assert(model1.coefficients ~== coefficientsR absTol 1E-6)
   }
-
+  //具有强L1正则化截取的多项式逻辑回归
   test("multinomial logistic regression with intercept with strong L1 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true).setWeightCol("weight")
       .setElasticNetParam(1.0).setRegParam(6.0).setStandardization(true)
@@ -1402,7 +1429,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector ~== interceptsTheory relTol 1E-3)
     assert(model2.coefficientMatrix ~= coefficientsTheory absTol 1E-6)
   }
-
+  //多项式逻辑回归,截距不正则化
   test("multinomial logistic regression with intercept without regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true)
       .setElasticNetParam(0.0).setRegParam(0.0).setStandardization(true).setWeightCol("weight")
@@ -1470,7 +1497,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector ~== interceptsR relTol 0.05)
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //具有零方差的多项式逻辑回归
   test("multinomial logistic regression with zero variance (SPARK-21681)") {
     val sqlContext = multinomialDatasetWithZeroVar.sqlContext
     import sqlContext.implicits._
@@ -1525,9 +1552,10 @@ class LogisticRegressionSuite
     assert(model.interceptVector ~== interceptsR relTol 0.05)
     assert(model.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //带有界限的正则化的多项式逻辑回归
   test("multinomial logistic regression with intercept without regularization with bound") {
     // Bound constrained optimization with bound on one side.
+    //边界约束的约束优化
     val lowerBoundsOnCoefficients = Matrices.dense(3, 4, Array.fill(12)(1.0))
     val lowerBoundsOnIntercepts = Vectors.dense(Array.fill(3)(1.0))
 
@@ -1596,6 +1624,7 @@ class LogisticRegressionSuite
     assert(model4.interceptVector ~== interceptsExpected3 relTol 0.01)
 
     // Bound constrained optimization with infinite bound on both side.
+    //边界约束无限边界约束优化
     val trainer5 = new LogisticRegression()
       .setLowerBoundsOnCoefficients(Matrices.dense(3, 4, Array.fill(12)(Double.NegativeInfinity)))
       .setLowerBoundsOnIntercepts(Vectors.dense(Array.fill(3)(Double.NegativeInfinity)))
@@ -1629,7 +1658,7 @@ class LogisticRegressionSuite
     checkCoefficientsEquivalent(model6.coefficientMatrix, coefficientsExpected5)
     assert(model6.interceptVector ~== interceptsExpected5 relTol 0.01)
   }
-
+  //多项式逻辑回归无拦截而无正则化
   test("multinomial logistic regression without intercept without regularization") {
 
     val trainer1 = (new LogisticRegression).setFitIntercept(false)
@@ -1697,7 +1726,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector.toArray === Array.fill(3)(0.0))
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //多项式逻辑回归无拦截而无正则化的约束
   test("multinomial logistic regression without intercept without regularization with bound") {
     val lowerBoundsOnCoefficients = Matrices.dense(3, 4, Array.fill(12)(1.0))
 
@@ -1726,10 +1755,11 @@ class LogisticRegressionSuite
     checkCoefficientsEquivalent(model2.coefficientMatrix, coefficientsExpected)
     assert(model2.interceptVector.toArray === Array.fill(3)(0.0))
   }
-
+  //多项式逻辑回归与L1正则化截取
   test("multinomial logistic regression with intercept with L1 regularization") {
 
     // use tighter constraints because OWL-QN solver takes longer to converge
+    //使用更严格的约束，因为OWL-QN求解器需要更长的时间来收敛
     val trainer1 = (new LogisticRegression).setFitIntercept(true)
       .setElasticNetParam(1.0).setRegParam(0.05).setStandardization(true)
       .setMaxIter(300).setTol(1e-10).setWeightCol("weight")
@@ -1829,7 +1859,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector ~== interceptsR relTol 0.1)
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //多项式逻辑回归无L1截距正则化
   test("multinomial logistic regression without intercept with L1 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(false)
       .setElasticNetParam(1.0).setRegParam(0.05).setStandardization(true).setWeightCol("weight")
@@ -1926,7 +1956,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector.toArray === Array.fill(3)(0.0))
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //多项式逻辑回归截取二层正则化
   test("multinomial logistic regression with intercept with L2 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true)
       .setElasticNetParam(0.0).setRegParam(0.1).setStandardization(true).setWeightCol("weight")
@@ -2024,7 +2054,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector ~== interceptsR relTol 0.05)
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //带有束缚L2正则化的多项式逻辑回归
   test("multinomial logistic regression with intercept with L2 regularization with bound") {
     val lowerBoundsOnCoefficients = Matrices.dense(3, 4, Array.fill(12)(1.0))
     val lowerBoundsOnIntercepts = Vectors.dense(Array.fill(3)(1.0))
@@ -2064,7 +2094,7 @@ class LogisticRegressionSuite
     assert(model2.coefficientMatrix ~== coefficientsExpected relTol 0.01)
     assert(model2.interceptVector ~== interceptsExpected relTol 0.01)
   }
-
+  //多项式逻辑回归,不用截取L2正则化
   test("multinomial logistic regression without intercept with L2 regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(false)
       .setElasticNetParam(0.0).setRegParam(0.1).setStandardization(true).setWeightCol("weight")
@@ -2161,7 +2191,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector.toArray === Array.fill(3)(0.0))
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //多项式逻辑回归,不受L2正则化的束缚
   test("multinomial logistic regression without intercept with L2 regularization with bound") {
     val lowerBoundsOnCoefficients = Matrices.dense(3, 4, Array.fill(12)(1.0))
 
@@ -2196,7 +2226,7 @@ class LogisticRegressionSuite
     assert(model2.coefficientMatrix ~== coefficientsExpected absTol 0.01)
     assert(model2.interceptVector.toArray === Array.fill(3)(0.0))
   }
-
+  //多项式逻辑回归,弹性网正则化截取
   test("multinomial logistic regression with intercept with elasticnet regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(true).setWeightCol("weight")
       .setElasticNetParam(0.5).setRegParam(0.1).setStandardization(true)
@@ -2296,7 +2326,7 @@ class LogisticRegressionSuite
     assert(model2.interceptVector ~== interceptsR absTol 0.01)
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //多项式逻辑回归无弹性网正则化截断
   test("multinomial logistic regression without intercept with elasticnet regularization") {
     val trainer1 = (new LogisticRegression).setFitIntercept(false).setWeightCol("weight")
       .setElasticNetParam(0.5).setRegParam(0.1).setStandardization(true)
@@ -2395,9 +2425,10 @@ class LogisticRegressionSuite
     assert(model2.interceptVector.toArray === Array.fill(3)(0.0))
     assert(model2.interceptVector.toArray.sum ~== 0.0 absTol eps)
   }
-
+  //在测试集上评估
   test("evaluate on test set") {
     // Evaluate on test set should be same as that of the transformed training data.
+    //对测试集的评估应与转换后的训练数据相同
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(1.0)
@@ -2448,9 +2479,10 @@ class LogisticRegressionSuite
     assert(mlorSummary.weightedRecall === mlorSameSummary.weightedRecall)
     assert(mlorSummary.weightedFMeasure === mlorSameSummary.weightedFMeasure)
   }
-
+  //评估与不是Double的标签
   test("evaluate with labels that are not doubles") {
     // Evaluate a test set with Label that is a numeric type other than Double
+    //使用不是Double的数字类型的Label来评估测试集
     val blor = new LogisticRegression()
       .setMaxIter(1)
       .setRegParam(1.0)
@@ -2480,9 +2512,10 @@ class LogisticRegressionSuite
 
     assert(mlorSummary.accuracy === mlorLongSummary.accuracy)
   }
-
+  //训练数据统计
   test("statistics on training data") {
     // Test that loss is monotonically decreasing.
+    //测试损失是单调递减的
     val blor = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(1.0)
@@ -2505,7 +2538,7 @@ class LogisticRegressionSuite
         .sliding(2)
         .forall(x => x(0) >= x(1)))
   }
-
+  //用样本权重进行逻辑回归
   test("logistic regression with sample weights") {
     def modelEquals(m1: LogisticRegressionModel, m2: LogisticRegressionModel): Unit = {
       assert(m1.coefficientMatrix ~== m2.coefficientMatrix absTol 0.05)
@@ -2525,7 +2558,7 @@ class LogisticRegressionSuite
         dataset.as[LabeledPoint], estimator, modelEquals, seed)
     }
   }
-
+  //
   test("set family") {
     val lr = new LogisticRegression().setMaxIter(1)
     // don't set anything for binary classification
@@ -2534,22 +2567,26 @@ class LogisticRegressionSuite
     assert(model1.interceptVector.size === 1)
 
     // set to multinomial for binary classification
+    //设置为二元分类的多项式
     val model2 = lr.setFamily("multinomial").fit(binaryDataset)
     assert(model2.coefficientMatrix.numRows === 2 && model2.coefficientMatrix.numCols === 4)
     assert(model2.interceptVector.size === 2)
 
     // set to binary for binary classification
+    //设置为二进制分类
     val model3 = lr.setFamily("binomial").fit(binaryDataset)
     assert(model3.coefficientMatrix.numRows === 1 && model3.coefficientMatrix.numCols === 4)
     assert(model3.interceptVector.size === 1)
 
     // don't set anything for multiclass classification
+    //不要为多类分类设置任何东西
     val mlr = new LogisticRegression().setMaxIter(1)
     val model4 = mlr.fit(multinomialDataset)
     assert(model4.coefficientMatrix.numRows === 3 && model4.coefficientMatrix.numCols === 4)
     assert(model4.interceptVector.size === 3)
 
     // set to binary for multiclass classification
+    //设置为多类分类的二进制
     mlr.setFamily("binomial")
     val thrown = intercept[IllegalArgumentException] {
       mlr.fit(multinomialDataset)
@@ -2557,12 +2594,13 @@ class LogisticRegressionSuite
     assert(thrown.getMessage.contains("Binomial family only supports 1 or 2 outcome classes"))
 
     // set to multinomial for multiclass
+    //设置为multiclass的多项
     mlr.setFamily("multinomial")
     val model5 = mlr.fit(multinomialDataset)
     assert(model5.coefficientMatrix.numRows === 3 && model5.coefficientMatrix.numCols === 4)
     assert(model5.interceptVector.size === 3)
   }
-
+  //设置初始模型
   test("set initial model") {
     val lr = new LogisticRegression().setFamily("binomial")
     val model1 = lr.fit(smallBinaryDataset)
@@ -2587,7 +2625,7 @@ class LogisticRegressionSuite
     }
     assert(model4.summary.totalIterations === 1)
   }
-
+  //二元逻辑回归与所有标签相同
   test("binary logistic regression with all labels the same") {
     val sameLabels = smallBinaryDataset
       .withColumn("zeroLabel", lit(0.0))
@@ -2631,7 +2669,7 @@ class LogisticRegressionSuite
     assert(allOneNoInterceptModel.intercept === 0.0)
     assert(allOneNoInterceptModel.summary.totalIterations > 0)
   }
-
+  //多类逻辑回归与所有标签相同
   test("multiclass logistic regression with all labels the same") {
     val constantData = Seq(
       LabeledPoint(4.0, Vectors.dense(0.0)),
@@ -2649,6 +2687,7 @@ class LogisticRegressionSuite
     assert(model.summary.totalIterations === 0)
 
     // force the model to be trained with only one class
+    //迫使模型只有一个阶级训练
     val constantZeroData = Seq(
       LabeledPoint(0.0, Vectors.dense(0.0)),
       LabeledPoint(0.0, Vectors.dense(1.0)),
@@ -2663,6 +2702,7 @@ class LogisticRegressionSuite
     assert(modelZeroLabel.summary.totalIterations > 0)
 
     // ensure that the correct value is predicted when numClasses passed through metadata
+    //确保numClasses传递元数据时预测正确的值
     val labelMeta = NominalAttribute.defaultAttr.withName("label").withNumValues(6).toMetadata()
     val constantDataWithMetadata = constantData
       .select(constantData("label").as("label", labelMeta), constantData("features"))
@@ -2676,7 +2716,7 @@ class LogisticRegressionSuite
     }
     require(modelWithMetadata.summary.totalIterations === 0)
   }
-
+  //压缩存储为恒定的标签
   test("compressed storage for constant label") {
     /*
       When the label is constant and fit intercept is true, all the coefficients will be
@@ -2706,7 +2746,7 @@ class LogisticRegressionSuite
     assert(blrModel.coefficientMatrix.isInstanceOf[SparseMatrix])
     assert(blrModel.coefficientMatrix.asInstanceOf[SparseMatrix].colPtrs.length === 2)
   }
-
+  //压缩系数
   test("compressed coefficients") {
 
     val trainer1 = new LogisticRegression()
@@ -2714,11 +2754,13 @@ class LogisticRegressionSuite
       .setElasticNetParam(1.0)
 
     // compressed row major is optimal
+    //压缩行主要是最佳的
     val model1 = trainer1.fit(multinomialDataset.limit(100))
     assert(model1.coefficientMatrix.isInstanceOf[SparseMatrix])
     assert(model1.coefficientMatrix.isRowMajor)
 
     // compressed column major is optimal since there are more classes than features
+    //压缩列专业是最佳的,因为有更多的类比功能
     val labelMeta = NominalAttribute.defaultAttr.withName("label").withNumValues(6).toMetadata()
     val model2 = trainer1.fit(multinomialDataset
       .withColumn("label", col("label").as("label", labelMeta)).limit(100))
@@ -2726,6 +2768,7 @@ class LogisticRegressionSuite
     assert(model2.coefficientMatrix.isColMajor)
 
     // coefficients are dense without L1 regularization
+    //系数密集,没有L1正则化
     val trainer2 = new LogisticRegression()
       .setElasticNetParam(0.0)
     val model3 = trainer2.fit(multinomialDataset.limit(100))
@@ -2744,6 +2787,7 @@ class LogisticRegressionSuite
     assert(model1.interceptVector.size === 4)
 
     // specify two classes when there are really three
+    //当真的有三个时，指定两个类
     val labelMeta1 = NominalAttribute.defaultAttr.withName("label").withNumValues(2).toMetadata()
     val df1 = smallMultinomialDataset
       .select(smallMultinomialDataset("label").as("label", labelMeta1),
@@ -2754,6 +2798,7 @@ class LogisticRegressionSuite
     assert(thrown.getMessage.contains("less than the number of unique labels"))
 
     // lr should infer the number of classes if not specified
+    //如果没有指定，lr应该推断出类的数量
     val model3 = lr.fit(smallMultinomialDataset)
     assert(model3.numClasses === 3)
   }
@@ -2769,7 +2814,7 @@ class LogisticRegressionSuite
     testEstimatorAndModelReadWrite(lr, smallBinaryDataset, LogisticRegressionSuite.allParamSettings,
       LogisticRegressionSuite.allParamSettings, checkModelData)
   }
-
+  //应该支持所有的NumericType标签和权重，不支持其他类型
   test("should support all NumericType labels and weights, and not support other types") {
     val lr = new LogisticRegression().setMaxIter(1)
     MLTestingUtils.checkNumericTypes[LogisticRegressionModel, LogisticRegression](
@@ -2778,7 +2823,7 @@ class LogisticRegressionSuite
         assert(expected.coefficients.toArray === actual.coefficients.toArray)
       }
   }
-
+  //字符串参数应该不区分大小写
   test("string params should be case-insensitive") {
     val lr = new LogisticRegression()
     Seq(("AuTo", smallBinaryDataset), ("biNoMial", smallBinaryDataset),
@@ -2819,6 +2864,7 @@ object LogisticRegressionSuite {
   }
 
   // Generate input of the form Y = logistic(offset + scale*X)
+  //生成形式为Y = logistic（offset + scale * X）的输入
   def generateLogisticInput(
       offset: Double,
       scale: Double,

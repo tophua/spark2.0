@@ -20,7 +20,7 @@ package org.apache.spark.ml.attribute
 import org.apache.spark.SparkFunSuite
 
 class AttributeGroupSuite extends SparkFunSuite {
-
+  //属性组
   test("attribute group") {
     val attrs = Array(
       NumericAttribute.defaultAttr,
@@ -46,7 +46,7 @@ class AttributeGroupSuite extends SparkFunSuite {
     assert(group === AttributeGroup.fromMetadata(group.toMetadataImpl, group.name))
     assert(group === AttributeGroup.fromStructField(group.toStructField()))
   }
-
+  //属性组没有属性
   test("attribute group without attributes") {
     val group0 = new AttributeGroup("user", 10)
     assert(group0.name === "user")

@@ -25,7 +25,7 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
  * Test suite for [[BaggedPoint]].
  */
 class BaggedPointSuite extends SparkFunSuite with MLlibTestSparkContext  {
-
+  //BaggedPoint RDD：无子采样
   test("BaggedPoint RDD: without subsampling") {
     val arr = EnsembleTestHelper.generateOrderedLabeledPoints(1, 1000)
     val rdd = sc.parallelize(arr)
@@ -34,7 +34,7 @@ class BaggedPointSuite extends SparkFunSuite with MLlibTestSparkContext  {
       assert(baggedPoint.subsampleWeights.size == 1 && baggedPoint.subsampleWeights(0) == 1)
     }
   }
-
+  //BaggedPoint RDD：带有替换的子采样（fraction = 1.0）
   test("BaggedPoint RDD: with subsampling with replacement (fraction = 1.0)") {
     val numSubsamples = 100
     val (expectedMean, expectedStddev) = (1.0, 1.0)
@@ -49,7 +49,7 @@ class BaggedPointSuite extends SparkFunSuite with MLlibTestSparkContext  {
         expectedStddev, epsilon = 0.01)
     }
   }
-
+  //BaggedPoint RDD：带有替换的子采样（fraction = 0.5）
   test("BaggedPoint RDD: with subsampling with replacement (fraction = 0.5)") {
     val numSubsamples = 100
     val subsample = 0.5
@@ -65,7 +65,7 @@ class BaggedPointSuite extends SparkFunSuite with MLlibTestSparkContext  {
         expectedStddev, epsilon = 0.01)
     }
   }
-
+  //BaggedPoint RDD：无取代的子采样（分数= 1.0）
   test("BaggedPoint RDD: with subsampling without replacement (fraction = 1.0)") {
     val numSubsamples = 100
     val (expectedMean, expectedStddev) = (1.0, 0)
@@ -80,7 +80,7 @@ class BaggedPointSuite extends SparkFunSuite with MLlibTestSparkContext  {
         expectedStddev, epsilon = 0.01)
     }
   }
-
+  //BaggedPoint RDD：无需替换的子采样（fraction = 0.5）
   test("BaggedPoint RDD: with subsampling without replacement (fraction = 0.5)") {
     val numSubsamples = 100
     val subsample = 0.5

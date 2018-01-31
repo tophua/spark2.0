@@ -36,6 +36,7 @@ object MLTestingUtils extends SparkFunSuite {
     assert(estimator.uid === model.uid, "Model uid does not match parent estimator")
 
     // copied model must have the same parent
+    //复制的模型必须具有相同的父级
     val copied = model.copy(ParamMap.empty)
       .asInstanceOf[Model[_]]
     assert(copied.parent == model.parent)
@@ -219,6 +220,8 @@ object MLTestingUtils extends SparkFunSuite {
    * Given a DataFrame, generate two output DataFrames: one having the original rows oversampled
    * an integer number of times, and one having the original rows but with a column of weights
    * proportional to the number of oversampled instances in the oversampled DataFrames.
+    * 给定一个DataFrame,生成两个输出DataFrame：一个具有过采样整数倍的原始行,另一个具有原始行,
+    * 但具有与过采样的DataFrame中的过采样实例的数量成比例的权值列。
    */
   def genEquivalentOversampledAndWeightedInstances(
       data: Dataset[LabeledPoint],
@@ -241,6 +244,8 @@ object MLTestingUtils extends SparkFunSuite {
   /**
    * Helper function for testing sample weights. Tests that oversampling each point is equivalent
    * to assigning a sample weight proportional to the number of samples for each point.
+    *
+    * Helper函数用于测试样品重量,对每个点进行过采样的测试相当于为每个点分配一个与采样数成比例的采样权重
    */
   def testOversamplingVsWeighting[M <: Model[M], E <: Estimator[M]](
       data: Dataset[LabeledPoint],
@@ -258,6 +263,8 @@ object MLTestingUtils extends SparkFunSuite {
    * Helper function for testing sample weights. Tests that injecting a large number of outliers
    * with very small sample weights does not affect fitting. The predictor should learn the true
    * model despite the outliers.
+    * Helper函数用于测试样品重量,用非常小的样品重量注入大量异常值的测试不会影响拟合,
+    * 预测器应该学习真正的模型,尽管有异常值。
    */
   def testOutliersWithSmallWeights[M <: Model[M], E <: Estimator[M]](
       data: Dataset[LabeledPoint],
@@ -279,6 +286,7 @@ object MLTestingUtils extends SparkFunSuite {
   /**
    * Helper function for testing sample weights. Tests that giving constant weights to each data
    * point yields the same model, regardless of the magnitude of the weight.
+    * Helper函数用于测试样品重量,对每个数据点赋予恒定权重的测试会得出相同的模型,而不考虑权重的大小
    */
   def testArbitrarilyScaledWeights[M <: Model[M], E <: Estimator[M]](
       data: Dataset[LabeledPoint],

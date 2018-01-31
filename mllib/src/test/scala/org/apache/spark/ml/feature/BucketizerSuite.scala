@@ -18,7 +18,6 @@
 package org.apache.spark.ml.feature
 
 import scala.util.Random
-
 import org.apache.spark.{SparkException, SparkFunSuite}
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.ml.param.ParamsSuite
@@ -28,7 +27,9 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
-
+/**
+  * 特征离散化函数
+  */
 class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
@@ -36,26 +37,34 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
   test("params") {
     ParamsSuite.checkParams(new Bucketizer)
   }
-
+  //离散连续特征
   test("Bucket continuous features, without -inf,inf") {
     // Check a set of valid feature values.
+    //检查一组有效的特征值
     val splits = Array(-0.5, 0.0, 0.5)
     val validData = Array(-0.5, -0.3, 0.0, 0.2)
     val expectedBuckets = Array(0.0, 0.0, 1.0, 1.0)
-    val dataFrame: DataFrame = validData.zip(expectedBuckets).toSeq.toDF("feature", "expected")
-
-    val bucketizer: Bucketizer = new Bucketizer()
-      .setInputCol("feature")
-      .setOutputCol("result")
-      .setSplits(splits)
-
+    val dataFrame: DataFrame =
+    //res4= Array((-0.5,0.0), (-0.3,0.0), (0.0,1.0), (0.2,1.0))
+      validData.zip(expectedBuckets).toSeq.toDF("feature", "expected")
+    val bucketizer: Bucketizer = new Bucketizer().setInputCol("feature")//输入字段
+      .setOutputCol("result")//输出字段
+      .setSplits(splits)//分隔
+    //transform()方法将DataFrame转化为另外一个DataFrame的算法
     bucketizer.transform(dataFrame).select("result", "expected").collect().foreach {
       case Row(x: Double, y: Double) =>
+        /**
+        0.0====0.0
+          0.0====0.0
+          1.0====1.0
+          1.0====1.0
+          **/
         assert(x === y,
           s"The feature value is not correct after bucketing.  Expected $y but found $x")
-    }
+
 
     // Check for exceptions when using a set of invalid feature values.
+    //使用一组无效的特征值时检查异常
     val invalidData1: Array[Double] = Array(-0.9) ++ validData
     val invalidData2 = Array(0.51) ++ validData
     val badDF1 = invalidData1.zipWithIndex.toSeq.toDF("feature", "idx")
@@ -71,7 +80,7 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       }
     }
   }
-
+  //离散连续特征,用-inf,inf
   test("Bucket continuous features, with -inf,inf") {
     val splits = Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity)
     val validData = Array(-0.9, -0.5, -0.3, 0.0, 0.2, 0.5, 0.9)
@@ -89,7 +98,7 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
           s"The feature value is not correct after bucketing.  Expected $y but found $x")
     }
   }
-
+  //桶连续功能,NaN数据,但不分NaN
   test("Bucket continuous features, with NaN data but non-NaN splits") {
     val splits = Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity)
     val validData = Array(-0.9, -0.5, -0.3, 0.0, 0.2, 0.5, 0.9, Double.NaN, Double.NaN, Double.NaN)
@@ -121,7 +130,7 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       }
     }
   }
-
+  //离散连续特征,NaN分裂
   test("Bucket continuous features, with NaN splits") {
     val splits = Array(Double.NegativeInfinity, -0.5, 0.0, 0.5, Double.PositiveInfinity, Double.NaN)
     withClue("Invalid NaN split was not caught during Bucketizer initialization") {
@@ -130,7 +139,7 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       }
     }
   }
-
+    //手动选择的例子的二进制搜索正确性
   test("Binary search correctness on hand-picked examples") {
     import BucketizerSuite.checkBinarySearch
     // length 3, with -inf
@@ -146,7 +155,7 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
     // length 4, with -inf and inf
     checkBinarySearch(Array(Double.NegativeInfinity, 0.0, 1.0, Double.PositiveInfinity))
   }
-
+    //与线性搜索相反的二进制搜索的正确性,对随机数据
   test("Binary search correctness in contrast with linear search, on random data") {
     val data = Array.fill(100)(Random.nextDouble())
     val splits: Array[Double] = Double.NegativeInfinity +:
@@ -164,7 +173,7 @@ class BucketizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       .setSplits(Array(0.1, 0.8, 0.9))
     testDefaultReadWrite(t)
   }
-
+  //桶数字功能
   test("Bucket numeric features") {
     val splits = Array(-3.0, 0.0, 3.0)
     val data = Array(-2.0, -1.0, 0.0, 1.0, 2.0)
@@ -203,7 +212,8 @@ private object BucketizerSuite extends SparkFunSuite {
       s"linearSearchForBuckets failed to find bucket for feature value $feature")
   }
 
-  /** Check all values in splits, plus values between all splits. */
+  /** Check all values in splits, plus values between all splits.
+    * 检查分割中的所有值,加上所有分割之间的值 */
   def checkBinarySearch(splits: Array[Double]): Unit = {
     def testFeature(feature: Double, expectedBucket: Double): Unit = {
       assert(Bucketizer.binarySearchForBuckets(splits, feature, false) === expectedBucket,
@@ -216,6 +226,7 @@ private object BucketizerSuite extends SparkFunSuite {
       // Split i should fall in bucket i.
       testFeature(splits(i), i)
       // Value between splits i,i+1 should be in i, which is also true if the (i+1)-th split is inf.
+      //分割i，i + 1之间的值应该在i中,如果（i + 1）分割是inf,则也是如此
       testFeature((splits(i) + splits(i + 1)) / 2, i)
       i += 1
     }

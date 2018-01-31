@@ -76,20 +76,20 @@ class RandomForestClassifierSuite
       Array(new DecisionTreeClassificationModel("dtc", new LeafNode(0.0, 0.0, null), 1, 2)), 2, 2)
     ParamsSuite.checkParams(model)
   }
-
+  //具有连续特征的二进制分类,
   test("Binary classification with continuous features:" +
     " comparing DecisionTree vs. RandomForest(numTrees = 1)") {
     val rf = new RandomForestClassifier()
     binaryClassificationTestWithContinuousFeatures(rf)
   }
-
+  //具有连续功能和节点Id缓存的二进制分类
   test("Binary classification with continuous features and node Id cache:" +
     " comparing DecisionTree vs. RandomForest(numTrees = 1)") {
     val rf = new RandomForestClassifier()
       .setCacheNodeIds(true)
     binaryClassificationTestWithContinuousFeatures(rf)
   }
-
+  //使用多类标签交替分类和连续的特征来测试索引
   test("alternating categorical and continuous features with multiclass labels to test indexing") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.dense(1.0, 0.0, 0.0, 3.0, 1.0)),
@@ -109,7 +109,7 @@ class RandomForestClassifierSuite
       .setSeed(12345)
     compareAPIs(rdd, rf, categoricalFeatures, numClasses)
   }
-
+  //RandomForest中的子采样率
   test("subsampling rate in RandomForest") {
     val rdd = orderedLabeledPoints5_20
     val categoricalFeatures = Map.empty[Int, Int]
@@ -127,7 +127,7 @@ class RandomForestClassifierSuite
     val rf2 = rf1.setSubsamplingRate(0.5)
     compareAPIs(rdd, rf2, categoricalFeatures, numClasses)
   }
-
+  //预测和预测可能性
   test("predictRaw and predictProbability") {
     val rdd = orderedLabeledPoints5_20
     val rf = new RandomForestClassifier()
@@ -158,7 +158,7 @@ class RandomForestClassifierSuite
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, RandomForestClassificationModel](model, df)
   }
-
+  //在元数据中没有numClasses
   test("Fitting without numClasses in metadata") {
     val df: DataFrame = TreeTests.featureImportanceData(sc).toDF()
     val rf = new RandomForestClassifier().setMaxDepth(1).setNumTrees(1)
@@ -168,7 +168,7 @@ class RandomForestClassifierSuite
   /////////////////////////////////////////////////////////////////////////////
   // Tests of feature importance
   /////////////////////////////////////////////////////////////////////////////
-
+  //重要的玩具数据
   test("Feature importance with toy data") {
     val numClasses = 2
     val rf = new RandomForestClassifier()
@@ -190,7 +190,7 @@ class RandomForestClassifierSuite
     assert(importances.toArray.sum === 1.0)
     assert(importances.toArray.forall(_ >= 0.0))
   }
-
+  //应该支持所有的NumericType标签，不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val rf = new RandomForestClassifier().setMaxDepth(1)
     MLTestingUtils.checkNumericTypes[RandomForestClassificationModel, RandomForestClassifier](

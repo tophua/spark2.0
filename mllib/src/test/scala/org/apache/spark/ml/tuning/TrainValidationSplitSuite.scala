@@ -42,7 +42,7 @@ class TrainValidationSplitSuite
     super.beforeAll()
     dataset = sc.parallelize(generateLogisticInput(1.0, 1.0, 100, 42), 2).toDF()
   }
-
+  //训练验证与逻辑回归
   test("train validation with logistic regression") {
     val lr = new LogisticRegression
     val lrParamMaps = new ParamGridBuilder()
@@ -63,7 +63,7 @@ class TrainValidationSplitSuite
     assert(parent.getMaxIter === 10)
     assert(tvsModel.validationMetrics.length === lrParamMaps.length)
   }
-
+  //用线性回归训练验证
   test("train validation with linear regression") {
     val dataset = sc.parallelize(
       LinearDataGenerator.generateLinearInput(
@@ -98,7 +98,7 @@ class TrainValidationSplitSuite
     assert(parent2.getMaxIter === 10)
     assert(tvsModel2.validationMetrics.length === lrParamMaps.length)
   }
-
+  //transformSchema应该检查estimatorParamMaps
   test("transformSchema should check estimatorParamMaps") {
     import TrainValidationSplitSuite.{MyEstimator, MyEvaluator}
 
@@ -121,7 +121,7 @@ class TrainValidationSplitSuite
       tvs.transformSchema(new StructType())
     }
   }
-
+  //训练验证并行评估
   test("train validation with parallel evaluation") {
     val lr = new LogisticRegression
     val lrParamMaps = new ParamGridBuilder()

@@ -46,7 +46,7 @@ class DifferentiableLossAggregatorSuite extends SparkFunSuite {
     assert(agg1.loss === agg2.loss)
     assert(agg1.gradient === agg2.gradient)
   }
-
+  //空的聚合器
   test("empty aggregator") {
     val numFeatures = 5
     val coef = Vectors.dense(Array.fill(numFeatures)(1.0))
@@ -62,7 +62,7 @@ class DifferentiableLossAggregatorSuite extends SparkFunSuite {
       }
     }
   }
-
+  //聚合器初始化
   test("aggregator initialization") {
     val numFeatures = 3
     val coef = Vectors.dense(Array.fill(numFeatures)(1.0))
@@ -71,7 +71,7 @@ class DifferentiableLossAggregatorSuite extends SparkFunSuite {
     assert(agg.gradient.size === 3)
     assert(agg.weight === 0.3)
   }
-
+  //合并聚合器
   test("merge aggregators") {
     val coefficients = Vectors.dense(0.5, -0.1)
     val agg1 = new TestAggregator(2)(coefficients)
@@ -81,18 +81,19 @@ class DifferentiableLossAggregatorSuite extends SparkFunSuite {
     instances1.foreach(agg1.add)
 
     // merge incompatible aggregators
+    //合并不兼容的聚合器
     withClue("cannot merge aggregators with different dimensions") {
       intercept[IllegalArgumentException] {
         agg1.merge(aggBadDim)
       }
     }
 
-    // merge empty other
+    // merge empty other 合并空的其他
     val mergedEmptyOther = agg1.merge(agg2)
     assertEqual(mergedEmptyOther, agg1)
     assert(mergedEmptyOther === agg1)
 
-    // merge empty this
+    // merge empty this 合并空这个
     val agg3 = new TestAggregator(2)(coefficients)
     val mergedEmptyThis = agg3.merge(agg1)
     assertEqual(mergedEmptyThis, agg1)
@@ -104,20 +105,23 @@ class DifferentiableLossAggregatorSuite extends SparkFunSuite {
     val merged = agg1.merge(agg2)
 
     // check pointers are equal
+    //检查指针是平等的
     assert(merged === agg1)
 
     // loss should be weighted average of the two individual losses
+    //损失应该是两项个人损失的加权平均
     assert(merged.loss === (loss1 * weight1 + loss2 * weight2) / (weight1 + weight2))
     assert(merged.weight === weight1 + weight2)
 
     // gradient should be weighted average of individual gradients
+    //梯度应该是个别梯度的加权平均值
     val addedGradients = Vectors.dense(grad1.toArray.clone())
     BLAS.scal(weight1, addedGradients)
     BLAS.axpy(weight2, grad2, addedGradients)
     BLAS.scal(1 / (weight1 + weight2), addedGradients)
     assert(merged.gradient === addedGradients)
   }
-
+  //损失，梯度，重量
   test("loss, gradient, weight") {
     val coefficients = Vectors.dense(0.5, -0.1)
     val agg = new TestAggregator(2)(coefficients)
@@ -144,6 +148,7 @@ class DifferentiableLossAggregatorSuite extends SparkFunSuite {
 object DifferentiableLossAggregatorSuite {
   /**
    * Dummy aggregator that represents least squares cost with no intercept.
+    * 代表最小二乘成本,没有拦截的虚拟聚合器
    */
   class TestAggregator(numFeatures: Int)(coefficients: Vector)
     extends DifferentiableLossAggregator[Instance, TestAggregator] {
@@ -161,7 +166,8 @@ object DifferentiableLossAggregatorSuite {
     }
   }
 
-  /** Get feature and label summarizers for provided data. */
+  /** Get feature and label summarizers for provided data.
+    * 获取提供的数据的功能和标签摘要*/
   private[ml] def getRegressionSummarizers(
       instances: Array[Instance]): (MultivariateOnlineSummarizer, MultivariateOnlineSummarizer) = {
     val seqOp = (c: (MultivariateOnlineSummarizer, MultivariateOnlineSummarizer),
@@ -178,7 +184,8 @@ object DifferentiableLossAggregatorSuite {
     )(seqOp, combOp)
   }
 
-  /** Get feature and label summarizers for provided data. */
+  /** Get feature and label summarizers for provided data.
+    * 获取提供的数据的功能和标签摘要*/
   private[ml] def getClassificationSummarizers(
       instances: Array[Instance]): (MultivariateOnlineSummarizer, MultiClassSummarizer) = {
     val seqOp = (c: (MultivariateOnlineSummarizer, MultiClassSummarizer),

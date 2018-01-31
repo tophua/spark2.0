@@ -71,7 +71,7 @@ class FPGrowthSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
         transformed.collect().toSet))
     }
   }
-
+  //获得Freq项目
   test("FPGrowth getFreqItems") {
     val model = new FPGrowth().setMinSupport(0.7).fit(dataset)
     val expectedFreq = spark.createDataFrame(Seq(

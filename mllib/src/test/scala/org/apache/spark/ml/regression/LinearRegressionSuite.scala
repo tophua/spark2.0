@@ -56,6 +56,7 @@ class LinearRegressionSuite
     /*
        datasetWithDenseFeatureWithoutIntercept is not needed for correctness testing
        but is useful for illustrating training model without intercept
+       datasetWithDenseFeatureWithoutIntercept不需要进行正确性测试,但是可以用来说明无拦截的训练模型
      */
     datasetWithDenseFeatureWithoutIntercept = sc.parallelize(
       LinearDataGenerator.generateLinearInput(
@@ -65,6 +66,7 @@ class LinearRegressionSuite
     val r = new Random(seed)
     // When feature size is larger than 4096, normal optimizer is chosen
     // as the solver of linear regression in the case of "auto" mode.
+    //当特征尺寸大于4096时,在“自动”模式下选择普通优化器作为线性回归的求解器
     val featureSize = 4100
     datasetWithSparseFeature = sc.parallelize(LinearDataGenerator.generateLinearInput(
         intercept = 0.0, weights = Seq.fill(featureSize)(r.nextDouble()).toArray,
@@ -136,7 +138,7 @@ class LinearRegressionSuite
     val model = new LinearRegressionModel("linearReg", Vectors.dense(0.0), 0.0)
     ParamsSuite.checkParams(model)
   }
-
+  //线性回归：默认参数
   test("linear regression: default params") {
     val lir = new LinearRegression
     assert(lir.getLabelCol === "label")
@@ -246,11 +248,12 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归无拦截而无正则化
   test("linear regression without intercept without regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setFitIntercept(false).setSolver(solver)
       // Without regularization the results should be the same
+      //没有正规化,结果应该是一样的
       val trainer2 = (new LinearRegression).setFitIntercept(false).setStandardization(false)
         .setSolver(solver)
       val model1 = trainer1.fit(datasetWithDenseFeature)
@@ -292,7 +295,7 @@ class LinearRegressionSuite
       assert(modelWithoutIntercept2.coefficients ~= coefficientsWithoutInterceptR relTol 1E-3)
     }
   }
-
+  //线性回归与L1正则化截取
   test("linear regression with intercept with L1 regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setElasticNetParam(1.0).setRegParam(0.57)
@@ -344,7 +347,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归无L1截距正则化
   test("linear regression without intercept with L1 regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setElasticNetParam(1.0).setRegParam(0.57)
@@ -397,7 +400,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //用L2正则化截取线性回归
   test("linear regression with intercept with L2 regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setElasticNetParam(0.0).setRegParam(2.3)
@@ -447,7 +450,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归没有截取正二化
   test("linear regression without intercept with L2 regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setElasticNetParam(0.0).setRegParam(2.3)
@@ -498,7 +501,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归与ElasticNet正则化截取
   test("linear regression with intercept with ElasticNet regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setElasticNetParam(0.3).setRegParam(1.6)
@@ -551,7 +554,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归没有拦截ElasticNet正则化
   test("linear regression without intercept with ElasticNet regularization") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer1 = (new LinearRegression).setElasticNetParam(0.3).setRegParam(1.6)
@@ -605,7 +608,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //具有恒定标签的线性回归模型
   test("linear regression model with constant label") {
     /*
        R code:
@@ -634,6 +637,7 @@ class LinearRegressionSuite
         assert(actual1 ~== expected(idx) absTol 1e-4)
 
         // Schema of summary.predictions should be a superset of the input dataset
+        //summary.predictions的模式应该是输入数据集的超集
         assert((datasetWithWeightConstantLabel.schema.fieldNames.toSet + model1.getPredictionCol)
           .subsetOf(model1.summary.predictions.schema.fieldNames.toSet))
 
@@ -648,6 +652,7 @@ class LinearRegressionSuite
         assert(actual2 ~==  Vectors.dense(0.0, 0.0, 0.0) absTol 1e-4)
 
         // Schema of summary.predictions should be a superset of the input dataset
+        //summary.predictions的模式应该是输入数据集的超集
         assert((datasetWithWeightZeroLabel.schema.fieldNames.toSet + model2.getPredictionCol)
           .subsetOf(model2.summary.predictions.schema.fieldNames.toSet))
 
@@ -655,10 +660,11 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //用恒定标号通过原点规范化线性回归
   test("regularized linear regression through origin with constant label") {
     // The problem is ill-defined if fitIntercept=false, regParam is non-zero.
     // An exception is thrown in this case.
+    //如果fitIntercept = false,regParam不为零,则问题不明确,在这种情况下抛出异常
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       for (standardization <- Seq(false, true)) {
         val model = new LinearRegression().setFitIntercept(false)
@@ -669,13 +675,17 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //当不需要训练时用l-bfgs进行线性回归
   test("linear regression with l-bfgs when training is not needed") {
     // When label is constant, l-bfgs solver returns results without training.
+    //当标签不变时，l-bfgs求解器返回结果而不进行训练
     // There are two possibilities: If the label is non-zero but constant,
+    //有两种可能性：如果标签是非零但恒定的
     // and fitIntercept is true, then the model return yMean as intercept without training.
+    //并fitIntercept是真的，那么模型返回yMean作为拦截没有训练。
     // If label is all zeros, then all coefficients are zero regardless of fitIntercept, so
     // no training is needed.
+    //如果标签全为零,那么不管fitIntercept如何,所有的系数都是零,所以不需要训练
     for (fitIntercept <- Seq(false, true)) {
       for (standardization <- Seq(false, true)) {
         val model1 = new LinearRegression()
@@ -696,7 +706,7 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归模型训练总结
   test("linear regression model training summary") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer = new LinearRegression().setSolver(solver).setPredictionCol("myPrediction")
@@ -705,13 +715,16 @@ class LinearRegressionSuite
       val modelNoPredictionCol = trainerNoPredictionCol.fit(datasetWithDenseFeature)
 
       // Training results for the model should be available
+      //模型的培训结果应该是可用的
       assert(model.hasSummary)
       assert(modelNoPredictionCol.hasSummary)
 
       // Schema should be a superset of the input dataset
+      //模式应该是输入数据集的超集
       assert((datasetWithDenseFeature.schema.fieldNames.toSet + model.getPredictionCol).subsetOf(
         model.summary.predictions.schema.fieldNames.toSet))
       // Validate that we re-insert a prediction column for evaluation
+      //验证我们是否重新插入预测列进行评估
       val modelNoPredictionColFieldNames
       = modelNoPredictionCol.summary.predictions.schema.fieldNames
       assert(datasetWithDenseFeature.schema.fieldNames.toSet.subsetOf(
@@ -719,6 +732,7 @@ class LinearRegressionSuite
       assert(modelNoPredictionColFieldNames.exists(s => s.startsWith("prediction_")))
 
       // Residuals in [[LinearRegressionResults]] should equal those manually computed
+      //[[LinearRegressionResults]]中的残差应等于手动计算的残差
       datasetWithDenseFeature.select("features", "label")
         .rdd
         .map { case Row(features: DenseVector, label: Double) =>
@@ -777,10 +791,13 @@ class LinearRegressionSuite
       assert(model.summary.r2 ~== 0.9998737 relTol 1E-4)
 
       // Normal solver uses "WeightedLeastSquares". If no regularization is applied or only L2
+      //正常解算器使用“WeightedLeastSquares”。 如果没有适用正规化或只有L2
       // regularization is applied, this algorithm uses a direct solver and does not generate an
       // objective history because it does not run through iterations.
+      //正则化被应用，该算法使用直接解算器，并且由于不经过迭代而不产生客观历史。
       if (solver == "l-bfgs") {
         // Objective function should be monotonically decreasing for linear regression
+        //目标函数应该是线性回归的单调递减
         assert(
           model.summary
             .objectiveHistory
@@ -788,6 +805,7 @@ class LinearRegressionSuite
             .forall(x => x(0) >= x(1)))
       } else {
         // To clarify that the normal solver is used here.
+        //澄清在这里使用正常解算器
         assert(model.summary.objectiveHistory.length == 1)
         assert(model.summary.objectiveHistory(0) == 0.0)
         val devianceResidualsR = Array(-0.47082, 0.34635)
@@ -803,13 +821,14 @@ class LinearRegressionSuite
       }
     }
   }
-
+  //线性回归模型测试集评估总结
   test("linear regression model testset evaluation summary") {
     Seq("auto", "l-bfgs", "normal").foreach { solver =>
       val trainer = new LinearRegression().setSolver(solver)
       val model = trainer.fit(datasetWithDenseFeature)
 
       // Evaluating on training dataset should yield results summary equal to training summary
+      //对训练数据集进行评估应得出与训练总结相同的结果总结
       val testSummary = model.evaluate(datasetWithDenseFeature)
       assert(model.summary.meanSquaredError ~== testSummary.meanSquaredError relTol 1E-5)
       assert(model.summary.r2 ~== testSummary.r2 relTol 1E-5)
@@ -818,7 +837,7 @@ class LinearRegressionSuite
         .forall { case (Row(r1: Double), Row(r2: Double)) => r1 ~== r2 relTol 1E-5 }
     }
   }
-
+  //用加权样本进行线性回归
   test("linear regression with weighted samples") {
     val sqlContext = spark.sqlContext
     import sqlContext.implicits._
@@ -851,21 +870,23 @@ class LinearRegressionSuite
         datasetWithStrongNoise.as[LabeledPoint], estimator, modelEquals, seed)
     }
   }
-
+  //具有大特征数据集的l-bfgs的线性回归模型
   test("linear regression model with l-bfgs with big feature datasets") {
     val trainer = new LinearRegression().setSolver("auto")
     val model = trainer.fit(datasetWithSparseFeature)
 
     // Training results for the model should be available
+    //模型的培训结果应该是可用的
     assert(model.hasSummary)
     // When LBFGS is used as optimizer, objective history can be restored.
+    //当LBFGS被用作优化器时,客观历史可以被恢复
     assert(
       model.summary
         .objectiveHistory
         .sliding(2)
         .forall(x => x(0) >= x(1)))
   }
-
+  //用加权样本和正态求解器截取的线性回归总结
   test("linear regression summary with weighted samples and intercept by normal solver") {
     /*
        R code:
@@ -929,7 +950,7 @@ class LinearRegressionSuite
         .sliding(2)
         .forall(x => x(0) >= x(1)))
   }
-
+  //用加权样本进行线性回归总结，用正态求解器进行w / o截取
   test("linear regression summary with weighted samples and w/o intercept by normal solver") {
     /*
        R code:
@@ -991,7 +1012,7 @@ class LinearRegressionSuite
     testEstimatorAndModelReadWrite(lr, datasetWithWeight, LinearRegressionSuite.allParamSettings,
       LinearRegressionSuite.allParamSettings, checkModelData)
   }
-
+  //应该支持所有的NumericType标签和权重，不支持其他类型
   test("should support all NumericType labels and weights, and not support other types") {
     for (solver <- Seq("auto", "l-bfgs", "normal")) {
       val lr = new LinearRegression().setMaxIter(1).setSolver(solver)

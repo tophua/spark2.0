@@ -34,14 +34,15 @@ class ClassifierSuite extends SparkFunSuite with MLlibTestSparkContext {
   private def getTestData(labels: Seq[Double]): DataFrame = {
     labels.map { label: Double => LabeledPoint(label, Vectors.dense(0.0)) }.toDF()
   }
-
+  //提取标记的点
   test("extractLabeledPoints") {
     val c = new MockClassifier
-    // Valid dataset
+    // Valid dataset 有效的数据集
     val df0 = getTestData(Seq(0.0, 2.0, 1.0, 5.0))
     c.extractLabeledPoints(df0, 6).count()
-    // Invalid datasets
+    // Invalid datasets 无效的数据集
     val df1 = getTestData(Seq(0.0, -2.0, 1.0, 5.0))
+    //如果标签为负值,分类器将会失败
     withClue("Classifier should fail if label is negative") {
       val e: SparkException = intercept[SparkException] {
         c.extractLabeledPoints(df1, 6).count()
@@ -49,6 +50,7 @@ class ClassifierSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(e.getMessage.contains("given dataset with invalid label"))
     }
     val df2 = getTestData(Seq(0.0, 2.1, 1.0, 5.0))
+    //如果标签不是整数,则分类器应该失败
     withClue("Classifier should fail if label is not an integer") {
       val e: SparkException = intercept[SparkException] {
         c.extractLabeledPoints(df2, 6).count()
@@ -56,12 +58,14 @@ class ClassifierSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(e.getMessage.contains("given dataset with invalid label"))
     }
     // extractLabeledPoints with numClasses specified
+    //如果label> = numClasses，则分类器将失败
     withClue("Classifier should fail if label is >= numClasses") {
       val e: SparkException = intercept[SparkException] {
         c.extractLabeledPoints(df0, numClasses = 5).count()
       }
       assert(e.getMessage.contains("given dataset with invalid label"))
     }
+    //如果numClasses <= 0，Classifier.extractLabeledPoints将失败
     withClue("Classifier.extractLabeledPoints should fail if numClasses <= 0") {
       val e: IllegalArgumentException = intercept[IllegalArgumentException] {
         c.extractLabeledPoints(df0, numClasses = 0).count()
@@ -69,7 +73,7 @@ class ClassifierSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(e.getMessage.contains("but requires numClasses > 0"))
     }
   }
-
+  //
   test("getNumClasses") {
     val c = new MockClassifier
     // Valid dataset
@@ -77,6 +81,7 @@ class ClassifierSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(c.getNumClasses(df0) === 6)
     // Invalid datasets
     val df1 = getTestData(Seq(0.0, 2.0, 1.0, 5.1))
+    //如果标签是最大标签不是一个整数应该失败
     withClue("getNumClasses should fail if label is max label not an integer") {
       val e: IllegalArgumentException = intercept[IllegalArgumentException] {
         c.getNumClasses(df1)
@@ -84,6 +89,7 @@ class ClassifierSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(e.getMessage.contains("requires integers in range"))
     }
     val df2 = getTestData(Seq(0.0, 2.0, 1.0, Int.MaxValue.toDouble))
+    //
     withClue("getNumClasses should fail if label is max label is >= Int.MaxValue") {
       val e: IllegalArgumentException = intercept[IllegalArgumentException] {
         c.getNumClasses(df2)
@@ -97,8 +103,11 @@ object ClassifierSuite {
 
   /**
    * Mapping from all Params to valid settings which differ from the defaults.
+    * 从所有参数映射到与默认设置不同的有效设置
    * This is useful for tests which need to exercise all Params, such as save/load.
+    * 这对于需要执行所有参数的测试非常有用,例如保存/加载
    * This excludes input columns to simplify some tests.
+    * 这排除了输入列以简化一些测试
    */
   val allParamSettings: Map[String, Any] = Map(
     "predictionCol" -> "myPrediction",

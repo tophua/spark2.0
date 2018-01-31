@@ -195,7 +195,9 @@ private object GBTRegressorSuite extends SparkFunSuite {
 
   /**
    * Train 2 models on the given dataset, one using the old API and one using the new API.
+    * 在给定的数据集上训练2个模型,一个使用旧的API,一个使用新的API
    * Convert the old model to the new format, compare them, and fail if they are not exactly equal.
+    * 将旧模型转换为新格式,比较它们,如果不完全相同则失败
    */
   def compareAPIs(
       data: RDD[LabeledPoint],

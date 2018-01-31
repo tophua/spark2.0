@@ -47,11 +47,14 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
   /**
    * The input is expected to be either a sparse vector, a dense vector or an array of doubles
    * (which will be converted to a dense vector)
+    * 输入将是一个稀疏向量、稠密向量或一组double（将被转换为稠密向量）
    * The expected is the list of all the known metrics.
+    * 预期是所有已知度量的列表
    *
    * The tests take an list of input vectors and a list of all the summary values that
    * are expected for this input. They currently test against some fixed subset of the
    * metrics, but should be made fuzzy in the future.
+    * 测试将输入一个输入向量列表,以及该输入所需的所有摘要值的列表,他们目前测试的一些固定的子集的指标,但应在未来模糊
    */
   private def testExample(name: String, input: Seq[Any], exp: ExpectedMetrics): Unit = {
 
@@ -69,28 +72,29 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
     }
 
     // Because the Spark context is reset between tests, we cannot hold a reference onto it.
+    //因为在测试之间重置了Spark上下文,所以我们不能对它进行引用。
     def wrappedInit() = {
       val df = inputVec.map(Tuple1.apply).toDF("features")
       val col = df.col("features")
       (df, col)
     }
-
+    //
     registerTest(s"$name - mean only") {
       val (df, c) = wrappedInit()
       compare(df.select(metrics("mean").summary(c), mean(c)), Seq(Row(exp.mean), summarizer.mean))
     }
-
+    //平均
     registerTest(s"$name - mean only (direct)") {
       val (df, c) = wrappedInit()
       compare(df.select(mean(c)), Seq(exp.mean))
     }
-
+    //方差
     registerTest(s"$name - variance only") {
       val (df, c) = wrappedInit()
       compare(df.select(metrics("variance").summary(c), variance(c)),
         Seq(Row(exp.variance), summarizer.variance))
     }
-
+    //仅方差（直接）
     registerTest(s"$name - variance only (direct)") {
       val (df, c) = wrappedInit()
       compare(df.select(variance(c)), Seq(summarizer.variance))
@@ -101,7 +105,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       compare(df.select(metrics("count").summary(c), count(c)),
         Seq(Row(exp.count), exp.count))
     }
-
+    //仅count（直接）
     registerTest(s"$name - count only (direct)") {
       val (df, c) = wrappedInit()
       compare(df.select(count(c)),
@@ -119,13 +123,13 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       compare(df.select(numNonZeros(c)),
         Seq(exp.numNonZeros))
     }
-
+    //最小值
     registerTest(s"$name - min only") {
       val (df, c) = wrappedInit()
       compare(df.select(metrics("min").summary(c), min(c)),
         Seq(Row(exp.min), exp.min))
     }
-
+    //最大值
     registerTest(s"$name - max only") {
       val (df, c) = wrappedInit()
       compare(df.select(metrics("max").summary(c), max(c)),
@@ -143,7 +147,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       compare(df.select(metrics("normL2").summary(c), normL2(c)),
         Seq(Row(exp.normL2), exp.normL2))
     }
-
+    //所有的指标
     registerTest(s"$name - all metrics at once") {
       val (df, c) = wrappedInit()
       compare(df.select(
@@ -170,6 +174,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
   }
 
   // Compares structured content.
+  //比较结构化内容
   private def compareStructures(x1: Any, x2: Any, name: String): Unit = (x1, x2) match {
     case (y1: Seq[Double @unchecked], v1: OldVector) =>
       compareStructures(y1, v1.toArray.toSeq, name)
@@ -204,7 +209,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
         throw new TestFailedException(Some(s"Failure with hint $hint"), Some(tfe), 1)
     }
   }
-
+  //调试试验
   test("debugging test") {
     val df = denseData(Nil)
     val c = df.col("features")
@@ -214,7 +219,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       compare(res, Seq.empty)
     }
   }
-
+  //基本的错误处理
   test("basic error handling") {
     val df = denseData(Nil)
     val c = df.col("features")
@@ -223,7 +228,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       compare(res, Seq.empty)
     }
   }
-
+  //没有元素,工作度量
   test("no element, working metrics") {
     val df = denseData(Nil)
     val c = df.col("features")
@@ -254,7 +259,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
     normL1 = Seq(0.0, 2.0, 4.0),
     normL2 = Seq(0.0, math.sqrt(2.0), math.sqrt(2.0) * 2.0)
   ))
-
+  //密集的输入向量
   testExample("dense vector input",
     Seq(Seq(-1.0, 0.0, 6.0), Seq(3.0, -3.0, 0.0)),
     ExpectedMetrics(
@@ -268,7 +273,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       normL2 = Seq(math.sqrt(10), 3, 6.0)
     )
   )
-
+  //摘要缓冲基本错误处理
   test("summarizer buffer basic error handing") {
     val summarizer = new SummarizerBuffer
 
@@ -325,7 +330,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       }
     }
   }
-
+  //汇总缓冲区密集的向量输入
   test("summarizer buffer dense vector input") {
     // For column 2, the maximum will be 0.0, and it's not explicitly added since we ignore all
     // the zeros; it's a case we need to test. For column 3, the minimum will be 0.0 which we
@@ -341,7 +346,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(summarizer.variance ~== Vectors.dense(8.0, 4.5, 18.0) absTol 1E-5, "variance mismatch")
     assert(summarizer.count === 2)
   }
-
+  //汇总缓冲区稀疏向量输入
   test("summarizer buffer sparse vector input") {
     val summarizer = (new SummarizerBuffer)
       .add(Vectors.sparse(3, Seq((0, -1.0), (2, 6.0))))
@@ -354,7 +359,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(summarizer.variance ~== Vectors.dense(8.0, 4.5, 18.0) absTol 1E-5, "variance mismatch")
     assert(summarizer.count === 2)
   }
-
+  //汇总缓冲区混合密集和稀疏矢量输入
   test("summarizer buffer mixing dense and sparse vector input") {
     val summarizer = (new SummarizerBuffer)
       .add(Vectors.sparse(3, Seq((0, -2.0), (1, 2.3))))
@@ -376,7 +381,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
 
     assert(summarizer.count === 6)
   }
-
+  //汇总缓冲区合并两个汇总程序
   test("summarizer buffer merging two summarizers") {
     val summarizer1 = (new SummarizerBuffer)
       .add(Vectors.sparse(3, Seq((0, -2.0), (1, 2.3))))
@@ -401,7 +406,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       "variance mismatch")
     assert(summarizer.count === 6)
   }
-
+  //总结缓冲区零方差测试
   test("summarizer buffer zero variance test (SPARK-21818)") {
     val summarizer1 = new SummarizerBuffer()
       .add(Vectors.dense(3.0), 0.7)
@@ -419,10 +424,12 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
 
     assert(summarizer.variance(0) >= 0.0)
   }
-
+  //汇总程序合并汇总程序与空汇总程序
   test("summarizer buffer merging summarizer with empty summarizer") {
     // If one of two is non-empty, this should return the non-empty summarizer.
+    //如果其中一个非空,则应返回非空的汇总程序
     // If both of them are empty, then just return the empty summarizer.
+    //如果它们都是空的,那么只需返回空的汇总表
     val summarizer1 = (new SummarizerBuffer)
       .add(Vectors.dense(0.0, -1.0, -3.0)).merge(new SummarizerBuffer)
     assert(summarizer1.count === 1)
@@ -445,7 +452,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(summarizer1.variance ~== Vectors.dense(0, 0, 0) absTol 1E-5, "variance mismatch")
     assert(summarizer2.variance ~== Vectors.dense(0, 0, 0) absTol 1E-5, "variance mismatch")
   }
-
+  //当一边是零均值时,汇总器缓冲区合并汇总器
   test("summarizer buffer merging summarizer when one side has zero mean (SPARK-4355)") {
     val s0 = new SummarizerBuffer()
       .add(Vectors.dense(2.0))
@@ -456,7 +463,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
     s0.merge(s1)
     assert(s0.mean(0) ~== 1.0 absTol 1e-14)
   }
-
+  //汇总器缓冲区合并汇总器加权样本
   test("summarizer buffer merging summarizer with weighted samples") {
     val summarizer = (new SummarizerBuffer)
       .add(Vectors.sparse(3, Seq((0, -0.8), (1, 1.7))), weight = 0.1)
@@ -483,7 +490,7 @@ class SummarizerSuite extends SparkFunSuite with MLlibTestSparkContext {
       absTol 1E-8, "normL2 mismatch")
     assert(summarizer.normL1 ~== Vectors.dense(0.21, 0.4265, 0.61) absTol 1E-10, "normL1 mismatch")
   }
-
+  //总结缓冲区测试最小/最大加权样本
   test("summarizer buffer test min/max with weighted samples") {
     val summarizer1 = new SummarizerBuffer()
       .add(Vectors.dense(10.0, -10.0), 1e10)

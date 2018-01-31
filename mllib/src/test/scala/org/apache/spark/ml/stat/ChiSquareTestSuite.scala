@@ -31,7 +31,7 @@ class ChiSquareTestSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
-
+  //DataFrame标记点测试
   test("test DataFrame of labeled points") {
     // labels: 1.0 (2 / 6), 0.0 (4 / 6)
     // feature1: 0.5 (1 / 6), 1.5 (2 / 6), 3.5 (3 / 6)
@@ -54,9 +54,10 @@ class ChiSquareTestSuite
       assert(statistics ~== Vectors.dense(0.75, 1.5) relTol 1e-4)
     }
   }
-
+  //大量的特征
   test("large number of features (SPARK-3087)") {
     // Test that the right number of results is returned
+    //测试返回正确的结果数
     val numCols = 1001
     val sparseData = Array(
       LabeledPoint(0.0, Vectors.sparse(numCols, Seq((100, 2.0)))),
@@ -71,7 +72,7 @@ class ChiSquareTestSuite
     assert(statistics.size === numCols)
     assert(pValues(1000) !== null)  // SPARK-3087
   }
-
+  //在连续的特性或标签上失败
   test("fail on continuous features or labels") {
     val tooManyCategories: Int = 100000
     assert(tooManyCategories > ChiSqTest.maxCategories, "This unit test requires that " +

@@ -75,7 +75,7 @@ class ALSSuite
       }
     }
   }
-
+  //正态方程构造
   test("normal equation construction") {
     val k = 2
     val ne0 = new NormalEquation(k)
@@ -135,6 +135,7 @@ class ALSSuite
     val chol = new CholeskySolver
     val x0 = chol.solve(ne0, 0.0).map(_.toDouble)
     // NumPy code that computes the expected solution:
+    //NumPy码计算预期的解决方案：
     // A = np.matrix("1 2; 1 3; 1 4")
     // b = b = np.matrix("3; 6")
     // x0 = np.linalg.lstsq(A, b)[0]
@@ -148,7 +149,7 @@ class ALSSuite
     // x0 = np.linalg.solve(A.transpose() * A + 1.5 * np.eye(2), A.transpose() * b)
     assert(Vectors.dense(x1) ~== Vectors.dense(-0.1155556, 3.28) relTol 1e-6)
   }
-
+  //评级模块生成器
   test("RatingBlockBuilder") {
     val emptyBuilder = new RatingBlockBuilder[Int]()
     assert(emptyBuilder.size === 0)
@@ -171,7 +172,7 @@ class ALSSuite
     }.toSet
     assert(ratings === Set((0, 1, 2.0f), (3, 4, 5.0f), (6, 7, 8.0f)))
   }
-
+  //未经压缩的块
   test("UncompressedInBlock") {
     val encoder = new LocalIndexEncoder(10)
     val uncompressed = new UncompressedInBlockBuilder[Int](encoder)
@@ -208,63 +209,64 @@ class ALSSuite
     }
     assert(decompressed.toSet === expected)
   }
-
+  //如果安全值超出整数范围或包含小数部分,则安全地将用户/项目ID转换为int会引发异常。
   test("CheckedCast") {
     val checkedCast = new ALS().checkedCast
     val df = spark.range(1)
-
+    //有效的整数ID
     withClue("Valid Integer Ids") {
       df.select(checkedCast(lit(123))).collect()
     }
-
+    //有效的Long ID
     withClue("Valid Long Ids") {
       df.select(checkedCast(lit(1231L))).collect()
     }
-
+    //有效的十进制ID
     withClue("Valid Decimal Ids") {
       df.select(checkedCast(lit(123).cast(DecimalType(15, 2)))).collect()
     }
-
+    //有效的Double ID
     withClue("Valid Double Ids") {
       df.select(checkedCast(lit(123.0))).collect()
     }
-
+    //在整数范围外或包含小数部分
     val msg = "either out of Integer range or contained a fractional part"
+    //无效的长：超出范围
     withClue("Invalid Long: out of range") {
       val e: SparkException = intercept[SparkException] {
         df.select(checkedCast(lit(1231000000000L))).collect()
       }
       assert(e.getMessage.contains(msg))
     }
-
+    //十进制无效：超出范围
     withClue("Invalid Decimal: out of range") {
       val e: SparkException = intercept[SparkException] {
         df.select(checkedCast(lit(1231000000000.0).cast(DecimalType(15, 2)))).collect()
       }
       assert(e.getMessage.contains(msg))
     }
-
+    //十进制无效：小数部分
     withClue("Invalid Decimal: fractional part") {
       val e: SparkException = intercept[SparkException] {
         df.select(checkedCast(lit(123.1).cast(DecimalType(15, 2)))).collect()
       }
       assert(e.getMessage.contains(msg))
     }
-
+    //无效的Double：超出范围
     withClue("Invalid Double: out of range") {
       val e: SparkException = intercept[SparkException] {
         df.select(checkedCast(lit(1231000000000.0))).collect()
       }
       assert(e.getMessage.contains(msg))
     }
-
+    //无效Double：小数部分
     withClue("Invalid Double: fractional part") {
       val e: SparkException = intercept[SparkException] {
         df.select(checkedCast(lit(123.1))).collect()
       }
       assert(e.getMessage.contains(msg))
     }
-
+    //无效的类型
     withClue("Invalid Type") {
       val e: SparkException = intercept[SparkException] {
         df.select(checkedCast(lit("123.1"))).collect()
@@ -275,11 +277,13 @@ class ALSSuite
 
   /**
    * Generates an explicit feedback dataset for testing ALS.
+    * 生成用于测试ALS的显式反馈数据集
    * @param numUsers number of users
    * @param numItems number of items
    * @param rank rank
    * @param noiseStd the standard deviation of additive Gaussian noise on training data
-   * @param seed random seed
+    *                 加性高斯噪声对训练数据的标准差
+    * @param seed random seed
    * @return (training, test)
    */
   def genExplicitTestData(
@@ -315,6 +319,7 @@ class ALSSuite
 
   /**
    * Generates an implicit feedback dataset for testing ALS.
+    * 生成用于测试ALS的隐式反馈数据集
    * @param numUsers number of users
    * @param numItems number of items
    * @param rank rank
@@ -333,6 +338,7 @@ class ALSSuite
 
   /**
    * Generates random user/item factors, with i.i.d. values drawn from U(a, b).
+    * 使用i.i.d生成随机用户/项目因子。 从U（a，b）中抽取的值
    * @param size number of users/items
    * @param rank number of features
    * @param random random number generator
@@ -351,11 +357,12 @@ class ALSSuite
 
   /**
   * Train ALS using the given training set and parameters
+    * 使用给定的训练集和参数训练ALS
   * @param training training dataset
-  * @param rank rank of the matrix factorization
-  * @param maxIter max number of iterations
-  * @param regParam regularization constant
-  * @param implicitPrefs whether to use implicit preference
+  * @param rank rank of the matrix factorization 矩阵分解的秩
+  * @param maxIter max number of iterations 最大迭代次数
+  * @param regParam regularization constant 正则化常数
+  * @param implicitPrefs whether to use implicit preference 是否使用隐式偏好
   * @param numUserBlocks number of user blocks
   * @param numItemBlocks number of item blocks
   * @return a trained ALSModel
@@ -382,6 +389,7 @@ class ALSSuite
 
   /**
    * Test ALS using the given training/test splits and parameters.
+    * 使用给定的训练/测试分组和参数测试ALS
    * @param training training dataset
    * @param test test dataset
    * @param rank rank of the matrix factorization
@@ -444,27 +452,27 @@ class ALSSuite
 
     MLTestingUtils.checkCopyAndUids(als, model)
   }
-
+  //确切的秩-1矩阵
   test("exact rank-1 matrix") {
     val (training, test) = genExplicitTestData(numUsers = 20, numItems = 40, rank = 1)
     testALS(training, test, maxIter = 1, rank = 1, regParam = 1e-5, targetRMSE = 0.001)
     testALS(training, test, maxIter = 1, rank = 2, regParam = 1e-5, targetRMSE = 0.001)
   }
-
+  //近似等级1的矩阵
   test("approximate rank-1 matrix") {
     val (training, test) =
       genExplicitTestData(numUsers = 20, numItems = 40, rank = 1, noiseStd = 0.01)
     testALS(training, test, maxIter = 2, rank = 1, regParam = 0.01, targetRMSE = 0.02)
     testALS(training, test, maxIter = 2, rank = 2, regParam = 0.01, targetRMSE = 0.02)
   }
-
+  //近似等级2的矩阵
   test("approximate rank-2 matrix") {
     val (training, test) =
       genExplicitTestData(numUsers = 20, numItems = 40, rank = 2, noiseStd = 0.01)
     testALS(training, test, maxIter = 4, rank = 2, regParam = 0.01, targetRMSE = 0.03)
     testALS(training, test, maxIter = 4, rank = 3, regParam = 0.01, targetRMSE = 0.03)
   }
-
+  //不同的块设置
   test("different block settings") {
     val (training, test) =
       genExplicitTestData(numUsers = 20, numItems = 40, rank = 2, noiseStd = 0.01)
@@ -473,21 +481,21 @@ class ALSSuite
         numUserBlocks = numUserBlocks, numItemBlocks = numItemBlocks)
     }
   }
-
+  //比评分更多的块
   test("more blocks than ratings") {
     val (training, test) =
       genExplicitTestData(numUsers = 4, numItems = 4, rank = 1)
     testALS(training, test, maxIter = 2, rank = 1, regParam = 1e-4, targetRMSE = 0.002,
      numItemBlocks = 5, numUserBlocks = 5)
   }
-
+  //隐式反馈
   test("implicit feedback") {
     val (training, test) =
       genImplicitTestData(numUsers = 20, numItems = 40, rank = 2, noiseStd = 0.01)
     testALS(training, test, maxIter = 4, rank = 2, regParam = 0.01, implicitPrefs = true,
       targetRMSE = 0.3)
   }
-
+  //隐式反馈回归
   test("implicit feedback regression") {
     val trainingWithNeg = sc.parallelize(Array(Rating(0, 0, 1), Rating(1, 1, 1), Rating(0, 1, -3)))
     val trainingWithZero = sc.parallelize(Array(Rating(0, 0, 1), Rating(1, 1, 1), Rating(0, 1, 0)))
@@ -502,6 +510,7 @@ class ALSSuite
     assert(userFactorsNeg.intersect(userFactorsZero).count() == 0)
     assert(itemFactorsNeg.intersect(itemFactorsZero).count() == 0)
   }
+  //使用通用的ID类型
   test("using generic ID types") {
     val (ratings, _) = genImplicitTestData(numUsers = 20, numItems = 40, rank = 2, noiseStd = 0.01)
 
@@ -513,7 +522,7 @@ class ALSSuite
     val (strUserFactors, _) = ALS.train(strRatings, rank = 2, maxIter = 4, seed = 0)
     assert(strUserFactors.first()._1.getClass === classOf[String])
   }
-
+  //非负约束
   test("nonnegative constraint") {
     val (ratings, _) = genImplicitTestData(numUsers = 20, numItems = 40, rank = 2, noiseStd = 0.01)
     val (userFactors, itemFactors) =
@@ -525,7 +534,7 @@ class ALSSuite
     assert(isNonnegative(itemFactors))
     // TODO: Validate the solution.
   }
-
+  //als分区器是一个projection
   test("als partitioner is a projection") {
     for (p <- Seq(1, 10, 100, 1000)) {
       val part = new ALSPartitioner(p)
@@ -537,7 +546,7 @@ class ALSSuite
       }
     }
   }
-
+  //在返回的因素分区
   test("partitioner in returned factors") {
     val (ratings, _) = genImplicitTestData(numUsers = 20, numItems = 40, rank = 2, noiseStd = 0.01)
     val (userFactors, itemFactors) = ALS.train(
@@ -555,7 +564,7 @@ class ALSSuite
       }.count()
     }
   }
-
+  //具有大量迭代的als
   test("als with large number of iterations") {
     val (ratings, _) = genExplicitTestData(numUsers = 4, numItems = 4, rank = 1)
     ALS.train(ratings, rank = 1, maxIter = 50, numUserBlocks = 2, numItemBlocks = 2, seed = 0)
@@ -585,7 +594,7 @@ class ALSSuite
     testEstimatorAndModelReadWrite(als, ratings.toDF(), allEstimatorParamSettings,
       allModelParamSettings, checkModelData)
   }
-
+  //输入类型验证
   test("input type validation") {
     val spark = this.spark
     import spark.implicits._
@@ -626,6 +635,7 @@ class ALSSuite
         als.fit(df.select(df("item_small").as("item"), df("user"), df("rating")))
       }.getCause.getMessage.contains(msg))
     }
+    //当id超过整数范围时，转换将失败
     withClue("transform should fail when ids exceed integer range. ") {
       val model = als.fit(df)
       assert(intercept[SparkException] {
@@ -642,14 +652,14 @@ class ALSSuite
       }.getMessage.contains(msg))
     }
   }
-
+  //具有空RDD的ALS应该会失败并显示更好的消息
   test("SPARK-18268: ALS with empty RDD should fail with better message") {
     val ratings = sc.parallelize(Array.empty[Rating[Int]])
     intercept[IllegalArgumentException] {
       ALS.train(ratings)
     }
   }
-
+  //ALS冷启动用户/项目预测策略
   test("ALS cold start user/item prediction strategy") {
     val spark = this.spark
     import spark.implicits._
@@ -677,6 +687,7 @@ class ALSSuite
     assert(!defaultPredictions.last.isNaN)
 
     // check 'drop' strategy should filter out rows with unknown users/items
+    //检查“下降”策略应该过滤掉具有未知用户/项目的行
     val dropPredictions = defaultModel
       .setColdStartStrategy("drop")
       .transform(test)
@@ -685,7 +696,7 @@ class ALSSuite
     assert(!dropPredictions.head.isNaN)
     assert(dropPredictions.head ~== defaultPredictions.last relTol 1e-14)
   }
-
+  //不区分大小写的冷启动参数值
   test("case insensitive cold start param value") {
     val spark = this.spark
     import spark.implicits._
@@ -717,7 +728,7 @@ class ALSSuite
       .setUserCol("user")
       .setItemCol("item")
   }
-
+  //推荐使用k <，=和> num_items的所有用户
   test("recommendForAllUsers with k <, = and > num_items") {
     val model = getALSModel
     val numUsers = model.userFactors.count
@@ -737,7 +748,7 @@ class ALSSuite
       checkRecommendations(topItems, expectedUpToN, "item")
     }
   }
-
+  //带有k <，=和> num_users的recommendForAllItems
   test("recommendForAllItems with k <, = and > num_users") {
     val model = getALSModel
     val numUsers = model.userFactors.count
@@ -791,7 +802,7 @@ class ALSCleanerSuite extends SparkFunSuite with BeforeAndAfterEach {
     Utils.clearLocalRootDirs()
     super.afterEach()
   }
-
+  //ALS shuffle清理独立
   test("ALS shuffle cleanup standalone") {
     val conf = new SparkConf()
     val localDir = Utils.createTempDir()
@@ -814,6 +825,7 @@ class ALSCleanerSuite extends SparkFunSuite with BeforeAndAfterEach {
         val resultingFiles = getAllFiles
         assert(resultingFiles === Set())
         // Ensure running count again works fine even if we kill the shuffle files.
+        //确保运行计数再次正常工作,即使我们杀死了洗牌文件
         keysOnly.count()
       } finally {
         sc.stop()
@@ -823,7 +835,7 @@ class ALSCleanerSuite extends SparkFunSuite with BeforeAndAfterEach {
       Utils.deleteRecursively(checkpointDir)
     }
   }
-
+  //算法中的ALS shuffle清理
   test("ALS shuffle cleanup in algorithm") {
     val conf = new SparkConf()
     val localDir = Utils.createTempDir()
@@ -838,6 +850,7 @@ class ALSCleanerSuite extends SparkFunSuite with BeforeAndAfterEach {
         // Generate test data
         val (training, _) = ALSSuite.genImplicitTestData(sc, 20, 5, 1, 0.2, 0)
         // Implicitly test the cleaning of parents during ALS training
+        //在ALS培训期间隐式测试父的清洁
         val spark = SparkSession.builder
           .sparkContext(sc)
           .getOrCreate()
@@ -852,6 +865,7 @@ class ALSCleanerSuite extends SparkFunSuite with BeforeAndAfterEach {
         val resultingFiles = getAllFiles
         // We expect the last shuffles files, block ratings, user factors, and item factors to be
         // around but no more.
+        //我们预计最后的洗牌文件,数据块评级,用户因素和项目因素将在周围,但不会超过
         val pattern = "shuffle_(\\d+)_.+\\.data".r
         val rddIds = resultingFiles.flatMap { f =>
           pattern.findAllIn(f.getName()).matchData.map { _.group(1) } }
@@ -868,7 +882,7 @@ class ALSCleanerSuite extends SparkFunSuite with BeforeAndAfterEach {
 
 class ALSStorageSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest with Logging {
-
+  //无效的存储参数
   test("invalid storage params") {
     intercept[IllegalArgumentException] {
       new ALS().setIntermediateStorageLevel("foo")
@@ -880,7 +894,7 @@ class ALSStorageSuite
       new ALS().setFinalStorageLevel("foo")
     }
   }
-
+  //默认和非默认存储参数设置正确的RDD StorageLevels
   test("default and non-default storage params set correct RDD StorageLevels") {
     val spark = this.spark
     import spark.implicits._
@@ -892,10 +906,12 @@ class ALSStorageSuite
     ).toDF("user", "item", "rating")
     val als = new ALS().setMaxIter(1).setRank(1)
     // add listener to check intermediate RDD default storage levels
+    //添加监听器来检查中间RDD默认存储级别
     val defaultListener = new IntermediateRDDStorageListener
     sc.addSparkListener(defaultListener)
     val model = als.fit(data)
     // check final factor RDD default storage levels
+    //检查最终因子RDD默认存储级别
     val defaultFactorRDDs = sc.getPersistentRDDs.collect {
       case (id, rdd) if rdd.name == "userFactors" || rdd.name == "itemFactors" =>
         rdd.name -> ((id, rdd.getStorageLevel))
@@ -906,6 +922,7 @@ class ALSStorageSuite
     defaultListener.storageLevels.foreach(level => assert(level == StorageLevel.MEMORY_AND_DISK))
 
     // add listener to check intermediate RDD non-default storage levels
+    //添加侦听器来检查中间RDD非默认存储级别
     val nonDefaultListener = new IntermediateRDDStorageListener
     sc.addSparkListener(nonDefaultListener)
     val nonDefaultModel = als
@@ -913,6 +930,7 @@ class ALSStorageSuite
       .setIntermediateStorageLevel("DISK_ONLY")
       .fit(data)
     // check final factor RDD non-default storage levels
+    //检查最终因素RDD非默认存储级别
     val levels = sc.getPersistentRDDs.collect {
       case (id, rdd) if rdd.name == "userFactors" && rdd.id != defaultFactorRDDs("userFactors")._1
         || rdd.name == "itemFactors" && rdd.id != defaultFactorRDDs("itemFactors")._1 =>
@@ -941,7 +959,9 @@ object ALSSuite extends Logging {
 
   /**
    * Mapping from all Params to valid settings which differ from the defaults.
+    * 从所有参数映射到与默认设置不同的有效设置
    * This is useful for tests which need to exercise all Params, such as save/load.
+    * 这对于需要执行所有参数的测试非常有用,例如保存/加载
    * This excludes input columns to simplify some tests.
    */
   val allModelParamSettings: Map[String, Any] = Map(
@@ -971,6 +991,7 @@ object ALSSuite extends Logging {
 
   /**
    * Generates random user/item factors, with i.i.d. values drawn from U(a, b).
+    * 使用i.i.d生成随机用户/项目因子。 从U（a，b）中抽取的值。
    * @param size number of users/items
    * @param rank number of features
    * @param random random number generator
@@ -996,12 +1017,13 @@ object ALSSuite extends Logging {
 
   /**
    * Generates an implicit feedback dataset for testing ALS.
-   *
+   *生成用于测试ALS的隐式反馈数据集。
    * @param sc SparkContext
    * @param numUsers number of users
    * @param numItems number of items
    * @param rank rank
    * @param noiseStd the standard deviation of additive Gaussian noise on training data
+    *                 加性高斯噪声对训练数据的标准差
    * @param seed random seed
    * @return (training, test)
    */
@@ -1014,6 +1036,7 @@ object ALSSuite extends Logging {
       seed: Long = 11L): (RDD[Rating[Int]], RDD[Rating[Int]]) = {
     // The assumption of the implicit feedback model is that unobserved ratings are more likely to
     // be negatives.
+    //隐式反馈模型的假设是未观测到的评级更可能是负面的
     val positiveFraction = 0.8
     val negativeFraction = 1.0 - positiveFraction
     val trainingFraction = 0.6

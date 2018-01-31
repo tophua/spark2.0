@@ -23,7 +23,9 @@ import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTestingUtils}
 import org.apache.spark.ml.util.TestingUtils._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Row
-
+/**
+  * 统计向量
+  */
 class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
   with DefaultReadWriteTest {
 
@@ -35,7 +37,7 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
   }
 
   private def split(s: String): Seq[String] = s.split("\\s+")
-
+  //计数矢量模型常见的情况
   test("CountVectorizerModel common cases") {
     val df = Seq(
       (0, split("a b c d"),
@@ -55,7 +57,7 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
         assert(features ~== expected absTol 1e-14)
     }
   }
-
+  //一般情况下计数矢量
   test("CountVectorizer common cases") {
     val df = Seq(
       (0, split("a b c d e"),
@@ -77,7 +79,7 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
         assert(features ~== expected absTol 1e-14)
     }
   }
-
+  //计数矢量大小和mindf词汇
   test("CountVectorizer vocabSize and minDF") {
     val df = Seq(
       (0, split("a b c d"), Vectors.sparse(2, Seq((0, 1.0), (1, 1.0)))),
@@ -88,11 +90,13 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
     val cvModel = new CountVectorizer()
       .setInputCol("words")
       .setOutputCol("features")
+      // limit vocab size to 3 限制单词列表
       .setVocabSize(3)  // limit vocab size to 3
       .fit(df)
     assert(cvModel.vocabulary === Array("a", "b", "c"))
 
     // minDF: ignore terms with count less than 3
+    //minDF：忽略计数小于3的项
     val cvModel2 = new CountVectorizer()
       .setInputCol("words")
       .setOutputCol("features")
@@ -106,19 +110,20 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
     }
 
     // minDF: ignore terms with freq < 0.75
+    //minDF:忽略与频率＜0.75
     val cvModel3 = new CountVectorizer()
       .setInputCol("words")
       .setOutputCol("features")
       .setMinDF(3.0 / df.count())
       .fit(df)
     assert(cvModel3.vocabulary === Array("a", "b"))
-
+    //transform()方法将DataFrame转化为另外一个DataFrame的算法
     cvModel3.transform(df).select("features", "expected").collect().foreach {
       case Row(features: Vector, expected: Vector) =>
         assert(features ~== expected absTol 1e-14)
     }
   }
-
+  //计数矢量抛出异常词汇为空时
   test("CountVectorizer throws exception when vocab is empty") {
     intercept[IllegalArgumentException] {
       val df = Seq(
@@ -133,7 +138,7 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
         .fit(df)
     }
   }
-
+  //计数矢量模型与mintf计数
   test("CountVectorizerModel with minTF count") {
     val df = Seq(
       (0, split("a a a b b c c c d "), Vectors.sparse(4, Seq((0, 3.0), (2, 3.0)))),
@@ -153,6 +158,7 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
     }
   }
 
+  //计数矢量模型与mintf频率
   test("CountVectorizerModel with minTF freq") {
     val df = Seq(
       (0, split("a a a b b c c c d "), Vectors.sparse(4, Seq((0, 3.0), (2, 3.0)))),
@@ -171,7 +177,7 @@ class CountVectorizerSuite extends SparkFunSuite with MLlibTestSparkContext
         assert(features ~== expected absTol 1e-14)
     }
   }
-
+//
   test("CountVectorizerModel and CountVectorizer with binary") {
     val df = Seq(
       (0, split("a a a a b b b b c d"),

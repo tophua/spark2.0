@@ -28,9 +28,11 @@ import org.apache.spark.ml.util.{Identifiable, MLReader, MLWritable}
 object ValidatorParamsSuiteHelpers extends Assertions {
   /**
    * Assert sequences of estimatorParamMaps are identical.
+    * estimatorParamMaps的声明序列是相同的
    * If the values for a parameter are not directly comparable with ===
    * and are instead Params types themselves then their corresponding paramMaps
    * are compared against each other.
+    * 如果一个参数的值不能直接与参数类型相比,而是参数类型本身,那么它们相应的参数映射相互比较
    */
   def compareParamMaps(pMaps: Array[ParamMap], pMaps2: Array[ParamMap]): Unit = {
     assert(pMaps.length === pMaps2.length)
@@ -62,6 +64,8 @@ object ValidatorParamsSuiteHelpers extends Assertions {
    * CrossValidator and TrainValidationSplit, relative paths should be used to store
    * the path of the estimator so that if the parent directory changes, loading the
    * model still works.
+    * 当嵌套的估计器（例如OneVsRest）被保存在元算法如CrossValidator和TrainValidationSplit中时,
+    * 应该使用相对路径来存储估计器的路径,以便如果父目录改变,加载模型仍然有效。
    */
   def testFileMove[T <: Params with MLWritable](instance: T, tempDir: File): Unit = {
     val uid = instance.uid

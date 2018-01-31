@@ -21,7 +21,7 @@ import org.apache.spark.SparkFunSuite
 import org.apache.spark.sql.types._
 
 class AttributeSuite extends SparkFunSuite {
-
+  ///默认的数字属性
   test("default numeric attribute") {
     val attr: NumericAttribute = NumericAttribute.defaultAttr
     val metadata = Metadata.fromJson("{}")
@@ -44,7 +44,7 @@ class AttributeSuite extends SparkFunSuite {
       attr.toStructField()
     }
   }
-
+  //自定义数字属性
   test("customized numeric attribute") {
     val name = "age"
     val index = 0
@@ -82,7 +82,7 @@ class AttributeSuite extends SparkFunSuite {
     assert(attr2.sparsity === Some(0.3))
     assert(attr2 === Attribute.fromMetadata(attr2.toMetadataImpl()))
   }
-
+  //错误的数字属性
   test("bad numeric attributes") {
     val attr = NumericAttribute.defaultAttr
     intercept[IllegalArgumentException](attr.withName(""))
@@ -91,7 +91,7 @@ class AttributeSuite extends SparkFunSuite {
     intercept[IllegalArgumentException](attr.withSparsity(-0.5))
     intercept[IllegalArgumentException](attr.withSparsity(1.5))
   }
-
+  //默认名义属性
   test("default nominal attribute") {
     val attr: NominalAttribute = NominalAttribute.defaultAttr
     val metadata = Metadata.fromJson("""{"type":"nominal"}""")
@@ -113,7 +113,7 @@ class AttributeSuite extends SparkFunSuite {
       attr.toStructField()
     }
   }
-
+  //定制的名义属性
   test("customized nominal attribute") {
     val name = "size"
     val index = 1
@@ -149,14 +149,14 @@ class AttributeSuite extends SparkFunSuite {
     assert(attr2 === Attribute.fromMetadata(attr2.toMetadataImpl()))
     assert(attr2 === NominalAttribute.fromMetadata(attr2.toMetadataImpl(withType = false)))
   }
-
+  //坏名义属性
   test("bad nominal attributes") {
     val attr = NominalAttribute.defaultAttr
     intercept[IllegalArgumentException](attr.withName(""))
     intercept[IllegalArgumentException](attr.withIndex(-1))
     intercept[IllegalArgumentException](attr.withNumValues(-1))
   }
-
+  //默认二进制属性
   test("default binary attribute") {
     val attr = BinaryAttribute.defaultAttr
     val metadata = Metadata.fromJson("""{"type":"binary"}""")
@@ -176,7 +176,7 @@ class AttributeSuite extends SparkFunSuite {
       attr.toStructField()
     }
   }
-
+  //定制二进制属性
   test("customized binary attribute") {
     val name = "clicked"
     val index = 2
@@ -202,13 +202,13 @@ class AttributeSuite extends SparkFunSuite {
     assert(attr === BinaryAttribute.fromMetadata(metadataWithoutType))
     assert(attr.withoutIndex === Attribute.fromStructField(attr.toStructField()))
   }
-
+  //坏的二进制属性
   test("bad binary attributes") {
     val attr = BinaryAttribute.defaultAttr
     intercept[IllegalArgumentException](attr.withName(""))
     intercept[IllegalArgumentException](attr.withIndex(-1))
   }
-
+  //来自struct字段的属性
   test("attribute from struct field") {
     val metadata = NumericAttribute.defaultAttr.withName("label").toMetadata()
     val fldWithoutMeta = new StructField("x", DoubleType, false, Metadata.empty)
@@ -216,6 +216,7 @@ class AttributeSuite extends SparkFunSuite {
     val fldWithMeta = new StructField("x", DoubleType, false, metadata)
     assert(Attribute.fromStructField(fldWithMeta).isNumeric)
     // Attribute.fromStructField should accept any NumericType, not just DoubleType
+    //Attribute.fromStructField应该接受任何的NumericType,而不仅仅是DoubleType
     val longFldWithMeta = new StructField("x", LongType, false, metadata)
     assert(Attribute.fromStructField(longFldWithMeta).isNumeric)
     val decimalFldWithMeta = new StructField("x", DecimalType(38, 18), false, metadata)

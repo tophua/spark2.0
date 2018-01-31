@@ -64,7 +64,7 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
       super.afterAll()
     }
   }
-
+ //选择为稀疏向量
   test("select as sparse vector") {
     val df = spark.read.format("libsvm").load(path)
     assert(df.columns(0) == "label")
@@ -74,7 +74,7 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
     val v = row1.getAs[SparseVector](1)
     assert(v == Vectors.sparse(6, Seq((0, 1.0), (2, 2.0), (4, 3.0))))
   }
-
+  //选择稠密向量
   test("select as dense vector") {
     val df = spark.read.format("libsvm").options(Map("vectorType" -> "dense"))
       .load(path)
@@ -86,7 +86,7 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
     val v = row1.getAs[DenseVector](1)
     assert(v == Vectors.dense(1.0, 0.0, 2.0, 0.0, 3.0, 0.0))
   }
-
+  //非法的vector类型
   test("illegal vector types") {
     val e = intercept[IllegalArgumentException] {
       spark.read.format("libsvm").options(Map("VectorType" -> "sparser")).load(path)
@@ -94,7 +94,7 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(e.contains("Invalid value `sparser` for parameter `vectorType`. Expected " +
       "types are `sparse` and `dense`."))
   }
-
+  //选择指定较长维度的向量
   test("select a vector with specifying the longer dimension") {
     val df = spark.read.option("numFeatures", "100").format("libsvm")
       .load(path)
@@ -102,13 +102,13 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
     val v = row1.getAs[SparseVector](1)
     assert(v == Vectors.sparse(100, Seq((0, 1.0), (2, 2.0), (4, 3.0))))
   }
-
+  //不区分大小写的选项
   test("case insensitive option") {
     val df = spark.read.option("NuMfEaTuReS", "100").format("libsvm").load(path)
     assert(df.first().getAs[SparseVector](1) ==
       Vectors.sparse(100, Seq((0, 1.0), (2, 2.0), (4, 3.0))))
   }
-
+  //写libsvm数据读一遍
   test("write libsvm data and read it again") {
     val df = spark.read.format("libsvm").load(path)
     val writePath = Utils.createTempDir().getPath
@@ -121,14 +121,14 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
     val v = row1.getAs[SparseVector](1)
     assert(v == Vectors.sparse(6, Seq((0, 1.0), (2, 2.0), (4, 3.0))))
   }
-
+  //写libsvm数据失败由于架构无效
   test("write libsvm data failed due to invalid schema") {
     val df = spark.read.format("text").load(path)
     intercept[IOException] {
       df.write.format("libsvm").save(path + "_2")
     }
   }
-
+  //写libsvm数据从头再读一遍
   test("write libsvm data from scratch and read it again") {
     val rawData = new java.util.ArrayList[Row]()
     rawData.add(Row(1.0, Vectors.sparse(3, Seq((0, 2.0), (1, 3.0)))))
@@ -149,13 +149,13 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
     val v = row1.getAs[SparseVector](1)
     assert(v == Vectors.sparse(3, Seq((0, 2.0), (1, 3.0))))
   }
-
+  //选择libsvm的关系特征
   test("select features from libsvm relation") {
     val df = spark.read.format("libsvm").load(path)
     df.select("features").rdd.map { case Row(d: Vector) => d }.first
     df.select("features").collect
   }
-
+  //没有libsvmtable模式中创建表
   test("create libsvmTable table without schema") {
     try {
       spark.sql(
@@ -173,7 +173,7 @@ class LibSVMRelationSuite extends SparkFunSuite with MLlibTestSparkContext {
       spark.sql("DROP TABLE IF EXISTS libsvmTable")
     }
   }
-
+  //没有模式和路径创造libsvmtable表
   test("create libsvmTable table without schema and path") {
     try {
       val e = intercept[IllegalArgumentException] {

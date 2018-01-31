@@ -49,7 +49,8 @@ class LeastSquaresAggregatorSuite extends SparkFunSuite with MLlibTestSparkConte
     )
   }
 
-  /** Get summary statistics for some data and create a new LeastSquaresAggregator. */
+  /** Get summary statistics for some data and create a new LeastSquaresAggregator.
+    * 获取一些数据的摘要统计信息并创建一个新的LeastSquaresAggregator */
   private def getNewAggregator(
       instances: Array[Instance],
       coefficients: Vector,
@@ -65,7 +66,7 @@ class LeastSquaresAggregatorSuite extends SparkFunSuite with MLlibTestSparkConte
     new LeastSquaresAggregator(yStd, yMean, fitIntercept, bcFeaturesStd,
       bcFeaturesMean)(bcCoefficients)
   }
-
+  //聚合器添加方法输入大小
   test("aggregator add method input size") {
     val coefficients = Vectors.dense(1.0, 2.0)
     val agg = getNewAggregator(instances, coefficients, fitIntercept = true)

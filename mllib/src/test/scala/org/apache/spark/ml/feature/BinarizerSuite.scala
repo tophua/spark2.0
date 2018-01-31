@@ -23,7 +23,10 @@ import org.apache.spark.ml.param.ParamsSuite
 import org.apache.spark.ml.util.DefaultReadWriteTest
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.{DataFrame, Row}
-
+/**
+  * Binarizer 二值化是根据阀值将连续数值特征转换为0-1特征的过程
+  * 特征值大于阀值将映射为1.0,特征值小于等于阀值将映射为0.0
+  */
 class BinarizerSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
@@ -38,7 +41,7 @@ class BinarizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
   test("params") {
     ParamsSuite.checkParams(new Binarizer)
   }
-
+  //使用默认参数将连续的功能二进制化
   test("Binarize continuous features with default parameter") {
     val defaultBinarized: Array[Double] = data.map(x => if (x > 0.0) 1.0 else 0.0)
     val dataFrame: DataFrame = data.zip(defaultBinarized).toSeq.toDF("feature", "expected")
@@ -52,7 +55,7 @@ class BinarizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
         assert(x === y, "The feature value is not correct after binarization.")
     }
   }
-
+  //用setter将连续的特征二值化
   test("Binarize continuous features with setter") {
     val threshold: Double = 0.2
     val thresholdBinarized: Array[Double] = data.map(x => if (x > threshold) 1.0 else 0.0)
@@ -68,7 +71,7 @@ class BinarizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
         assert(x === y, "The feature value is not correct after binarization.")
     }
   }
-
+  //使用默认参数将连续要素的向量二值化
   test("Binarize vector of continuous features with default parameter") {
     val defaultBinarized: Array[Double] = data.map(x => if (x > 0.0) 1.0 else 0.0)
     val dataFrame: DataFrame = Seq(
@@ -84,7 +87,7 @@ class BinarizerSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
         assert(x == y, "The feature value is not correct after binarization.")
     }
   }
-
+  //用setter将连续特征的向量二值化
   test("Binarize vector of continuous features with setter") {
     val threshold: Double = 0.2
     val defaultBinarized: Array[Double] = data.map(x => if (x > threshold) 1.0 else 0.0)

@@ -39,7 +39,7 @@ class BinaryClassificationEvaluatorSuite
       .setMetricName("areaUnderPR")
     testDefaultReadWrite(evaluator)
   }
-
+  //应接受向量和双重预测列
   test("should accept both vector and double raw prediction col") {
     val evaluator = new BinaryClassificationEvaluator()
       .setMetricName("areaUnderPR")
@@ -70,7 +70,7 @@ class BinaryClassificationEvaluatorSuite
       "equal to one of the following types: [DoubleType, ")
     assert(thrown.getMessage.replace("\n", "") contains "but was actually of type StringType.")
   }
-
+  //应该支持所有的NumericType标签,不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val evaluator = new BinaryClassificationEvaluator().setRawPredictionCol("prediction")
     MLTestingUtils.checkNumericTypes(evaluator, spark)

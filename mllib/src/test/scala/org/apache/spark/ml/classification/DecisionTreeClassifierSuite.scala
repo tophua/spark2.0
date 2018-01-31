@@ -69,7 +69,7 @@ class DecisionTreeClassifierSuite
   /////////////////////////////////////////////////////////////////////////////
   // Tests calling train()
   /////////////////////////////////////////////////////////////////////////////
-
+  //具有有序分类特征的二元分类树桩
   test("Binary classification stump with ordered categorical features") {
     val dt = new DecisionTreeClassifier()
       .setImpurity("gini")
@@ -80,7 +80,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 2
     compareAPIs(categoricalDataPointsRDD, dt, categoricalFeatures, numClasses)
   }
-
+  //具有固定标签的二元分类残块0,1用于熵，基尼
   test("Binary classification stump with fixed labels 0,1 for Entropy,Gini") {
     val dt = new DecisionTreeClassifier()
       .setMaxDepth(3)
@@ -93,7 +93,7 @@ class DecisionTreeClassifierSuite
       }
     }
   }
-
+  //具有3元（无序）分类特征的多类分类树桩
   test("Multiclass classification stump with 3-ary (unordered) categorical features") {
     val rdd = categoricalDataPointsForMulticlassRDD
     val dt = new DecisionTreeClassifier()
@@ -103,7 +103,7 @@ class DecisionTreeClassifierSuite
     val categoricalFeatures = Map(0 -> 3, 1 -> 3)
     compareAPIs(rdd, dt, categoricalFeatures, numClasses)
   }
-
+  //具有1个连续特征的二进制分类树桩，用于检查偏离1的错误
   test("Binary classification stump with 1 continuous feature, to check off-by-1 error") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.dense(0.0)),
@@ -117,7 +117,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 2
     compareAPIs(rdd, dt, categoricalFeatures = Map.empty[Int, Int], numClasses)
   }
-
+  //具有2个连续特征的二元分类树桩
   test("Binary classification stump with 2 continuous features") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.sparse(2, Seq((0, 0.0)))),
@@ -131,7 +131,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 2
     compareAPIs(rdd, dt, categoricalFeatures = Map.empty[Int, Int], numClasses)
   }
-
+  //具有无序分类特征的多类分类树桩，只有足够的分类
   test("Multiclass classification stump with unordered categorical features," +
     " with just enough bins") {
     val maxBins = 2 * (math.pow(2, 3 - 1).toInt - 1) // just enough bins to allow unordered features
@@ -144,7 +144,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 3
     compareAPIs(rdd, dt, categoricalFeatures, numClasses)
   }
-
+  //具有连续特征的多类分类树桩
   test("Multiclass classification stump with continuous features") {
     val rdd = continuousDataPointsForMulticlassRDD
     val dt = new DecisionTreeClassifier()
@@ -154,7 +154,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 3
     compareAPIs(rdd, dt, categoricalFeatures = Map.empty[Int, Int], numClasses)
   }
-
+  //具有连续+无序分类特征的多类分类树桩
   test("Multiclass classification stump with continuous + unordered categorical features") {
     val rdd = continuousDataPointsForMulticlassRDD
     val dt = new DecisionTreeClassifier()
@@ -165,7 +165,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 3
     compareAPIs(rdd, dt, categoricalFeatures, numClasses)
   }
-
+  //具有10元（有序）分类特征的多类分类树桩
   test("Multiclass classification stump with 10-ary (ordered) categorical features") {
     val rdd = categoricalDataPointsForMulticlassForOrderedFeaturesRDD
     val dt = new DecisionTreeClassifier()
@@ -176,7 +176,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 3
     compareAPIs(rdd, dt, categoricalFeatures, numClasses)
   }
-
+  //具有10元（有序）分类特征的多类分类树，只有足够的分类
   test("Multiclass classification tree with 10-ary (ordered) categorical features," +
     " with just enough bins") {
     val rdd = categoricalDataPointsForMulticlassForOrderedFeaturesRDD
@@ -188,7 +188,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 3
     compareAPIs(rdd, dt, categoricalFeatures, numClasses)
   }
-
+  //拆分必须满足每个节点需求的最小实例
   test("split must satisfy min instances per node requirements") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.sparse(2, Seq((0, 0.0)))),
@@ -202,10 +202,12 @@ class DecisionTreeClassifierSuite
     val numClasses = 2
     compareAPIs(rdd, dt, categoricalFeatures = Map.empty[Int, Int], numClasses)
   }
-
+  //不要选择不满足每个节点要求最小实例的拆分
   test("do not choose split that does not satisfy min instance per node requirements") {
     // if a split does not satisfy min instances per node requirements,
+    //如果拆分不满足每个节点需求的最小实例数，
     // this split is invalid, even though the information gain of split is large.
+    //即使分割的信息增益很大，这个分割也是无效的。
     val arr = Array(
       LabeledPoint(0.0, Vectors.dense(0.0, 1.0)),
       LabeledPoint(1.0, Vectors.dense(1.0, 1.0)),
@@ -221,7 +223,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 2
     compareAPIs(rdd, dt, categoricalFeatures, numClasses)
   }
-
+  //拆分必须满足最低信息增益要求
   test("split must satisfy min info gain requirements") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.sparse(2, Seq((0, 0.0)))),
@@ -236,7 +238,7 @@ class DecisionTreeClassifierSuite
     val numClasses = 2
     compareAPIs(rdd, dt, categoricalFeatures = Map.empty[Int, Int], numClasses)
   }
-
+  //预测和预测可能性
   test("predictRaw and predictProbability") {
     val rdd = continuousDataPointsForMulticlassRDD
     val dt = new DecisionTreeClassifier()
@@ -266,7 +268,7 @@ class DecisionTreeClassifierSuite
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, DecisionTreeClassificationModel](newTree, newData)
   }
-
+  //训练与1类别的分类功能
   test("training with 1-category categorical feature") {
     val data = sc.parallelize(Seq(
       LabeledPoint(0, Vectors.dense(0, 2, 3)),
@@ -279,7 +281,7 @@ class DecisionTreeClassifierSuite
     val dt = new DecisionTreeClassifier().setMaxDepth(3)
     dt.fit(df)
   }
-
+  //使用软预测进行具有有序分类特征的二元分类
   test("Use soft prediction for binary classification with ordered categorical features") {
     // The following dataset is set up such that the best split is {1} vs. {0, 2}.
     // If the hard prediction is used to order the categories, then {0} vs. {1, 2} is chosen.
@@ -300,6 +302,7 @@ class DecisionTreeClassifierSuite
     val df = TreeTests.setMetadata(data, Map(0 -> 3), 2)
 
     // Must set maxBins s.t. the feature will be treated as an ordered categorical feature.
+    //必须设置maxBins s.t. 该功能将被视为有序的分类功能
     val dt = new DecisionTreeClassifier()
       .setImpurity("gini")
       .setMaxDepth(1)
@@ -317,7 +320,7 @@ class DecisionTreeClassifierSuite
         fail(s"Root node should be an internal node, but got ${other.getClass.getName}: $other.")
     }
   }
-
+  //重要的玩具数据
   test("Feature importance with toy data") {
     val dt = new DecisionTreeClassifier()
       .setImpurity("gini")
@@ -325,6 +328,7 @@ class DecisionTreeClassifierSuite
       .setSeed(123)
 
     // In this data, feature 1 is very important.
+    //在这个数据中，特征1是非常重要的
     val data: RDD[LabeledPoint] = TreeTests.featureImportanceData(sc)
     val numFeatures = data.first().features.size
     val categoricalFeatures = (0 to numFeatures).map(i => (i, 2)).toMap
@@ -338,7 +342,7 @@ class DecisionTreeClassifierSuite
     assert(importances.toArray.sum === 1.0)
     assert(importances.toArray.forall(_ >= 0.0))
   }
-
+  //应该支持所有的NumericType标签，不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val dt = new DecisionTreeClassifier().setMaxDepth(1)
     MLTestingUtils.checkNumericTypes[DecisionTreeClassificationModel, DecisionTreeClassifier](
@@ -346,7 +350,7 @@ class DecisionTreeClassifierSuite
         TreeTests.checkEqual(expected, actual)
       }
   }
-
+  //在元数据中没有numClasses
   test("Fitting without numClasses in metadata") {
     val df: DataFrame = TreeTests.featureImportanceData(sc).toDF()
     val dt = new DecisionTreeClassifier().setMaxDepth(1)
@@ -372,22 +376,25 @@ class DecisionTreeClassifierSuite
     val allParamSettings = TreeTests.allParamSettings ++ Map("impurity" -> "entropy")
 
     // Categorical splits with tree depth 2
+    //分类分裂与树深度2
     val categoricalData: DataFrame =
       TreeTests.setMetadata(rdd, Map(0 -> 2, 1 -> 3), numClasses = 2)
     testEstimatorAndModelReadWrite(dt, categoricalData, allParamSettings,
       allParamSettings, checkModelData)
 
     // Continuous splits with tree depth 2
+    //连续分裂与树深度2
     val continuousData: DataFrame =
       TreeTests.setMetadata(rdd, Map.empty[Int, Int], numClasses = 2)
     testEstimatorAndModelReadWrite(dt, continuousData, allParamSettings,
       allParamSettings, checkModelData)
 
     // Continuous splits with tree depth 0
+    //与树深度0连续分割
     testEstimatorAndModelReadWrite(dt, continuousData, allParamSettings ++ Map("maxDepth" -> 0),
       allParamSettings ++ Map("maxDepth" -> 0), checkModelData)
   }
-
+  //杂质计算器生成器在模型读取/写入中不能使用大写的杂质类型基尼
   test("SPARK-20043: " +
        "ImpurityCalculator builder fails for uppercase impurity type Gini in model read/write") {
     val rdd = TreeTests.getTreeReadWriteData(sc)
@@ -407,7 +414,9 @@ private[ml] object DecisionTreeClassifierSuite extends SparkFunSuite {
 
   /**
    * Train 2 decision trees on the given dataset, one using the old API and one using the new API.
+    * 在给定的数据集上训练2个决策树，一个使用旧的API，一个使用新的API。
    * Convert the old tree to the new format, compare them, and fail if they are not exactly equal.
+    * 将旧的树转换为新的格式,比较它们,如果它们不完全相同则失败
    */
   def compareAPIs(
       data: RDD[LabeledPoint],

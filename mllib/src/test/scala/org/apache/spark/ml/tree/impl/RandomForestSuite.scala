@@ -39,9 +39,9 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
   import RandomForestSuite.mapToVec
 
   /////////////////////////////////////////////////////////////////////////////
-  // Tests for split calculation
+  // Tests for split calculation 测试拆分计算
   /////////////////////////////////////////////////////////////////////////////
-
+  //具有连续特征的二进制分类：分割计算
   test("Binary classification with continuous features: split calculation") {
     val arr = OldDTSuite.generateOrderedLabeledPointsWithLabel1().map(_.asML)
     assert(arr.length === 1000)
@@ -53,7 +53,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(splits.length === 2)
     assert(splits(0).length === 99)
   }
-
+  //用二进制（有序）分类特征进行二进制分类：分割计算
   test("Binary classification with binary (ordered) categorical features: split calculation") {
     val arr = OldDTSuite.generateCategoricalDataPoints().map(_.asML)
     assert(arr.length === 1000)
@@ -67,9 +67,10 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(!metadata.isUnordered(featureIndex = 1))
     assert(splits.length === 2)
     // no splits pre-computed for ordered categorical features
+    //没有为有序分类特征预先计算的分割
     assert(splits(0).length === 0)
   }
-
+  //三元（有序）分类特征的二元分类,一个类别无样本：分割计算
   test("Binary classification with 3-ary (ordered) categorical features," +
     " with no samples for one category: split calculation") {
     val arr = OldDTSuite.generateCategoricalDataPoints().map(_.asML)
@@ -86,7 +87,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     // no splits pre-computed for ordered categorical features
     assert(splits(0).length === 0)
   }
-
+  //找到一个连续的功能拆分
   test("find splits for a continuous feature") {
     // find splits for normal case
     {
@@ -101,6 +102,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(fakeMetadata.numSplits(0) === 5)
       assert(fakeMetadata.numBins(0) === 6)
       // check returned splits are distinct
+      //检查返回的分裂是不同的
       assert(splits.distinct.length === splits.length)
     }
 
@@ -130,7 +132,9 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     }
 
     // find splits should not return identical splits
+    //发现分裂不应该返回相同的分裂
     // when there are not enough split candidates, reduce the number of splits in metadata
+    //当没有足够的拆分候选者时,减少元数据拆分的次数
     {
       val fakeMetadata = new DecisionTreeMetadata(1, 0, 0, 0,
         Map(), Set(),
@@ -142,10 +146,12 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       val expectedSplits = Array((1.0 + 2.0) / 2, (2.0 + 3.0) / 2)
       assert(splits === expectedSplits)
       // check returned splits are distinct
+      //检查返回的分裂是不同的
       assert(splits.distinct.length === splits.length)
     }
 
     // find splits when most samples close to the minimum
+    //当大多数样本接近最小值时发现分裂
     {
       val fakeMetadata = new DecisionTreeMetadata(1, 0, 0, 0,
         Map(), Set(),
@@ -160,6 +166,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     }
 
     // find splits when most samples close to the maximum
+    //当大多数样本接近最大值时发现分裂
     {
       val fakeMetadata = new DecisionTreeMetadata(1, 0, 0, 0,
         Map(), Set(),
@@ -173,6 +180,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     }
 
     // find splits for constant feature
+    //找到不断的功能拆分
     {
       val fakeMetadata = new DecisionTreeMetadata(1, 0, 0, 0,
         Map(), Set(),
@@ -188,7 +196,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(splitsEmpty === Array.empty[Double])
     }
   }
-
+  //训练与空数组
   test("train with empty arrays") {
     val lp = LabeledPoint(1.0, Vectors.dense(Array.empty[Double]))
     val data = Array.fill(5)(lp)
@@ -203,7 +211,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       }
     }
   }
-
+  //训练与特定的特征
   test("train with constant features") {
     val lp = LabeledPoint(1.0, Vectors.dense(0.0, 0.0, 0.0))
     val data = Array.fill(5)(lp)
@@ -221,6 +229,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(tree.rootNode.prediction === lp.label)
 
     // Test with no categorical features
+    //无分类特征检验
     val strategy2 = new OldStrategy(
       OldAlgo.Regression,
       Variance,
@@ -231,7 +240,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(tree2.depth === 0)
     assert(tree2.rootNode.prediction === lp.label)
   }
-
+  //具有无序分类特征的多类分类：分裂计算
   test("Multiclass classification with unordered categorical features: split calculations") {
     val arr = OldDTSuite.generateCategoricalDataPoints().map(_.asML)
     assert(arr.length === 1000)
@@ -272,7 +281,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     checkCategoricalSplit(splits(1)(1), 1, Array(1.0))
     checkCategoricalSplit(splits(1)(2), 1, Array(0.0, 1.0))
   }
-
+  //具有有序分类特征的多类分类：分裂计算
   test("Multiclass classification with ordered categorical features: split calculations") {
     val arr = OldDTSuite.generateCategoricalDataPointsForMulticlassForOrderedFeatures().map(_.asML)
     assert(arr.length === 3000)
@@ -293,13 +302,13 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
   /////////////////////////////////////////////////////////////////////////////
   // Tests of other algorithm internals
   /////////////////////////////////////////////////////////////////////////////
-
+  //从多类别分类中提取类别
   test("extract categories from a number for multiclass classification") {
     val l = RandomForest.extractMultiClassCategories(13, 10)
     assert(l.length === 3)
     assert(Seq(3.0, 2.0, 0.0) === l)
   }
-
+  //避免在最后一级聚合
   test("Avoid aggregation on the last level") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.dense(1.0, 0.0, 0.0)),
@@ -329,19 +338,22 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       nodesForGroup, treeToNodeToIndexInfo, splits, nodeStack)
 
     // don't enqueue leaf nodes into node queue
+    ///不要将叶子节点到节点的队列
     assert(nodeStack.isEmpty)
 
     // set impurity and predict for topNode
+    //把杂质和预测topnode
     assert(topNode.stats !== null)
     assert(topNode.stats.impurity > 0.0)
 
     // set impurity and predict for child nodes
+    //设置杂质并预测子节点
     assert(topNode.leftChild.get.toNode.prediction === 0.0)
     assert(topNode.rightChild.get.toNode.prediction === 1.0)
     assert(topNode.leftChild.get.stats.impurity === 0.0)
     assert(topNode.rightChild.get.stats.impurity === 0.0)
   }
-
+  //如果杂质是0,避免聚集
   test("Avoid aggregation if impurity is 0.0") {
     val arr = Array(
       LabeledPoint(0.0, Vectors.dense(1.0, 0.0, 0.0)),
@@ -371,19 +383,22 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       nodesForGroup, treeToNodeToIndexInfo, splits, nodeStack)
 
     // don't enqueue a node into node queue if its impurity is 0.0
+    //不要将一个节点到节点的队列，如果杂质含量0
     assert(nodeStack.isEmpty)
 
     // set impurity and predict for topNode
+    //把杂质和预测topnode
     assert(topNode.stats !== null)
     assert(topNode.stats.impurity > 0.0)
 
     // set impurity and predict for child nodes
+    //设置杂质并预测子节点
     assert(topNode.leftChild.get.toNode.prediction === 0.0)
     assert(topNode.rightChild.get.toNode.prediction === 1.0)
     assert(topNode.leftChild.get.stats.impurity === 0.0)
     assert(topNode.rightChild.get.stats.impurity === 0.0)
   }
-
+  //有序分类特征的二值分类软预测
   test("Use soft prediction for binary classification with ordered categorical features") {
     // The following dataset is set up such that the best split is {1} vs. {0, 2}.
     // If the hard prediction is used to order the categories, then {0} vs. {1, 2} is chosen.
@@ -403,6 +418,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     val input = sc.parallelize(arr)
 
     // Must set maxBins s.t. the feature will be treated as an ordered categorical feature.
+    //必须建立maxbins该特征将被视为一个有序的分类特征
     val strategy = new OldStrategy(algo = OldAlgo.Classification, impurity = Gini, maxDepth = 1,
       numClasses = 2, categoricalFeaturesInfo = Map(0 -> 3), maxBins = 3)
 
@@ -417,7 +433,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       case _ => throw new AssertionError("model.rootNode was not an InternalNode")
     }
   }
-
+  //无群vs二级节点的建立
   test("Second level node building with vs. without groups") {
     val arr = OldDTSuite.generateOrderedLabeledPoints().map(_.asML)
     assert(arr.length === 1000)
@@ -425,7 +441,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     // For tree with 1 group
     val strategy1 =
       new OldStrategy(OldAlgo.Classification, Entropy, 3, 2, 100, maxMemoryInMB = 1000)
-    // For tree with multiple groups
+    // For tree with multiple groups 多组树
     val strategy2 =
       new OldStrategy(OldAlgo.Classification, Entropy, 3, 2, 100, maxMemoryInMB = 0)
 
@@ -443,11 +459,13 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     }
 
     // Single group second level tree construction.
+    //单群二级树构造
     val children1 = getChildren(tree1.rootNode)
     val children2 = getChildren(tree2.rootNode)
 
     // Verify whether the splits obtained using single group and multiple group level
     // construction strategies are the same.
+    //验证单组和多组级构造策略取得的分裂是否相同
     for (i <- 0 until 2) {
       assert(children1(i).gain > 0)
       assert(children2(i).gain > 0)
@@ -459,13 +477,14 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       assert(children1(i).prediction === children2(i).prediction)
     }
   }
-
+  //二分类试验连续特征和采样功能
   def binaryClassificationTestWithContinuousFeaturesAndSubsampledFeatures(strategy: OldStrategy) {
     val numFeatures = 50
     val arr = EnsembleTestHelper.generateOrderedLabeledPoints(numFeatures, 1000)
     val rdd = sc.parallelize(arr).map(_.asML)
 
     // Select feature subset for top nodes.  Return true if OK.
+    //选择顶级节点的特征子集。返回true,如果可以
     def checkFeatureSubsetStrategy(
         numTrees: Int,
         featureSubsetStrategy: String,
@@ -494,6 +513,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
 
         if (numFeaturesPerNode == numFeatures) {
           // featureSubset values should all be None
+          //量子分类器值都应该没有
           assert(treeToNodeToIndexInfo.values.forall(_.values.forall(_.featureSubset.isEmpty)),
             failString)
         } else {
@@ -554,14 +574,14 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       }
     }
   }
-
+  //特点：连续二分类抽样的特点
   test("Binary classification with continuous features: subsampling features") {
     val categoricalFeaturesInfo = Map.empty[Int, Int]
     val strategy = new OldStrategy(algo = OldAlgo.Classification, impurity = Gini, maxDepth = 2,
       numClasses = 2, categoricalFeaturesInfo = categoricalFeaturesInfo)
     binaryClassificationTestWithContinuousFeaturesAndSubsampledFeatures(strategy)
   }
-
+  //连续特征和节点ID缓存分类：抽样的特点
   test("Binary classification with continuous features and node Id cache: subsampling features") {
     val categoricalFeaturesInfo = Map.empty[Int, Int]
     val strategy = new OldStrategy(algo = OldAlgo.Classification, impurity = Gini, maxDepth = 2,
@@ -569,7 +589,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
       useNodeIdCache = true)
     binaryClassificationTestWithContinuousFeaturesAndSubsampledFeatures(strategy)
   }
-
+  //计算功能的重要性，功能的重要性
   test("computeFeatureImportance, featureImportances") {
     /* Build tree for testing, with this structure:
           grandParent
@@ -602,6 +622,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     testNode(left, Map.empty[Int, Double])
 
     // Internal node with 2 leaf children
+    //有2个叶子的内部节点
     val feature0importance = parentImp.calculate() * parentImp.count -
       (leftImp.calculate() * leftImp.count + rightImp.calculate() * rightImp.count)
     testNode(parent, Map(0 -> feature0importance))
@@ -612,6 +633,7 @@ class RandomForestSuite extends SparkFunSuite with MLlibTestSparkContext {
     testNode(grandParent, Map(0 -> feature0importance, 1 -> feature1importance))
 
     // Forest consisting of (full tree) + (internal node with 2 leafs)
+    //森林由（全树）+（内部节点与2叶）
     val trees = Array(parent, grandParent).map { root =>
       new DecisionTreeClassificationModel(root, numFeatures = 2, numClasses = 3)
         .asInstanceOf[DecisionTreeModel]

@@ -90,7 +90,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     val output = pipelineModel.transform(dataset0)
     assert(output.eq(dataset4))
   }
-
+  //管道重复阶段
   test("pipeline with duplicate stages") {
     val estimator = mock[Estimator[MyModel]]
     val pipeline = new Pipeline()
@@ -100,7 +100,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       pipeline.fit(dataset)
     }
   }
-
+  //管道复制
   test("Pipeline.copy") {
     val hashingTF = new HashingTF()
       .setNumFeatures(100)
@@ -112,7 +112,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(copied.getStages(0).asInstanceOf[HashingTF].getNumFeatures === 10,
       "copy should handle extra stage params")
   }
-
+  //管道模型复制
   test("PipelineModel.copy") {
     val hashingTF = new HashingTF()
       .setNumFeatures(100)
@@ -127,7 +127,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(copied.parent === model.parent,
       "copy should create an instance with the same parent")
   }
-
+  //管道模型构造函数
   test("pipeline model constructors") {
     val transform0 = mock[Transformer]
     val model1 = mock[MyModel]
@@ -142,7 +142,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     assert(pipelineModel1.uid === "pipeline1")
     assert(pipelineModel1.stages === stages)
   }
-
+  //管道读/写
   test("Pipeline read/write") {
     val writableStage = new WritableStage("writableStage").setIntParam(56)
     val pipeline = new Pipeline().setStages(Array(writableStage))
@@ -153,7 +153,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     val writableStage2 = pipeline2.getStages(0).asInstanceOf[WritableStage]
     assert(writableStage.getIntParam === writableStage2.getIntParam)
   }
-
+  //管道读/写与不可写阶段
   test("Pipeline read/write with non-Writable stage") {
     val unWritableStage = new UnWritableStage("unwritableStage")
     val unWritablePipeline = new Pipeline().setStages(Array(unWritableStage))
@@ -163,7 +163,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       }
     }
   }
-
+  //管道模型读/写
   test("PipelineModel read/write") {
     val writableStage = new WritableStage("writableStage").setIntParam(56)
     val pipeline =
@@ -175,7 +175,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     val writableStage2 = pipeline2.stages(0).asInstanceOf[WritableStage]
     assert(writableStage.getIntParam === writableStage2.getIntParam)
   }
-
+  //管道模型读/写
   test("PipelineModel read/write: getStagePath") {
     val stageUid = "myStage"
     val stagesDir = new Path("pipeline", "stages").toString
@@ -190,7 +190,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
     testStage(1, 10, "01")
     testStage(12, 999, "012")
   }
-
+  //管道模型读/写
   test("PipelineModel read/write with non-Writable stage") {
     val unWritableStage = new UnWritableStage("unwritableStage")
     val unWritablePipeline =
@@ -201,7 +201,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
       }
     }
   }
-
+  //管道模型验证参数
   test("pipeline validateParams") {
     val df = Seq(
       (1, Vectors.dense(0.0, 1.0, 4.0), 1.0),
@@ -232,6 +232,7 @@ class PipelineSuite extends SparkFunSuite with MLlibTestSparkContext with Defaul
 
 /**
  * Used to test [[Pipeline]] with `MLWritable` stages
+  * 用于用`MLWritable`阶段测试[[Pipeline]]
  */
 class WritableStage(override val uid: String) extends Transformer with MLWritable {
 
@@ -261,6 +262,7 @@ object WritableStage extends MLReadable[WritableStage] {
 
 /**
  * Used to test [[Pipeline]] with non-`MLWritable` stages
+  * 用于使用非`MLWritable`阶段测试[[Pipeline]]
  */
 class UnWritableStage(override val uid: String) extends Transformer {
 

@@ -25,6 +25,7 @@ import org.apache.spark.util.Utils
 
 /**
  * Trait that creates a temporary directory before all tests and deletes it after all.
+  * 在所有测试之前创建一个临时目录的特质,毕竟删除它
  */
 trait TempDirectory extends BeforeAndAfterAll { self: Suite =>
 
@@ -32,6 +33,7 @@ trait TempDirectory extends BeforeAndAfterAll { self: Suite =>
 
   /**
    * Returns the temporary directory as a `File` instance.
+    * 以“File”实例的形式返回临时目录
    */
   protected def tempDir: File = _tempDir
 

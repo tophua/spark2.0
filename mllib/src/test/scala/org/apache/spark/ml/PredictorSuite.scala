@@ -26,11 +26,11 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
-
+//预测套件
 class PredictorSuite extends SparkFunSuite with MLlibTestSparkContext {
 
   import PredictorSuite._
-
+  //应该支持所有的NumericType标签和权重，不支持其他类型
   test("should support all NumericType labels and weights, and not support other types") {
     val df = spark.createDataFrame(Seq(
       (0, 1, Vectors.dense(0, 2, 3)),

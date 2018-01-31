@@ -62,6 +62,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
         prediction != label
     }
     // At least 80% of the predictions should be on.
+    //至少有80％的预测应该开启
     assert(numOfErrorPredictions < predictionAndLabels.count() / 5)
   }
 
@@ -121,7 +122,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       theta = new DenseMatrix(2, 3, Array(0.1, 0.2, 0.3, 0.4, 0.6, 0.4)))
     ParamsSuite.checkParams(model)
   }
-
+  //默认参数
   test("naive bayes: default params") {
     val nb = new NaiveBayes
     assert(nb.getLabelCol === "label")
@@ -130,7 +131,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
     assert(nb.getSmoothing === 1.0)
     assert(nb.getModelType === "multinomial")
   }
-
+  //多项
   test("Naive Bayes Multinomial") {
     val nPoints = 1000
     val piArray = Array(0.5, 0.1, 0.4).map(math.log)
@@ -164,7 +165,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, NaiveBayesModel](model, testDataset)
   }
-
+  //加权样本
   test("Naive Bayes with weighted samples") {
     val numClasses = 3
     def modelEquals(m1: NaiveBayesModel, m2: NaiveBayesModel): Unit = {
@@ -187,7 +188,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
         dataset.as[LabeledPoint], estimatorWithSmoothing, modelEquals, seed)
     }
   }
-
+  //伯努利
   test("Naive Bayes Bernoulli") {
     val nPoints = 10000
     val piArray = Array(0.5, 0.3, 0.2).map(math.log)
@@ -220,7 +221,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, NaiveBayesModel](model, testDataset)
   }
-
+  //检测负值
   test("detect negative values") {
     val dense = spark.createDataFrame(Seq(
       LabeledPoint(1.0, Vectors.dense(1.0)),
@@ -247,7 +248,7 @@ class NaiveBayesSuite extends SparkFunSuite with MLlibTestSparkContext with Defa
       new NaiveBayes().fit(nan)
     }
   }
-
+  //检测伯努利中的非零或一个值
   test("detect non zero or one values in Bernoulli") {
     val badTrain = spark.createDataFrame(Seq(
       LabeledPoint(1.0, Vectors.dense(1.0)),

@@ -67,7 +67,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val model = new OneVsRestModel("ovr", Metadata.empty, Array(lrModel))
     ParamsSuite.checkParams(model)
   }
-
+  //默认参数
   test("one-vs-rest: default params") {
     val numClasses = 3
     val ova = new OneVsRest()
@@ -82,6 +82,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val transformedDataset = ovaModel.transform(dataset)
 
     // check for label metadata in prediction col
+    //检查预测列中的标签元数据
     val predictionColSchema = transformedDataset.schema(ovaModel.getPredictionCol)
     assert(MetadataUtils.getNumClasses(predictionColSchema) === Some(3))
 
@@ -100,7 +101,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val ovaMetrics = new MulticlassMetrics(ovaResults)
     assert(expectedMetrics.confusionMatrix.asML ~== ovaMetrics.confusionMatrix.asML absTol 400)
   }
-
+  //并行不会改变输出
   test("one-vs-rest: tuning parallelism does not change output") {
     val ovaPar1 = new OneVsRest()
       .setClassifier(new LogisticRegression)
@@ -138,7 +139,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
           s" LogisticRegressionModel but found ${other.getClass.getName}")
     }
   }
-
+  //在训练上正确传递标签元数据
   test("one-vs-rest: pass label metadata correctly during train") {
     val numClasses = 3
     val ova = new OneVsRest()
@@ -150,7 +151,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val datasetWithLabelMetadata = dataset.select(labelWithMetadata, features)
     ova.fit(datasetWithLabelMetadata)
   }
-
+  //确保标签功能和预测列是可配置的
   test("SPARK-8092: ensure label features and prediction cols are configurable") {
     val labelIndexer = new StringIndexer()
       .setInputCol("label")
@@ -173,7 +174,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val outputFields = transformedDataset.schema.fieldNames.toSet
     assert(outputFields.contains("p"))
   }
-
+  //
   test("SPARK-18625 : OneVsRestModel should support setFeaturesCol and setPredictionCol") {
     val ova = new OneVsRest().setClassifier(new LogisticRegression)
     val ovaModel = ova.fit(dataset)
@@ -184,7 +185,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val outputFields = transformedDataset.schema.fieldNames.toSet
     assert(outputFields === Set("y", "fea", "pred"))
   }
-
+  //不应该输出临时列
   test("SPARK-8049: OneVsRest shouldn't output temp columns") {
     val logReg = new LogisticRegression()
       .setMaxIter(1)
@@ -287,7 +288,7 @@ class OneVsRestSuite extends SparkFunSuite with MLlibTestSparkContext with Defau
     val newOvaModel = testDefaultReadWrite(ovaModel, testParams = false)
     checkModelData(ovaModel, newOvaModel)
   }
-
+  //应该支持所有的NumericType标签，不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val ovr = new OneVsRest().setClassifier(new LogisticRegression().setMaxIter(1))
     MLTestingUtils.checkNumericTypes[OneVsRestModel, OneVsRest](

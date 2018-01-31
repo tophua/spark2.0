@@ -20,7 +20,8 @@ package org.apache.spark.ml.param
 import org.apache.spark.ml.param.shared.{HasHandleInvalid, HasInputCol, HasMaxIter}
 import org.apache.spark.ml.util.Identifiable
 
-/** A subclass of Params for testing. */
+/** A subclass of Params for testing.
+  * Params的一个子类用于测试*/
 class TestParams(override val uid: String) extends Params with HasHandleInvalid with HasMaxIter
     with HasInputCol {
 

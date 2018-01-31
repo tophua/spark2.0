@@ -23,7 +23,7 @@ import org.apache.spark.sql.catalyst.JavaTypeInference
 import org.apache.spark.sql.types._
 
 class VectorUDTSuite extends SparkFunSuite {
-
+  //预装
   test("preloaded VectorUDT") {
     val dv1 = Vectors.dense(Array.empty[Double])
     val dv2 = Vectors.dense(1.0, 2.0)

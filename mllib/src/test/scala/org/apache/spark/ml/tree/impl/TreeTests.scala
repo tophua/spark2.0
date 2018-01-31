@@ -32,10 +32,14 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Convert the given data to a DataFrame, and set the features and label metadata.
+    * 将给定的数据转换为DataFrame,并设置要素和标签元数据
    * @param data  Dataset.  Categorical features and labels must already have 0-based indices.
+    *              数据集,分类特征和标签必须已经具有基于0的索引,这必须是非空的
    *              This must be non-empty.
    * @param categoricalFeatures  Map: categorical feature index to number of distinct values
+    *                             Map：分类特征索引到不同值的数量
    * @param numClasses  Number of classes label can take.  If 0, mark as continuous.
+    *                    类标签的数量可以采取。 如果为0，则标记为连续。
    * @return DataFrame with metadata
    */
   def setMetadata(
@@ -69,6 +73,7 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Java-friendly version of `setMetadata()`
+    * 适用于Java的`setMetadata（）`版本
    */
   def setMetadata(
       data: JavaRDD[LabeledPoint],
@@ -80,10 +85,14 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Set label metadata (particularly the number of classes) on a DataFrame.
+    * 在DataFrame上设置标签元数据（特别是类的数量）
    * @param data  Dataset.  Categorical features and labels must already have 0-based indices.
+    *              数据集,分类特征和标签必须已经具有基于0的索引
    *              This must be non-empty.
    * @param numClasses  Number of classes label can take. If 0, mark as continuous.
+    *                    类标签的数量可以采取,如果为0,则标记为连续
    * @param labelColName  Name of the label column on which to set the metadata.
+    *                      要在其上设置元数据的标签列的名称
    * @param featuresColName  Name of the features column
    * @return DataFrame with metadata
    */
@@ -103,9 +112,12 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Check if the two trees are exactly the same.
+    * 检查两棵树是否完全一样
    * Note: I hesitate to override Node.equals since it could cause problems if users
    *       make mistakes such as creating loops of Nodes.
+    *       注意：我不愿意重写Node.equals，因为如果用户出现错误，例如创建节点循环，可能会导致问题。
    * If the trees are not equal, this prints the two trees and throws an exception.
+    * 如果树不相等,则打印两棵树并抛出异常
    */
   def checkEqual(a: DecisionTreeModel, b: DecisionTreeModel): Unit = {
     try {
@@ -120,8 +132,10 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Return true iff the two nodes and their descendants are exactly the same.
+    * 如果两个节点及其后代完全相同,则返回true
    * Note: I hesitate to override Node.equals since it could cause problems if users
    *       make mistakes such as creating loops of Nodes.
+    *       注意：我不愿意重写Node.equals,因为如果用户出现错误,例如创建节点循环,可能会导致问题
    */
   private def checkEqual(a: Node, b: Node): Unit = {
     assert(a.prediction === b.prediction)
@@ -139,7 +153,9 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Check if the two models are exactly the same.
+    * 检查两个模型是否完全相同
    * If the models are not equal, this throws an exception.
+    * 如果模型不相等,则会引发异常
    */
   def checkEqual[M <: DecisionTreeModel](a: TreeEnsembleModel[M], b: TreeEnsembleModel[M]): Unit = {
     try {
@@ -155,7 +171,9 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Helper method for constructing a tree for testing.
+    * Helper方法构建测试树
    * Given left, right children, construct a parent node.
+    * 给定左侧,右侧的孩子,构建一个父节点
    * @param split  Split for parent node
    * @return  Parent node with children attached
    */
@@ -173,6 +191,7 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Create some toy data for testing feature importances.
+    * 创建一些玩具数据来测试功能重要性
    */
   def featureImportanceData(sc: SparkContext): RDD[LabeledPoint] = sc.parallelize(Seq(
     new LabeledPoint(0, Vectors.dense(1, 0, 0, 0, 1)),
@@ -184,6 +203,7 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Create some toy data for testing correctness of variance.
+    * 创建一些玩具数据来测试方差的正确性
    */
   def varianceData(sc: SparkContext): RDD[LabeledPoint] = sc.parallelize(Seq(
     new LabeledPoint(1.0, Vectors.dense(Array(0.0))),
@@ -196,10 +216,14 @@ private[ml] object TreeTests extends SparkFunSuite {
 
   /**
    * Mapping from all Params to valid settings which differ from the defaults.
+    * 从所有参数映射到与默认设置不同的有效设置
    * This is useful for tests which need to exercise all Params, such as save/load.
+    * 这对于需要执行所有参数的测试非常有用,例如保存/加载
    * This excludes input columns to simplify some tests.
+    * 这排除了输入列以简化一些测试
    *
    * This set of Params is for all Decision Tree-based models.
+    * 这组Params适用于所有基于决策树的模型
    */
   val allParamSettings: Map[String, Any] = Map(
     "checkpointInterval" -> 7,
@@ -212,7 +236,8 @@ private[ml] object TreeTests extends SparkFunSuite {
     "cacheNodeIds" -> true
   )
 
-  /** Data for tree read/write tests which produces a non-trivial tree. */
+  /** Data for tree read/write tests which produces a non-trivial tree.
+    * 数据为树读/写测试产生一个非平凡的树*/
   def getTreeReadWriteData(sc: SparkContext): RDD[LabeledPoint] = {
     val arr = Array(
       LabeledPoint(0.0, Vectors.dense(0.0, 0.0)),

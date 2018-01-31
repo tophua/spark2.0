@@ -32,7 +32,7 @@ class RegressionEvaluatorSuite
   test("params") {
     ParamsSuite.checkParams(new RegressionEvaluator)
   }
-
+  //回归评估者：默认参数
   test("Regression Evaluator: default params") {
     /**
      * Here is the instruction describing how to export the test data into CSV format
@@ -85,7 +85,7 @@ class RegressionEvaluatorSuite
       .setMetricName("r2")
     testDefaultReadWrite(evaluator)
   }
-
+  //应该支持所有的NumericType标签,不支持其他类型
   test("should support all NumericType labels and not support other types") {
     MLTestingUtils.checkNumericTypes(new RegressionEvaluator, spark)
   }

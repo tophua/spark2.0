@@ -33,9 +33,10 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
 class GradientBoostedTreesSuite extends SparkFunSuite with MLlibTestSparkContext with Logging {
 
   import testImplicits._
-
+  //unWith Validation会尽早停止，并在验证数据集上执行得更好
   test("runWithValidation stops early and performs better on a validation dataset") {
     // Set numIterations large enough so that it stops early.
+    //将numIterations设置得足够大,以便提前停止。
     val numIterations = 20
     val trainRdd = sc.parallelize(OldGBTSuite.trainData, 2).map(_.asML)
     val validateRdd = sc.parallelize(OldGBTSuite.validateData, 2).map(_.asML)
@@ -55,6 +56,7 @@ class GradientBoostedTreesSuite extends SparkFunSuite with MLlibTestSparkContext
       assert(numTrees !== numIterations)
 
       // Test that it performs better on the validation dataset.
+      //测试它在验证数据集上的执行情况
       val (trees, treeWeights) = GradientBoostedTrees.run(trainRdd, boostingStrategy, 42L)
       val (errorWithoutValidation, errorWithValidation) = {
         if (algo == Classification) {
@@ -71,6 +73,7 @@ class GradientBoostedTreesSuite extends SparkFunSuite with MLlibTestSparkContext
       assert(errorWithValidation <= errorWithoutValidation)
 
       // Test that results from evaluateEachIteration comply with runWithValidation.
+      //来自evaluateEachIteration的测试结果符合runWithValidation
       // Note that convergenceTol is set to 0.0
       val evaluationArray = GradientBoostedTrees
         .evaluateEachIteration(validateRdd, trees, treeWeights, loss, algo)

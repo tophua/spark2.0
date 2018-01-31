@@ -44,16 +44,16 @@ final class TestProbabilisticClassificationModel(
   }
 }
 
-
+//概率分类器套件
 class ProbabilisticClassifierSuite extends SparkFunSuite {
 
-  test("test thresholding") {
+  test("test thresholding") {//测试阈值
     val testModel = new TestProbabilisticClassificationModel("myuid", 2, 2)
       .setThresholds(Array(0.5, 0.2))
     assert(testModel.friendlyPredict(1.0, 1.0) === 1.0)
     assert(testModel.friendlyPredict(1.0, 0.2) === 0.0)
   }
-
+  //测试阈值不是必需的
   test("test thresholding not required") {
     val testModel = new TestProbabilisticClassificationModel("myuid", 2, 2)
     assert(testModel.friendlyPredict(1.0, 2.0) === 1.0)
@@ -64,7 +64,7 @@ class ProbabilisticClassifierSuite extends SparkFunSuite {
       .setThresholds(Array(0.4, 0.4))
     assert(testModel.friendlyPredict(0.6, 0.6) === 0.0)
   }
-
+  //测试一个零门槛
   test("test one zero threshold") {
     val testModel = new TestProbabilisticClassificationModel("myuid", 2, 2)
       .setThresholds(Array(0.0, 0.1))

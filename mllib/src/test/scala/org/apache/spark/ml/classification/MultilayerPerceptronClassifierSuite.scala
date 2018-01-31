@@ -48,7 +48,7 @@ class MultilayerPerceptronClassifierSuite
       (Vectors.dense(1.0, 1.0), 0.0)
     ).toDF("features", "label")
   }
-
+  //输入验证
   test("Input Validation") {
     val mlpc = new MultilayerPerceptronClassifier()
     intercept[IllegalArgumentException] {
@@ -65,7 +65,7 @@ class MultilayerPerceptronClassifierSuite
     }
     mlpc.setLayers(Array[Int](1, 1))
   }
-
+  //XOR函数学习作为具有两个输出的二元分类问题
   test("XOR function learning as binary classification problem with two outputs.") {
     val layers = Array[Int](2, 5, 2)
     val trainer = new MultilayerPerceptronClassifier()
@@ -82,7 +82,7 @@ class MultilayerPerceptronClassifierSuite
       assert(p == l)
     }
   }
-
+  //预测的类概率：玩具数据集上的校准
   test("Predicted class probabilities: calibration on toy dataset") {
     val layers = Array[Int](4, 5, 2)
 
@@ -107,7 +107,7 @@ class MultilayerPerceptronClassifierSuite
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, MultilayerPerceptronClassificationModel](model, strongDataset)
   }
-
+  //测试模型概率
   test("test model probability") {
     val layers = Array[Int](2, 5, 2)
     val trainer = new MultilayerPerceptronClassifier()
@@ -125,7 +125,7 @@ class MultilayerPerceptronClassifierSuite
         assert(p1 ~== p2 absTol 1e-3)
     }
   }
-
+  //通过训练重新测试setWeights
   test("Test setWeights by training restart") {
     val dataFrame = Seq(
       (Vectors.dense(0.0, 0.0), 0.0),
@@ -148,7 +148,7 @@ class MultilayerPerceptronClassifierSuite
     assert(weights1 ~== weights2 absTol 10e-5,
       "Training should produce the same weights given equal initial weights and number of steps")
   }
-
+  //3类分类与2隐藏层
   test("3 class classification with 2 hidden layers") {
     val nPoints = 1000
 
@@ -161,6 +161,7 @@ class MultilayerPerceptronClassifierSuite
     val xMean = Array(5.843, 3.057, 3.758, 1.199)
     val xVariance = Array(0.6856, 0.1899, 3.116, 0.581)
     // the input seed is somewhat magic, to make this test pass
+    //输入种子有点神奇,使这个测试通过
     val data = generateMultinomialLogisticInput(
       coefficients, xMean, xVariance, true, nPoints, 1).toDS()
     val dataFrame = data.toDF("label", "features")
@@ -170,6 +171,7 @@ class MultilayerPerceptronClassifierSuite
     val trainer = new MultilayerPerceptronClassifier()
       .setLayers(layers)
       .setBlockSize(1)
+      //目前这个种子被忽略
       .setSeed(11L) // currently this seed is ignored
       .setMaxIter(numIterations)
     val model = trainer.fit(dataFrame)
@@ -179,6 +181,7 @@ class MultilayerPerceptronClassifierSuite
       case Row(p: Double, l: Double) => (p, l)
     }
     // train multinomial logistic regression
+    //训练多项式逻辑回归
     val lr = new LogisticRegressionWithLBFGS()
       .setIntercept(true)
       .setNumClasses(numClasses)
@@ -188,11 +191,12 @@ class MultilayerPerceptronClassifierSuite
     val lrPredictionAndLabels =
       lrModel.predict(data.rdd.map(p => OldVectors.fromML(p.features))).zip(data.rdd.map(_.label))
     // MLP's predictions should not differ a lot from LR's.
+    //MLP的预测与LR的预测应该没有太大的区别
     val lrMetrics = new MulticlassMetrics(lrPredictionAndLabels)
     val mlpMetrics = new MulticlassMetrics(mlpPredictionAndLabels)
     assert(mlpMetrics.confusionMatrix.asML ~== lrMetrics.confusionMatrix.asML absTol 100)
   }
-
+  //多层感知器分类器
   test("read/write: MultilayerPerceptronClassifier") {
     val mlp = new MultilayerPerceptronClassifier()
       .setLayers(Array(2, 3, 2))
@@ -206,7 +210,7 @@ class MultilayerPerceptronClassifierSuite
 
     testDefaultReadWrite(mlp, testParams = true)
   }
-
+  //多层感知器分类模型
   test("read/write: MultilayerPerceptronClassificationModel") {
     val mlp = new MultilayerPerceptronClassifier().setLayers(Array(2, 3, 2)).setMaxIter(5)
     val mlpModel = mlp.fit(dataset)
@@ -214,7 +218,7 @@ class MultilayerPerceptronClassifierSuite
     assert(newMlpModel.layers === mlpModel.layers)
     assert(newMlpModel.weights === mlpModel.weights)
   }
-
+  //该支持所有的NumericType标签,不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val layers = Array(3, 2)
     val mpc = new MultilayerPerceptronClassifier().setLayers(layers).setMaxIter(1)

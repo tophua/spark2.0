@@ -39,7 +39,7 @@ class KMeansSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultR
 
     dataset = KMeansSuite.generateKMeansData(spark, 50, 3, k)
   }
-
+  //默认参数
   test("default parameters") {
     val kmeans = new KMeans()
 
@@ -57,7 +57,7 @@ class KMeansSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultR
     val copiedModel = model.copy(ParamMap.empty)
     assert(copiedModel.hasSummary)
   }
-
+  //设置参数
   test("set parameters") {
     val kmeans = new KMeans()
       .setK(9)
@@ -78,7 +78,7 @@ class KMeansSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultR
     assert(kmeans.getSeed === 123)
     assert(kmeans.getTol === 1e-3)
   }
-
+  //参数验证
   test("parameters validation") {
     intercept[IllegalArgumentException] {
       new KMeans().setK(1)
@@ -128,7 +128,7 @@ class KMeansSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultR
     model.setSummary(None)
     assert(!model.hasSummary)
   }
-
+  //使用非默认特征和预测列转换
   test("KMeansModel transform with non-default feature and prediction cols") {
     val featuresColName = "kmeans_model_features"
     val predictionColName = "kmeans_model_prediction"

@@ -24,7 +24,7 @@ import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.util.MyParams
 
 class ParamsSuite extends SparkFunSuite {
-
+  //json编码/解码
   test("json encode/decode") {
     val dummy = new Params {
       override def copy(extra: ParamMap): Params = defaultCopy(extra)
@@ -179,7 +179,7 @@ class ParamsSuite extends SparkFunSuite {
       solver.setMaxIter(-1)
     }
   }
-
+  //param对
   test("param pair") {
     val solver = new TestParams()
     import solver.maxIter
@@ -283,6 +283,7 @@ class ParamsSuite extends SparkFunSuite {
     assert(!solver.isSet(maxIter))
 
     // Re-set and clear maxIter using the generic clear API
+    //使用通用清除API重新设置并清除maxIter
     solver.setMaxIter(10)
     solver.clear(maxIter)
     assert(!solver.isSet(maxIter))
@@ -292,7 +293,7 @@ class ParamsSuite extends SparkFunSuite {
     assert(copied.getInputCol === solver.getInputCol)
     assert(copied.getMaxIter === 50)
   }
-
+  //参数验证
   test("ParamValidate") {
     val alwaysTrue = ParamValidators.alwaysTrue[Int]
     assert(alwaysTrue(1))
@@ -347,7 +348,7 @@ class ParamsSuite extends SparkFunSuite {
     val t3 = t.copy(ParamMap(t.maxIter -> 20))
     assert(t3.isSet(t3.maxIter))
   }
-
+  //
   test("Filtering ParamMap") {
     val params1 = new MyParams("my_params1")
     val params2 = new MyParams("my_params2")
@@ -378,9 +379,10 @@ object ParamsSuite extends SparkFunSuite {
 
   /**
    * Checks common requirements for `Params.params`:
-   *   - params are ordered by names
-   *   - param parent has the same UID as the object's UID
-   *   - param name is the same as the param method name
+    * 检查`Params.params`的常见要求：
+   *   - params are ordered by names params是按名字排序的
+   *   - param parent has the same UID as the object's UID 父对象的UID与对象的UID相同
+   *   - param name is the same as the param method name 参数名称与param方法名称相同
    *   - obj.copy should return the same type as the obj
    */
   def checkParams(obj: Params): Unit = {

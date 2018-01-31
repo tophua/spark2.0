@@ -56,7 +56,7 @@ class StopwatchSuite extends SparkFunSuite with MLlibTestSparkContext {
     val sw = new DistributedStopwatch(sc, "sw")
     testStopwatchOnDriver(sw)
   }
-
+  //
   test("DistributedStopwatch on executors") {
     val sw = new DistributedStopwatch(sc, "sw")
     val rdd = sc.parallelize(0 until 4, 4)

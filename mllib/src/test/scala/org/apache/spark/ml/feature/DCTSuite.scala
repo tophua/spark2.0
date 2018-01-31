@@ -26,21 +26,23 @@ import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.util.DefaultReadWriteTest
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Row
-
+/**
+  * 统计向量
+  */
 @BeanInfo
 case class DCTTestData(vec: Vector, wantedVec: Vector)
 
 class DCTSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
   import testImplicits._
-
+  //计数矢量模型常见的情况
   test("forward transform of discrete cosine matches jTransforms result") {
     val data = Vectors.dense((0 until 128).map(_ => 2D * math.random - 1D).toArray)
     val inverse = false
 
     testDCT(data, inverse)
   }
-
+  //离散余弦逆变换匹配jTransforms结果
   test("inverse transform of discrete cosine matches jTransforms result") {
     val data = Vectors.dense((0 until 128).map(_ => 2D * math.random - 1D).toArray)
     val inverse = true

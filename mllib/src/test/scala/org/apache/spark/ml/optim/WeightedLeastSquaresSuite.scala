@@ -102,11 +102,12 @@ class WeightedLeastSquaresSuite extends SparkFunSuite with MLlibTestSparkContext
       Instance(29.0, 4.0, Vectors.dense(1.0, 13.0))
     ), 2)
   }
-
+  //强L1正则化的WLS
   test("WLS with strong L1 regularization") {
     /*
       We initialize the coefficients for WLS QN solver to be weighted average of the label. Check
       here that with only an intercept the model converges to bBar.
+      我们初始化WLS QN求解器的系数为标签的加权平均值,在这里检查只有一个截距模型收敛到bBar。
      */
     val bAgg = instances.collect().foldLeft((0.0, 0.0)) {
       case ((sum, weightSum), Instance(l, w, f)) => (sum + w * l, weightSum + w)
@@ -116,7 +117,7 @@ class WeightedLeastSquaresSuite extends SparkFunSuite with MLlibTestSparkContext
     val model = wls.fit(instances)
     assert(model.intercept ~== bBar relTol 1e-6)
   }
-
+  //AtWA的对角倒数
   test("diagonal inverse of AtWA") {
     /*
       library(Matrix)
@@ -148,7 +149,7 @@ class WeightedLeastSquaresSuite extends SparkFunSuite with MLlibTestSparkContext
     assert(expectedWithIntercept ~== wlsModelWithIntercept.diagInvAtWA relTol 1e-4)
     assert(expected ~== wlsModel.diagInvAtWA relTol 1e-4)
   }
-
+  //两个共线特征
   test("two collinear features") {
     // Cholesky solver does not handle singular input
     intercept[SingularMatrixException] {

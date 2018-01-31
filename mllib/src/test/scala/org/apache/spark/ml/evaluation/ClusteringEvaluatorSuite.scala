@@ -44,7 +44,7 @@ class ClusteringEvaluatorSuite
 
   /*
     Use the following python code to load the data and evaluate it using scikit-learn package.
-
+    使用下面的python代码来加载数据并使用scikit-learn软件包进行评估
     from sklearn import datasets
     from sklearn.metrics import silhouette_score
     iris = datasets.load_iris()
@@ -52,6 +52,7 @@ class ClusteringEvaluatorSuite
 
     0.6564679231
   */
+  //
   test("squared euclidean Silhouette") {
     val iris = ClusteringEvaluatorSuite.irisDataset(spark)
     val evaluator = new ClusteringEvaluator()
@@ -60,7 +61,7 @@ class ClusteringEvaluatorSuite
 
     assert(evaluator.evaluate(iris) ~== 0.6564679231 relTol 1e-5)
   }
-
+  //群集数量必须大于一个
   test("number of clusters must be greater than one") {
     val iris = ClusteringEvaluatorSuite.irisDataset(spark)
       .where($"label" === 0.0)

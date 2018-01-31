@@ -75,7 +75,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
       Array(1.0), 1, 2)
     ParamsSuite.checkParams(model)
   }
-
+  //默认参数
   test("GBTClassifier: default params") {
     val gbt = new GBTClassifier
     assert(gbt.getLabelCol === "label")
@@ -116,18 +116,20 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     gbt2.setThresholds(threshold)
     assert(gbt2.getThresholds === threshold)
   }
-
+  //阈值预测
   test("thresholds prediction") {
     val gbt = new GBTClassifier
     val df = trainData.toDF()
     val binaryModel = gbt.fit(df)
 
     // should predict all zeros
+    //应该预测全零
     binaryModel.setThresholds(Array(0.0, 1.0))
     val binaryZeroPredictions = binaryModel.transform(df).select("prediction").collect()
     assert(binaryZeroPredictions.forall(_.getDouble(0) === 0.0))
 
     // should predict all ones
+    //应该预测所有的
     binaryModel.setThresholds(Array(1.0, 0.0))
     val binaryOnePredictions = binaryModel.transform(df).select("prediction").collect()
     assert(binaryOnePredictions.forall(_.getDouble(0) === 1.0))
@@ -138,6 +140,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     val basePredictions = model.transform(df).select("prediction").collect()
 
     // constant threshold scaling is the same as no thresholds
+    //常量阈值缩放与无阈值相同
     binaryModel.setThresholds(Array(1.0, 1.0))
     val scaledPredictions = binaryModel.transform(df).select("prediction").collect()
     assert(scaledPredictions.zip(basePredictions).forall { case (scaled, base) =>
@@ -145,11 +148,12 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     })
 
     // force it to use the predict method
+    //迫使其使用预测方法
     model.setRawPredictionCol("").setProbabilityCol("").setThresholds(Array(0, 1))
     val predictionsWithPredict = model.transform(df).select("prediction").collect()
     assert(predictionsWithPredict.forall(_.getDouble(0) === 0.0))
   }
-
+  //预测器，分类器方法
   test("GBTClassifier: Predictor, Classifier methods") {
     val rawPredictionCol = "rawPrediction"
     val predictionCol = "prediction"
@@ -169,6 +173,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     val validationDataset = validationData.toDF(labelCol, featuresCol)
     val results = gbtModel.transform(validationDataset)
     // check that raw prediction is tree predictions dot tree weights
+    //检查原始预测是树预测点云权重
     results.select(rawPredictionCol, featuresCol).collect().foreach {
       case Row(raw: Vector, features: Vector) =>
         assert(raw.size === 2)
@@ -178,11 +183,13 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     }
 
     // Compare rawPrediction with probability
+    //将原始预测与概率进行比较
     results.select(rawPredictionCol, probabilityCol).collect().foreach {
       case Row(raw: Vector, prob: Vector) =>
         assert(raw.size === 2)
         assert(prob.size === 2)
         // Note: we should check other loss types for classification if they are added
+        //注意：如果添加了分类，我们应该检查其他损失类型
         val predFromRaw = raw.toDense.values.map(value => LogLoss.computeProbability(value))
         assert(prob(0) ~== predFromRaw(0) relTol eps)
         assert(prob(1) ~== predFromRaw(1) relTol eps)
@@ -190,13 +197,14 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     }
 
     // Compare prediction with probability
+    //预测与概率比较
     results.select(predictionCol, probabilityCol).collect().foreach {
       case Row(pred: Double, prob: Vector) =>
         val predFromProb = prob.toArray.zipWithIndex.maxBy(_._1)._2
         assert(pred == predFromProb)
     }
 
-    // force it to use raw2prediction
+    // force it to use raw2prediction 迫使它使用raw2预测
     gbtModel.setRawPredictionCol(rawPredictionCol).setProbabilityCol("")
     val resultsUsingRaw2Predict =
       gbtModel.transform(validationDataset).select(predictionCol).as[Double].collect()
@@ -204,7 +212,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
       case (pred1, pred2) => assert(pred1 === pred2)
     }
 
-    // force it to use probability2prediction
+    // force it to use probability2prediction 迫使它使用概率2预测
     gbtModel.setRawPredictionCol("").setProbabilityCol(probabilityCol)
     val resultsUsingProb2Predict =
       gbtModel.transform(validationDataset).select(predictionCol).as[Double].collect()
@@ -212,7 +220,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
       case (pred1, pred2) => assert(pred1 === pred2)
     }
 
-    // force it to use predict
+    // force it to use predict 迫使其使用预测
     gbtModel.setRawPredictionCol("").setProbabilityCol("")
     val resultsUsingPredict =
       gbtModel.transform(validationDataset).select(predictionCol).as[Double].collect()
@@ -223,7 +231,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     ProbabilisticClassifierSuite.testPredictMethods[
       Vector, GBTClassificationModel](gbtModel, validationDataset)
   }
-
+  //GBT参数stepSize应该在间隔内
   test("GBT parameter stepSize should be in interval (0, 1]") {
     withClue("GBT parameter stepSize should be in interval (0, 1]") {
       intercept[IllegalArgumentException] {
@@ -231,7 +239,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
       }
     }
   }
-
+  //具有连续特征的二进制分类：日志丢失
   test("Binary classification with continuous features: Log Loss") {
     val categoricalFeatures = Map.empty[Int, Int]
     testCombinations.foreach {
@@ -268,7 +276,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     sc.checkpointDir = None
     Utils.deleteRecursively(tempDir)
   }
-
+  //应该支持所有的NumericType标签，不支持其他类型
   test("should support all NumericType labels and not support other types") {
     val gbt = new GBTClassifier().setMaxDepth(1)
     MLTestingUtils.checkNumericTypes[GBTClassificationModel, GBTClassifier](
@@ -294,13 +302,13 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
     }
   }
   */
-
+  //在元数据中没有numClasses
   test("Fitting without numClasses in metadata") {
     val df: DataFrame = TreeTests.featureImportanceData(sc).toDF()
     val gbt = new GBTClassifier().setMaxDepth(1).setMaxIter(1)
     gbt.fit(df)
   }
-
+  //提取具有不良数据的标签点
   test("extractLabeledPoints with bad data") {
     def getTestData(labels: Seq[Double]): DataFrame = {
       labels.map { label: Double => LabeledPoint(label, Vectors.dense(0.0)) }.toDF()
@@ -334,7 +342,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
   /////////////////////////////////////////////////////////////////////////////
   // Tests of feature importance
   /////////////////////////////////////////////////////////////////////////////
-  test("Feature importance with toy data") {
+  test("Feature importance with toy data") { //重要的玩具数据
     val numClasses = 2
     val gbt = new GBTClassifier()
       .setImpurity("Gini")
@@ -345,6 +353,7 @@ class GBTClassifierSuite extends SparkFunSuite with MLlibTestSparkContext
       .setSeed(123)
 
     // In this data, feature 1 is very important.
+    //在这个数据中，特征1是非常重要的。
     val data: RDD[LabeledPoint] = TreeTests.featureImportanceData(sc)
     val categoricalFeatures = Map.empty[Int, Int]
     val df: DataFrame = TreeTests.setMetadata(data, categoricalFeatures, numClasses)

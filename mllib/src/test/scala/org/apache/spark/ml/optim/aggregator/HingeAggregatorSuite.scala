@@ -49,7 +49,8 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
     )
   }
 
-   /** Get summary statistics for some data and create a new HingeAggregator. */
+   /** Get summary statistics for some data and create a new HingeAggregator.
+     * 获取某些数据的摘要统计信息并创建一个新的HingeAggregator*/
   private def getNewAggregator(
       instances: Array[Instance],
       coefficients: Vector,
@@ -61,7 +62,7 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
     val bcCoefficients = spark.sparkContext.broadcast(coefficients)
     new HingeAggregator(bcFeaturesStd, fitIntercept)(bcCoefficients)
   }
-
+  //聚合器添加方法输入大小
   test("aggregator add method input size") {
     val coefArray = Array(1.0, 2.0)
     val interceptArray = Array(2.0)
@@ -73,7 +74,7 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
       }
     }
   }
-
+  //负重量
   test("negative weight") {
     val coefArray = Array(1.0, 2.0)
     val interceptArray = Array(2.0)
@@ -85,7 +86,7 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
       }
     }
   }
-
+  //检查大小
   test("check sizes") {
     val rng = new scala.util.Random
     val numFeatures = instances.head.features.size
@@ -100,7 +101,7 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(aggIntercept.gradient.size === numFeatures + 1)
     assert(aggNoIntercept.gradient.size === numFeatures)
   }
-
+  //检查正确性
   test("check correctness") {
     val coefArray = Array(1.0, 2.0)
     val intercept = 1.0
@@ -143,7 +144,7 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
     assert(loss ~== agg.loss relTol 0.01)
     assert(gradient ~== agg.gradient relTol 0.01)
   }
-
+  //检查零标准偏差
   test("check with zero standard deviation") {
     val binaryCoefArray = Array(1.0, 2.0)
     val intercept = 1.0
@@ -156,6 +157,7 @@ class HingeAggregatorSuite extends SparkFunSuite with MLlibTestSparkContext {
     instancesConstantFeatureFiltered.foreach(aggConstantFeatureBinaryFiltered.add)
 
     // constant features should not affect gradient
+    //不变的特征不应该影响渐变
     assert(aggConstantFeatureBinary.gradient(0) === 0.0)
     assert(aggConstantFeatureBinary.gradient(1) == aggConstantFeatureBinaryFiltered.gradient(0))
   }

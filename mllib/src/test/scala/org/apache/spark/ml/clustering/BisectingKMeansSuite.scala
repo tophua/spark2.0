@@ -36,7 +36,7 @@ class BisectingKMeansSuite
     dataset = KMeansSuite.generateKMeansData(spark, 50, 3, k)
     sparseDataset = KMeansSuite.generateSparseData(spark, 10, 1000, 42)
   }
-
+  //默认参数
   test("default parameters") {
     val bkm = new BisectingKMeans()
 
@@ -52,7 +52,7 @@ class BisectingKMeansSuite
     val copiedModel = model.copy(ParamMap.empty)
     assert(copiedModel.hasSummary)
   }
-
+  //验证平分K-Means在分裂后一个集群为空的边缘情况下不会失败
   test("SPARK-16473: Verify Bisecting K-Means does not fail in edge case where" +
     "one cluster is empty after split") {
     val bkm = new BisectingKMeans()
@@ -62,6 +62,7 @@ class BisectingKMeansSuite
       .setSeed(123)
 
     // Verify fit does not fail on very sparse data
+    //验证适合不会在非常稀疏的数据上失败
     val model = bkm.fit(sparseDataset)
     val result = model.transform(sparseDataset)
     val numClusters = result.select("prediction").distinct().collect().length
@@ -93,7 +94,7 @@ class BisectingKMeansSuite
       new BisectingKMeans().setMinDivisibleClusterSize(0)
     }
   }
-
+  //转换和总结
   test("fit, transform and summary") {
     val predictionColName = "bisecting_kmeans_prediction"
     val bkm = new BisectingKMeans().setK(k).setPredictionCol(predictionColName).setSeed(1)
@@ -113,6 +114,7 @@ class BisectingKMeansSuite
     assert(model.hasParent)
 
     // Check validity of model summary
+    //检查模型摘要的有效性
     val numRows = dataset.count()
     assert(model.hasSummary)
     val summary: BisectingKMeansSummary = model.summary

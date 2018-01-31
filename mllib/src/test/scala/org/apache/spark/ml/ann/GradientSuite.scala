@@ -24,7 +24,7 @@ import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 
 class GradientSuite extends SparkFunSuite with MLlibTestSparkContext {
-
+  //对数值微分的梯度计算
   test("Gradient computation against numerical differentiation") {
     val input = new BDM[Double](3, 1, Array(1.0, 1.0, 1.0))
     // output must contain zeros and one 1 for SoftMax

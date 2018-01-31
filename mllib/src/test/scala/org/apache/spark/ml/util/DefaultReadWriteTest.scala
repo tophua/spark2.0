@@ -31,13 +31,16 @@ trait DefaultReadWriteTest extends TempDirectory { self: Suite =>
 
   /**
    * Checks "overwrite" option and params.
+    * 检查“覆盖”选项和参数
    * This saves to and loads from [[tempDir]], but creates a subdirectory with a random name
    * in order to avoid conflicts from multiple calls to this method.
-   *
-   * @param instance ML instance to test saving/loading
+   * 这将保存到[[tempDir]]并加载,但会创建一个随机名称的子目录,以避免多次调用此方法的冲突。
+    *
+   * @param instance ML instance to test saving/loading ML实例来测试保存/加载
    * @param testParams  If true, then test values of Params.  Otherwise, just test overwrite option.
-   * @tparam T ML instance type
-   * @return  Instance loaded from file
+    *                    如果为true，则测试Params的值。 否则，只需测试覆盖选项。
+   * @tparam T ML instance type ML实例类型
+   * @return  Instance loaded from file 从文件加载的实例
    */
   def testDefaultReadWrite[T <: Params with MLWritable](
       instance: T,
@@ -52,6 +55,7 @@ trait DefaultReadWriteTest extends TempDirectory { self: Suite =>
     intercept[IOException] {
       instance.save(path)
     }
+    //MLWritable
     instance.write.overwrite().save(path)
     val loader = instance.getClass.getMethod("read").invoke(null).asInstanceOf[MLReader[T]]
     val newInstance = loader.load(path)
@@ -79,21 +83,24 @@ trait DefaultReadWriteTest extends TempDirectory { self: Suite =>
 
   /**
    * Default test for Estimator, Model pairs:
-   *  - Explicitly set Params, and train model
+    * Estimator,Model对的默认测试：
+   *  - Explicitly set Params, and train model 显式设置参数,并训练模型
    *  - Test save/load using `testDefaultReadWrite` on Estimator and Model
-   *  - Check Params on Estimator and Model
-   *  - Compare model data
+    * -在Estimator和Model上使用`testDefaultReadWrite`测试保存/加载
+   *  - Check Params on Estimator and Model 检查参数估计和模型
+   *  - Compare model data 比较模型数据
    *
    * This requires that `Model`'s `Param`s should be a subset of `Estimator`'s `Param`s.
-   *
-   * @param estimator  Estimator to test
+   * 这就要求`Model`的`Param`应该是`Estimator`的`Param`的一个子集。
+   * @param estimator  Estimator to test 估算器进行测试
    * @param dataset  Dataset to pass to `Estimator.fit()`
-   * @param testEstimatorParams  Set of `Param` values to set in estimator
-   * @param testModelParams Set of `Param` values to set in model
+   * @param testEstimatorParams  Set of `Param` values to set in estimator 在参数估计器中设置“参数”值
+   * @param testModelParams Set of `Param` values to set in model 在模型中设置“参数”值
    * @param checkModelData  Method which takes the original and loaded `Model` and compares their
    *                        data.  This method does not need to check `Param` values.
-   * @tparam E  Type of `Estimator`
-   * @tparam M  Type of `Model` produced by estimator
+    *                        采取原始和加载“模型”,并比较他们的数据的方法,这个方法不需要检查`Param`值
+   * @tparam E  Type of `Estimator` “估算器”的类型
+   * @tparam M  Type of `Model` produced by estimator 估计器产生的“模型”类型
    */
   def testEstimatorAndModelReadWrite[
     E <: Estimator[M] with MLWritable, M <: Model[M] with MLWritable](
@@ -103,12 +110,14 @@ trait DefaultReadWriteTest extends TempDirectory { self: Suite =>
       testModelParams: Map[String, Any],
       checkModelData: (M, M) => Unit): Unit = {
     // Set some Params to make sure set Params are serialized.
+    //设置一些参数,以确保设置参数序列化
     testEstimatorParams.foreach { case (p, v) =>
       estimator.set(estimator.getParam(p), v)
     }
     val model = estimator.fit(dataset)
 
     // Test Estimator save/load
+    //测试估算器保存/加载
     val estimator2 = testDefaultReadWrite(estimator)
     testEstimatorParams.foreach { case (p, v) =>
       val param = estimator.getParam(p)
@@ -116,6 +125,7 @@ trait DefaultReadWriteTest extends TempDirectory { self: Suite =>
     }
 
     // Test Model save/load
+    //测试模型保存/加载
     val model2 = testDefaultReadWrite(model)
     testModelParams.foreach { case (p, v) =>
       val param = model.getParam(p)

@@ -52,7 +52,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     decompositionDataset = decompositionData.map(FeatureData).toDF()
     rDataset = rData.map(FeatureData).toDF()
   }
-
+  //gmm在高维数据上失败
   test("gmm fails on high dimensional data") {
     val df = Seq(
       Vectors.sparse(GaussianMixture.MAX_NUM_FEATURES + 1, Array(0, 4), Array(3.0, 8.0)),
@@ -66,7 +66,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
       }
     }
   }
-
+  //默认参数
   test("default parameters") {
     val gm = new GaussianMixture()
 
@@ -82,7 +82,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     val copiedModel = model.copy(ParamMap.empty)
     assert(copiedModel.hasSummary)
   }
-
+  //设置参数
   test("set parameters") {
     val gm = new GaussianMixture()
       .setK(9)
@@ -101,7 +101,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     assert(gm.getSeed === 123)
     assert(gm.getTol === 1e-3)
   }
-
+  //参数验证
   test("parameters validation") {
     intercept[IllegalArgumentException] {
       new GaussianMixture().setK(1)
@@ -125,6 +125,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     }
 
     // Check prediction matches the highest probability, and probabilities sum to one.
+    //检查预测匹配最高概率,概率总和为1
     transformed.select(predictionColName, probabilityColName).collect().foreach {
       case Row(pred: Int, prob: Vector) =>
         val probArray = prob.toArray
@@ -134,6 +135,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     }
 
     // Check validity of model summary
+    //检查模型摘要的有效性
     val numRows = dataset.count()
     assert(model.hasSummary)
     val summary: GaussianMixtureSummary = model.summary
@@ -165,7 +167,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     testEstimatorAndModelReadWrite(gm, dataset, GaussianMixtureSuite.allParamSettings,
       GaussianMixtureSuite.allParamSettings, checkModelData)
   }
-
+  //具有两个群集的单变量密集/稀疏数据
   test("univariate dense/sparse data with two clusters") {
     val weights = Array(2.0 / 3.0, 1.0 / 3.0)
     val means = Array(Vectors.dense(5.1604), Vectors.dense(-4.3673))
@@ -180,7 +182,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
       modelEquals(expected, actual)
     }
   }
-
+  //检查分布式分解
   test("check distributed decomposition") {
     val k = 5
     val d = decompositionData.head.size
@@ -240,7 +242,7 @@ class GaussianMixtureSuite extends SparkFunSuite with MLlibTestSparkContext
     val llk = actual.summary.logLikelihood
     assert(llk ~== -46.89499 absTol 1E-5)
   }
-
+  //检查分布式分解上三角矩阵拆包
   test("upper triangular matrix unpacking") {
     /*
        The full symmetric matrix is as follows:
