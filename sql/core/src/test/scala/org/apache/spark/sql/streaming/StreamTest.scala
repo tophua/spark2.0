@@ -45,13 +45,13 @@ import org.apache.spark.util.{Clock, SystemClock, Utils}
 
 /**
  * A framework for implementing tests for streaming queries and sources.
-  * 流式查询和来源的测试框架
+  * 一个流式查询和来源的测试框架
  *
  * A test consists of a set of steps (expressed as a `StreamAction`) that are executed in order,
   * 一个测试包括一系列的步骤（表示为“StreamAction”）
  * blocking as necessary to let the stream catch up.  For example, the following adds some data to
  * a stream, blocking until it can verify that the correct values are eventually produced.
-  * 必要时阻止让河流迎头赶上,例如,以下内容将一些数据添加到流中,直到它可以验证最终生成正确的值为止,
+  * 必要时阻止流式缓存,例如,以下内容将一些数据添加到流中,直到它可以验证最终生成正确的值为止,
  *
  * {{{
  *  val inputData = MemoryStream[Int]
@@ -63,12 +63,16 @@ import org.apache.spark.util.{Clock, SystemClock, Utils}
  * }}}
  *
  * Note that while we do sleep to allow the other thread to progress without spinning,
+  * 请注意,虽然我们睡觉,让其他线程进展而不旋转,
  * `StreamAction` checks should not depend on the amount of time spent sleeping.  Instead they
  * should check the actual progress of the stream before verifying the required test condition.
- *
+ *`StreamAction`检查不应该依赖于花费的时间,相反,他们应该在验证所需的测试条件之前检查流的实际进度。
+  *
  * Currently it is assumed that all streaming queries will eventually complete in 10 seconds to
  * avoid hanging forever in the case of failures. However, individual suites can change this
  * by overriding `streamingTimeout`.
+  * 目前假定所有流式查询最终将在10秒内完成,以避免在失败的情况下永远悬挂,但是,
+  * 单个套件可以通过覆盖`streamingTimeout`来改变它
  */
 trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with BeforeAndAfterAll {
 
@@ -80,7 +84,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
   }
 
   /** How long to wait for an active stream to catch up when checking a result.
-    * 检查结果时等待主动流追上多久*/
+    * 在检查结果时等待活动流多长时间？*/
   val streamingTimeout = 10.seconds
 
   /** A trait for actions that can be performed while testing a streaming DataFrame.
@@ -88,13 +92,13 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
   trait StreamAction
 
   /** A trait to mark actions that require the stream to be actively running.
-    * 标记要求流正在主动运行的操作的特征*/
+    * 用于标识需要流运行的动作的特性*/
   trait StreamMustBeRunning
 
   /**
    * Adds the given data to the stream. Subsequent check answers will block until this data has
    * been processed.
-    * 将给定的数据添加到流中,后续的检查答案将被阻止,直到这个数据已经被处理
+    * 将给定的数据添加到流中,随后的检查答案将被阻塞,直到数据被处理为止
    */
   object AddData {
     def apply[A](source: MemoryStream[A], data: A*): AddDataMemory[A] =
@@ -108,7 +112,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
      * Called to adding the data to a source. It should find the source to add data to from
      * the active query, and then return the source object the data was added, as well as the
      * offset of added data.
-      * 被称为将数据添加到源,它应该找到从活动查询中添加数据的源,然后返回添加数据的源对象,以及添加数据的偏移量
+      * 调用将数据添加到源,它应该找到从活动查询添加数据的源,然后返回数据添加的源对象,以及添加数据的偏移量。
      */
     def addData(query: Option[StreamExecution]): (Source, Offset)
   }
@@ -197,7 +201,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
    * @param isFatalError if this is a fatal error. If so, the error should also be caught by
    *                     UncaughtExceptionHandler.
     *                     如果这是一个致命的错误,如果是这样,错误也应该被UncaughtExceptionHandler捕获
-   * @param assertFailure a function to verify the error.
+   * @param assertFailure a function to verify the error. 一个函数来验证错误
    */
   case class ExpectFailure[T <: Throwable : ClassTag](
       assertFailure: Throwable => Unit = _ => {},
@@ -378,6 +382,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     var manualClockExpectedTime = -1L
     try {
       startedTest.foreach { action =>
+        //处理测试流操作
         logInfo(s"Processing test stream action: $action")
         action match {
           case StartStream(trigger, triggerClock, additionalConfs) =>
@@ -423,6 +428,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             }
 
           case AdvanceManualClock(timeToAdd) =>
+            //当一个流不运行时,不能提前手动时钟
             verify(currentStream != null,
                    "can not advance manual clock when a stream is not running")
             verify(currentStream.triggerClock.isInstanceOf[StreamManualClock],
@@ -431,6 +437,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             assert(manualClockExpectedTime >= 0)
 
             // Make sure we don't advance ManualClock too early. See SPARK-16002.
+            //StreamManualClock尚未进入等待状态
             eventually("StreamManualClock has not yet entered the waiting state") {
               assert(clock.isStreamWaitingAt(manualClockExpectedTime))
             }
@@ -455,6 +462,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             } catch {
               case _: InterruptedException =>
               case e: org.scalatest.exceptions.TestFailedDueToTimeoutException =>
+                //超时停止并等待microbatchthread终止
                 failTest(
                   "Timed out while stopping and waiting for microbatchthread to terminate.", e)
               case t: Throwable =>
@@ -465,11 +473,13 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             }
 
           case ef: ExpectFailure[_] =>
+            //当流不运行时不能期望失败
             verify(currentStream != null, "can not expect failure when stream is not running")
             try failAfter(streamingTimeout) {
               val thrownException = intercept[StreamingQueryException] {
                 currentStream.awaitTermination()
               }
+              //在终止失败之后,microbatch线程不会停止
               eventually("microbatch thread not stopped after termination with failure") {
                 assert(!currentStream.microBatchThread.isAlive)
               }
@@ -493,8 +503,9 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             } catch {
               case _: InterruptedException =>
               case e: org.scalatest.exceptions.TestFailedDueToTimeoutException =>
+                //在等待失败时超时
                 failTest("Timed out while waiting for failure", e)
-              case t: Throwable =>
+              case t: Throwable =>  //检查流失败时出错
                 failTest("Error while checking stream failure", t)
             } finally {
               lastStream = currentStream
@@ -505,7 +516,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             verify(currentStream != null || lastStream != null,
               "cannot assert when no stream has been started")
             val streamToAssert = Option(currentStream).getOrElse(lastStream)
-//            verify(a.condition(streamToAssert), s"Assert on query failed: ${a.message}")
+            //verify(a.condition(streamToAssert), s"Assert on query failed: ${a.message}")
 
           case a: Assert =>
             val streamToAssert = Option(currentStream).getOrElse(lastStream)
@@ -521,6 +532,10 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
               // clock is incremented in following AdvanceManualClock. This avoid race conditions
               // between the test thread and the stream execution thread in tests using manual
               // clock.
+              //如果查询以手动时钟运行,则等待流执行线程开始等待时钟递增,这是需要的,
+              //以便我们在没有激活触发器的情况下添加数据,
+              // 这将确保数据被确定性地添加到在手动时钟在AdvanceManualClock之后递增之后触发的下一批,
+              // 这可以避免使用手动时钟的测试中测试线程与流执行线程之间的竞争状况
               if (currentStream != null &&
                   currentStream.triggerClock.isInstanceOf[StreamManualClock]) {
                 val clock = currentStream.triggerClock.asInstanceOf[StreamManualClock]
@@ -547,7 +562,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
 
               // Try to find the index of the source to which data was added. Either get the index
               // from the current active query or the original input logical plan.
-              //尝试找到添加数据的源的索引,从当前活动查询或原始输入逻辑计划中获取索引。
+              //尝试找到添加数据的源的索引,从当前活动查询或原始输入逻辑计划中获取索引
               val sourceIndex =
                 queryToUse.flatMap { query =>
                   findSourceIndex(query.logicalPlan)
@@ -613,6 +628,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
       }
 
       // Rollback prev configuration values
+      //回滚prev配置值
       resetConfValues.foreach {
         case (key, Some(value)) => sparkSession.conf.set(key, value)
         case (key, None) => sparkSession.conf.unset(key)
@@ -626,9 +642,11 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
    * Creates a stress test that randomly starts/stops/adds data/checks the result.
    * 创建一个随机启动/停止/添加数据/检查结果的压力测试
    * @param ds a dataframe that executes + 1 on a stream of integers, returning the result
+    *           一个dataframe,执行+ 1流的整数,返回结果
    * @param addData an add data action that adds the given numbers to the stream, encoding them
    *                as needed
-   * @param iterations the iteration number
+    *               添加数据操作,将给定的数字添加到流中,根据需要对它们进行编码
+   * @param iterations the iteration number 迭代次数
    */
   def runStressTest(
     ds: Dataset[Int],
@@ -641,10 +659,13 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
    * Creates a stress test that randomly starts/stops/adds data/checks the result.
    * 创建一个随机启动/停止/添加数据/检查结果的压力测试
    * @param ds a dataframe that executes + 1 on a stream of integers, returning the result
+    *           一个dataframe,执行+ 1流的整数,返回结果
    * @param prepareActions actions need to run before starting the stress test.
+    *                       启动压力测试之前需要运行操作
    * @param addData an add data action that adds the given numbers to the stream, encoding them
    *                as needed
-   * @param iterations the iteration number
+    *                添加数据操作,将给定的数字添加到流中,根据需要对它们进行编码
+   * @param iterations the iteration number 迭代次数
    */
   def runStressTest(
       ds: Dataset[Int],
@@ -696,7 +717,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     addCheck()
     testStream(ds)(actions: _*)
   }
-
+  //等待终止测试
   object AwaitTerminationTester {
 
     trait ExpectedBehavior
@@ -723,14 +744,14 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
       ): Unit = {
 
       expectedBehavior match {
-        case ExpectNotBlocked =>
+        case ExpectNotBlocked => //当预期的非阻塞时被阻塞
           withClue("Got blocked when expected non-blocking.") {
             failAfter(testTimeout) {
               awaitTermFunc()
             }
           }
 
-        case ExpectBlocked =>
+        case ExpectBlocked => //预期时没有被阻塞
           withClue("Was not blocked when expected.") {
             intercept[TestFailedDueToTimeoutException] {
               failAfter(testTimeout) {
