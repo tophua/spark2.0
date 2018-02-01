@@ -31,7 +31,7 @@ class SQLTransformerSuite
   test("params") {
     ParamsSuite.checkParams(new SQLTransformer())
   }
-
+  //转换数字数据
   test("transform numeric data") {
     val original = Seq((0, 1.0, 3.0), (2, 2.0, 5.0)).toDF("id", "v1", "v2")
     val sqlTrans = new SQLTransformer().setStatement(

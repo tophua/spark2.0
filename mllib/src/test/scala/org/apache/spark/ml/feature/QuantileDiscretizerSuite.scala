@@ -23,9 +23,13 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions.udf
 
+/**
+  * QuantileDiscretizer分位树为数离散化，和Bucketizer（分箱处理）一样也是：将连续数值特征转换为离散类别特征
+  *
+  */
 class QuantileDiscretizerSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
-
+  //测试观察到的桶的数量及其大小与期望值匹配
   test("Test observed number of buckets and their sizes match expected values") {
     val spark = this.spark
     import spark.implicits._
@@ -36,7 +40,7 @@ class QuantileDiscretizerSuite
     val discretizer = new QuantileDiscretizer()
       .setInputCol("input")
       .setOutputCol("result")
-      .setNumBuckets(numBuckets)
+      .setNumBuckets(numBuckets) //设置分箱数
     val result = discretizer.fit(df).transform(df)
 
     val observedNumBuckets = result.select("result").distinct.count
@@ -51,7 +55,7 @@ class QuantileDiscretizerSuite
     assert(numGoodBuckets === numBuckets,
       "Bucket sizes are not within expected relative error tolerance.")
   }
-
+  //对重复值比例高的数据进行测试
   test("Test on data with high proportion of duplicated values") {
     val spark = this.spark
     import spark.implicits._
@@ -70,7 +74,7 @@ class QuantileDiscretizerSuite
       s"Observed number of buckets are not correct." +
         s" Expected $expectedNumBuckets but found $observedNumBuckets")
   }
-
+  //用NaN值测试数据的转换
   test("Test transform on data with NaN value") {
     val spark = this.spark
     import spark.implicits._
@@ -104,7 +108,7 @@ class QuantileDiscretizerSuite
         }
     }
   }
-
+  //测试未知数据的转换方法
   test("Test transform method on unseen data") {
     val spark = this.spark
     import spark.implicits._
@@ -133,7 +137,7 @@ class QuantileDiscretizerSuite
       .setNumBuckets(6)
     testDefaultReadWrite(t)
   }
-
+  //验证结果模型是否具有父级
   test("Verify resulting model has parent") {
     val spark = this.spark
     import spark.implicits._

@@ -26,6 +26,7 @@ import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.types.DoubleType
 
 /**
+  * RFormula用于将数据中的字段通过R语言的Model Formulae转换成特征值，输出结果为一个特征向量和Double类型的label
     公式选择由R模型公式指定的列。 目前，我们支持R运算符的有限子集，包括'〜'，'。'，'：'，'+'和' - '。 基本操作有：
     〜单独的目标和条件
     +连字词，“+ 0”表示删除截取

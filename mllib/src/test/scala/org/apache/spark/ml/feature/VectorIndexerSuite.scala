@@ -109,7 +109,7 @@ class VectorIndexerSuite extends SparkFunSuite with MLlibTestSparkContext
       vectorIndexer.fit(rdd)
     }
   }
-
+  //给予具有不同大小矢量的RDD时引发错误
   test("Throws error when given RDDs with different size vectors") {
     val vectorIndexer = getIndexer
     val model = vectorIndexer.fit(densePoints1) // vectors of length 3
@@ -119,6 +119,7 @@ class VectorIndexerSuite extends SparkFunSuite with MLlibTestSparkContext
     model.transform(densePoints1) // should work
     model.transform(sparsePoints1) // should work
     // If the data is local Dataset, it throws AssertionError directly.
+    //如果数据是本地数据集,则直接抛出AssertionError。
     intercept[AssertionError] {
       model.transform(densePoints2).collect()
       logInfo("Did not throw error when fit, transform were called on vectors of different lengths")
@@ -134,7 +135,7 @@ class VectorIndexerSuite extends SparkFunSuite with MLlibTestSparkContext
       logInfo("Did not throw error when fitting vectors of different lengths in same RDD.")
     }
   }
-
+  //相同的结果与密集和稀疏的载体
   test("Same result with dense and sparse vectors") {
     def testDenseSparse(densePoints: DataFrame, sparsePoints: DataFrame): Unit = {
       val denseVectorIndexer = getIndexer.setMaxCategories(2)
@@ -151,7 +152,7 @@ class VectorIndexerSuite extends SparkFunSuite with MLlibTestSparkContext
     testDenseSparse(densePoints1, sparsePoints1)
     testDenseSparse(densePoints2, sparsePoints2)
   }
-
+  //构建有效的分类特征值索引，正确转换，检查元数据
   test("Builds valid categorical feature value index, transform correctly, check metadata") {
     def checkCategoryMaps(
         data: DataFrame,
@@ -218,6 +219,7 @@ class VectorIndexerSuite extends SparkFunSuite with MLlibTestSparkContext
     checkCategoryMaps(densePoints1, maxCategories = 3, categoricalFeatures = Set(0, 2))
     checkCategoryMaps(densePoints2, maxCategories = 2, categoricalFeatures = Set(1, 3))
   }
+
 
   test("Maintain sparsity for sparse vectors") {
     def checkSparsity(data: DataFrame, maxCategories: Int): Unit = {

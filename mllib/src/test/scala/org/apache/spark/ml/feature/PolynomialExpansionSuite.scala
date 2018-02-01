@@ -27,6 +27,9 @@ import org.apache.spark.ml.util.TestingUtils._
 import org.apache.spark.mllib.util.MLlibTestSparkContext
 import org.apache.spark.sql.Row
 
+/**
+  * PolynomialExpansion多项式核转换
+  */
 class PolynomialExpansionSuite
   extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
 
@@ -59,7 +62,7 @@ class PolynomialExpansionSuite
     Vectors.dense(0.6, 0.36, 0.216, -1.1, -0.66, -0.396, 1.21, 0.726, -1.331, -3.0, -1.8,
       -1.08, 3.3, 1.98, -3.63, 9.0, 5.4, -9.9, -27.0),
     Vectors.sparse(19, Array.empty, Array.empty))
-
+  //带缺省参数的多项式展开
   test("Polynomial expansion with default parameter") {
     val df = data.zip(twoDegreeExpansion).toSeq.toDF("features", "expected")
 
@@ -76,7 +79,7 @@ class PolynomialExpansionSuite
         throw new TestFailedException("Unmatched data types after polynomial expansion", 0)
     }
   }
-
+  //带乘子的多项式展开
   test("Polynomial expansion with setter") {
     val df = data.zip(threeDegreeExpansion).toSeq.toDF("features", "expected")
 
@@ -94,7 +97,7 @@ class PolynomialExpansionSuite
         throw new TestFailedException("Unmatched data types after polynomial expansion", 0)
     }
   }
-
+  //1度多项式展开在向量上的恒等式
   test("Polynomial expansion with degree 1 is identity on vectors") {
     val df = data.zip(data).toSeq.toDF("features", "expected")
 
@@ -118,7 +121,7 @@ class PolynomialExpansionSuite
       .setDegree(3)
     testDefaultReadWrite(t)
   }
-
+  //在polynomialexpansion.getpolysize整数溢出
   test("SPARK-17027. Integer overflow in PolynomialExpansion.getPolySize") {
     val data: Array[(Vector, Int, Int)] = Array(
       (Vectors.dense(1.0, 2.0, 3.0, 4.0, 5.0), 3002, 4367),

@@ -73,7 +73,7 @@ class StandardScalerSuite extends SparkFunSuite with MLlibTestSparkContext
     ParamsSuite.checkParams(new StandardScalerModel("empty",
       Vectors.dense(1.0), Vectors.dense(2.0)))
   }
-
+  //标准化与默认参数
   test("Standardization with default parameter") {
     val df0 = data.zip(resWithStd).toSeq.toDF("features", "expected")
 
@@ -85,7 +85,7 @@ class StandardScalerSuite extends SparkFunSuite with MLlibTestSparkContext
 
     assertResult(standardScaler0.transform(df0))
   }
-
+  //用setter标准化
   test("Standardization with setter") {
     val df1 = data.zip(resWithBoth).toSeq.toDF("features", "expected")
     val df2 = data.zip(resWithMean).toSeq.toDF("features", "expected")
@@ -116,7 +116,7 @@ class StandardScalerSuite extends SparkFunSuite with MLlibTestSparkContext
     assertResult(standardScaler2.transform(df2))
     assertResult(standardScaler3.transform(df3))
   }
-
+  //稀疏数据和平均值
   test("sparse data and withMean") {
     val someSparseData = Array(
       Vectors.sparse(3, Array(0, 1), Array(-2.0, 2.3)),
