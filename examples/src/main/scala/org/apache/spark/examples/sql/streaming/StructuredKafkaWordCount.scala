@@ -26,16 +26,18 @@ import org.apache.spark.sql.SparkSession
  * Usage: StructuredKafkaWordCount <bootstrap-servers> <subscribe-type> <topics>
  *   <bootstrap-servers> The Kafka "bootstrap.servers" configuration. A
  *   comma-separated list of host:port.
+  *   Kafka“bootstrap.servers”配置,主机：端口的逗号分隔列表,
  *   <subscribe-type> There are three kinds of type, i.e. 'assign', 'subscribe',
- *   'subscribePattern'.
+ *   'subscribePattern'. 有三种类型，即“分配”，“订阅”，“订阅模式”。
  *   |- <assign> Specific TopicPartitions to consume. Json string
  *   |  {"topicA":[0,1],"topicB":[2,4]}.
  *   |- <subscribe> The topic list to subscribe. A comma-separated list of
- *   |  topics.
+ *   |  topics.要订阅的主题列表,以逗号分隔的主题列表。
  *   |- <subscribePattern> The pattern used to subscribe to topic(s).
- *   |  Java regex string.
+ *   |  Java regex string. 用于订阅主题的模式.Java正则表达式字符串。
  *   |- Only one of "assign, "subscribe" or "subscribePattern" options can be
  *   |  specified for Kafka source.
+  *     可以为Kafka源指定“分配”,“订阅”或“订阅模式”选项中的一个。
  *   <topics> Different value format depends on the value of 'subscribe-type'.
  *
  * Example:
@@ -61,6 +63,7 @@ object StructuredKafkaWordCount {
     import spark.implicits._
 
     // Create DataSet representing the stream of input lines from kafka
+    //创建DataSet,表示来自kafka的输入行的流
     val lines = spark
       .readStream
       .format("kafka")
@@ -71,9 +74,11 @@ object StructuredKafkaWordCount {
       .as[String]
 
     // Generate running word count
+    //生成运行字数
     val wordCounts = lines.flatMap(_.split(" ")).groupBy("value").count()
 
     // Start running the query that prints the running counts to the console
+    //开始运行查询,将运行计数输出到控制台
     val query = wordCounts.writeStream
       .outputMode("complete")
       .format("console")

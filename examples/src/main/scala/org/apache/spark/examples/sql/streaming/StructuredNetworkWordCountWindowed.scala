@@ -27,14 +27,19 @@ import org.apache.spark.sql.functions._
  * Counts words in UTF8 encoded, '\n' delimited text received from the network over a
  * sliding window of configurable duration. Each line from the network is tagged
  * with a timestamp that is used to determine the windows into which it falls.
+  *
+  * 以UTF8编码的字符计数'\ n'分隔的文本,通过可配置持续时间的滑动窗口从网络接收,
+  * 来自网络的每一行都标有一个时间戳,用于确定它所属的窗口。
  *
  * Usage: StructuredNetworkWordCountWindowed <hostname> <port> <window duration>
  *   [<slide duration>]
  * <hostname> and <port> describe the TCP server that Structured Streaming
- * would connect to receive data.
+ * would connect to receive data. 描述结构化流传输将连接到的接收数据的TCP服务器
  * <window duration> gives the size of window, specified as integer number of seconds
+  *                  给出窗口的大小,指定为整数秒
  * <slide duration> gives the amount of time successive windows are offset from one another,
- * given in the same units as above. <slide duration> should be less than or equal to
+ * given in the same units as above.
+  * 给出连续窗口相互偏移的时间量，以与上述相同的单位给出。<slide duration> should be less than or equal to
  * <window duration>. If the two are equal, successive windows have no overlap. If
  * <slide duration> is not provided, it defaults to <window duration>.
  *
@@ -73,6 +78,7 @@ object StructuredNetworkWordCountWindowed {
     import spark.implicits._
 
     // Create DataFrame representing the stream of input lines from connection to host:port
+    //创建DataFrame,表示从连接到主机：端口的输入行的流
     val lines = spark.readStream
       .format("socket")
       .option("host", host)
@@ -81,16 +87,19 @@ object StructuredNetworkWordCountWindowed {
       .load()
 
     // Split the lines into words, retaining timestamps
+    //将这些行拆分成单词,保留时间戳
     val words = lines.as[(String, Timestamp)].flatMap(line =>
       line._1.split(" ").map(word => (word, line._2))
     ).toDF("word", "timestamp")
 
     // Group the data by window and word and compute the count of each group
+    //通过窗口和单词分组数据,并计算每个组的计数
     val windowedCounts = words.groupBy(
       window($"timestamp", windowDuration, slideDuration), $"word"
     ).count().orderBy("window")
 
     // Start running the query that prints the windowed word counts to the console
+    //开始运行查询,打印窗口的字数到控制台
     val query = windowedCounts.writeStream
       .outputMode("complete")
       .format("console")

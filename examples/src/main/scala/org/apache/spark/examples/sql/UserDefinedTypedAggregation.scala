@@ -29,25 +29,31 @@ object UserDefinedTypedAggregation {
 
   object MyAverage extends Aggregator[Employee, Average, Double] {
     // A zero value for this aggregation. Should satisfy the property that any b + zero = b
+    //此聚合的零值。 应该满足任何b +零= b的属性
     def zero: Average = Average(0L, 0L)
     // Combine two values to produce a new value. For performance, the function may modify `buffer`
     // and return it instead of constructing a new object
+    //结合两个值来产生一个新的值,为了性能,函数可能会修改`buffer`并返回它而不是构造一个新的对象
     def reduce(buffer: Average, employee: Employee): Average = {
       buffer.sum += employee.salary
       buffer.count += 1
       buffer
     }
     // Merge two intermediate values
+    //合并两个中间值
     def merge(b1: Average, b2: Average): Average = {
       b1.sum += b2.sum
       b1.count += b2.count
       b1
     }
     // Transform the output of the reduction
+    //转换减少的输出
     def finish(reduction: Average): Double = reduction.sum.toDouble / reduction.count
     // Specifies the Encoder for the intermediate value type
+    //指定中间值类型的编码器
     def bufferEncoder: Encoder[Average] = Encoders.product
     // Specifies the Encoder for the final output value type
+    //指定最终输出值类型的编码器
     def outputEncoder: Encoder[Double] = Encoders.scalaDouble
   }
   // $example off:typed_custom_aggregation$
@@ -73,6 +79,7 @@ object UserDefinedTypedAggregation {
     // +-------+------+
 
     // Convert the function to a `TypedColumn` and give it a name
+    //将函数转换为一个“TypedColumn”并给它一个名字
     val averageSalary = MyAverage.toColumn.name("average_salary")
     val result = ds.select(averageSalary)
     result.show()

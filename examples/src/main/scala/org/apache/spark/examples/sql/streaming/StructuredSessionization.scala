@@ -26,7 +26,7 @@ import org.apache.spark.sql.streaming._
 
 /**
  * Counts words in UTF8 encoded, '\n' delimited text received from the network.
- *
+ * 统计UTF8编码的文字，从网络收到的'\ n'分隔文本。
  * Usage: MapGroupsWithState <hostname> <port>
  * <hostname> and <port> describe the TCP server that Structured Streaming
  * would connect to receive data.
@@ -56,6 +56,7 @@ object StructuredSessionization {
     import spark.implicits._
 
     // Create DataFrame representing the stream of input lines from connection to host:port
+    //创建DataFrame，表示从连接到主机：端口的输入行的流
     val lines = spark.readStream
       .format("socket")
       .option("host", host)

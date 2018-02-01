@@ -28,14 +28,18 @@ object UserDefinedUntypedAggregation {
   // $example on:untyped_custom_aggregation$
   object MyAverage extends UserDefinedAggregateFunction {
     // Data types of input arguments of this aggregate function
+    //这个聚集函数的输入参数的数据类型
     def inputSchema: StructType = StructType(StructField("inputColumn", LongType) :: Nil)
     // Data types of values in the aggregation buffer
+    //聚合缓冲区中值的数据类型
     def bufferSchema: StructType = {
       StructType(StructField("sum", LongType) :: StructField("count", LongType) :: Nil)
     }
     // The data type of the returned value
+    //返回值的数据类型
     def dataType: DataType = DoubleType
     // Whether this function always returns the same output on the identical input
+    //此功能是否始终在相同的输入上返回相同的输出
     def deterministic: Boolean = true
     // Initializes the given aggregation buffer. The buffer itself is a `Row` that in addition to
     // standard methods like retrieving a value at an index (e.g., get(), getBoolean()), provides
@@ -46,6 +50,7 @@ object UserDefinedUntypedAggregation {
       buffer(1) = 0L
     }
     // Updates the given aggregation buffer `buffer` with new input data from `input`
+    //用`input`中的新输入数据更新给定的聚合缓冲区`buffer'
     def update(buffer: MutableAggregationBuffer, input: Row): Unit = {
       if (!input.isNullAt(0)) {
         buffer(0) = buffer.getLong(0) + input.getLong(0)
@@ -53,11 +58,12 @@ object UserDefinedUntypedAggregation {
       }
     }
     // Merges two aggregation buffers and stores the updated buffer values back to `buffer1`
+    //合并两个聚合缓冲区,并将更新的缓冲区值存回“缓冲区1”
     def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
       buffer1(0) = buffer1.getLong(0) + buffer2.getLong(0)
       buffer1(1) = buffer1.getLong(1) + buffer2.getLong(1)
     }
-    // Calculates the final result
+    // Calculates the final result 计算最终结果
     def evaluate(buffer: Row): Double = buffer.getLong(0).toDouble / buffer.getLong(1)
   }
   // $example off:untyped_custom_aggregation$
@@ -70,6 +76,7 @@ object UserDefinedUntypedAggregation {
 
     // $example on:untyped_custom_aggregation$
     // Register the function to access it
+    //注册该功能来访问它
     spark.udf.register("myAverage", MyAverage)
 
     val df = spark.read.json("examples/src/main/resources/employees.json")

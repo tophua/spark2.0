@@ -22,12 +22,13 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * Counts words in UTF8 encoded, '\n' delimited text received from the network.
- *
+ * 统计UTF8编码的文字，从网络收到的'\ n'分隔文本。
  * Usage: StructuredNetworkWordCount <hostname> <port>
  * <hostname> and <port> describe the TCP server that Structured Streaming
  * would connect to receive data.
  *
  * To run this on your local machine, you need to first run a Netcat server
+  * 要在本地机器上运行这个,你需要先运行一个Netcat服务器
  *    `$ nc -lk 9999`
  * and then run the example
  *    `$ bin/run-example sql.streaming.StructuredNetworkWordCount

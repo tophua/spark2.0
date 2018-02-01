@@ -41,6 +41,7 @@ object SparkSQLExample {
       .getOrCreate()
 
     // For implicit conversions like converting RDDs to DataFrames
+    //用于隐式转换,如将RDD转换为DataFrame
     import spark.implicits._
     // $example off:init_session$
 
@@ -57,6 +58,7 @@ object SparkSQLExample {
     val df = spark.read.json("examples/src/main/resources/people.json")
 
     // Displays the content of the DataFrame to stdout
+    //显示DataFrame的内容到标准输出
     df.show()
     // +----+-------+
     // | age|   name|
@@ -69,14 +71,17 @@ object SparkSQLExample {
 
     // $example on:untyped_ops$
     // This import is needed to use the $-notation
+    //这个导入需要使用$ -notation
     import spark.implicits._
     // Print the schema in a tree format
+    //以树形格式打印模式
     df.printSchema()
     // root
     // |-- age: long (nullable = true)
     // |-- name: string (nullable = true)
 
     // Select only the "name" column
+    //只选择“name”列
     df.select("name").show()
     // +-------+
     // |   name|
@@ -87,6 +92,7 @@ object SparkSQLExample {
     // +-------+
 
     // Select everybody, but increment the age by 1
+    //选择每个人，但年龄增加1
     df.select($"name", $"age" + 1).show()
     // +-------+---------+
     // |   name|(age + 1)|
@@ -97,6 +103,7 @@ object SparkSQLExample {
     // +-------+---------+
 
     // Select people older than 21
+    //选择21岁以上的人
     df.filter($"age" > 21).show()
     // +---+----+
     // |age|name|
@@ -105,6 +112,7 @@ object SparkSQLExample {
     // +---+----+
 
     // Count people by age
+    //按年龄计算人数
     df.groupBy("age").count().show()
     // +----+-----+
     // | age|count|
@@ -117,6 +125,7 @@ object SparkSQLExample {
 
     // $example on:run_sql$
     // Register the DataFrame as a SQL temporary view
+    //将DataFrame注册为SQL临时视图
     df.createOrReplaceTempView("people")
 
     val sqlDF = spark.sql("SELECT * FROM people")
@@ -132,9 +141,11 @@ object SparkSQLExample {
 
     // $example on:global_temp_view$
     // Register the DataFrame as a global temporary view
+    //将DataFrame注册为全局临时视图
     df.createGlobalTempView("people")
 
     // Global temporary view is tied to a system preserved database `global_temp`
+    //全局临时视图与系统保存的数据库“global_temp”绑定
     spark.sql("SELECT * FROM global_temp.people").show()
     // +----+-------+
     // | age|   name|
@@ -145,6 +156,7 @@ object SparkSQLExample {
     // +----+-------+
 
     // Global temporary view is cross-session
+    //全局临时视图是跨会话的
     spark.newSession().sql("SELECT * FROM global_temp.people").show()
     // +----+-------+
     // | age|   name|
@@ -173,6 +185,7 @@ object SparkSQLExample {
     primitiveDS.map(_ + 1).collect() // Returns: Array(2, 3, 4)
 
     // DataFrames can be converted to a Dataset by providing a class. Mapping will be done by name
+    //DataFrames可以通过提供一个类来转换为数据集,Mapping将按名称完成
     val path = "examples/src/main/resources/people.json"
     val peopleDS = spark.read.json(path).as[Person]
     peopleDS.show()
@@ -189,21 +202,26 @@ object SparkSQLExample {
   private def runInferSchemaExample(spark: SparkSession): Unit = {
     // $example on:schema_inferring$
     // For implicit conversions from RDDs to DataFrames
+    //用于从RDD到DataFrame的隐式转换
     import spark.implicits._
 
     // Create an RDD of Person objects from a text file, convert it to a Dataframe
+    //从文本文件创建Person对象的RDD,将其转换为Dataframe
     val peopleDF = spark.sparkContext
       .textFile("examples/src/main/resources/people.txt")
       .map(_.split(","))
       .map(attributes => Person(attributes(0), attributes(1).trim.toInt))
       .toDF()
     // Register the DataFrame as a temporary view
+    //将DataFrame注册为临时视图
     peopleDF.createOrReplaceTempView("people")
 
     // SQL statements can be run by using the sql methods provided by Spark
+    //SQL语句可以使用Spark提供的sql方法运行
     val teenagersDF = spark.sql("SELECT name, age FROM people WHERE age BETWEEN 13 AND 19")
 
     // The columns of a row in the result can be accessed by field index
+    //结果中一行的列可以通过字段索引来访问
     teenagersDF.map(teenager => "Name: " + teenager(0)).show()
     // +------------+
     // |       value|
@@ -211,7 +229,7 @@ object SparkSQLExample {
     // |Name: Justin|
     // +------------+
 
-    // or by field name
+    // or by field name 或按字段名称
     teenagersDF.map(teenager => "Name: " + teenager.getAs[String]("name")).show()
     // +------------+
     // |       value|
@@ -220,8 +238,10 @@ object SparkSQLExample {
     // +------------+
 
     // No pre-defined encoders for Dataset[Map[K,V]], define explicitly
+    //数据集[Map [K，V]]没有预定义的编码器，明确定义
     implicit val mapEncoder = org.apache.spark.sql.Encoders.kryo[Map[String, Any]]
     // Primitive types and case classes can be also defined as
+    //原始类型和案例类别也可以定义为
     // implicit val stringIntMapEncoder: Encoder[Map[String, Any]] = ExpressionEncoder()
 
     // row.getValuesMap[T] retrieves multiple columns at once into a Map[String, T]
@@ -237,29 +257,36 @@ object SparkSQLExample {
     val peopleRDD = spark.sparkContext.textFile("examples/src/main/resources/people.txt")
 
     // The schema is encoded in a string
+    //模式以字符串编码
     val schemaString = "name age"
 
     // Generate the schema based on the string of schema
+    //根据模式字符串生成模式
     val fields = schemaString.split(" ")
       .map(fieldName => StructField(fieldName, StringType, nullable = true))
     val schema = StructType(fields)
 
     // Convert records of the RDD (people) to Rows
+    //将RDD（people）的记录转换为行
     val rowRDD = peopleRDD
       .map(_.split(","))
       .map(attributes => Row(attributes(0), attributes(1).trim))
 
-    // Apply the schema to the RDD
+    // Apply the schema to the RDD 将模式应用于RDD
     val peopleDF = spark.createDataFrame(rowRDD, schema)
 
     // Creates a temporary view using the DataFrame
+    //使用DataFrame创建一个临时视图
     peopleDF.createOrReplaceTempView("people")
 
     // SQL can be run over a temporary view created using DataFrames
+    //SQL可以在使用DataFrame创建的临时视图上运行
     val results = spark.sql("SELECT name FROM people")
 
     // The results of SQL queries are DataFrames and support all the normal RDD operations
+    //SQL查询的结果是DataFrame,并支持所有正常的RDD操作
     // The columns of a row in the result can be accessed by field index or by field name
+    //结果中行的列可以通过字段索引或字段名称来访问
     results.map(attributes => "Name: " + attributes(0)).show()
     // +-------------+
     // |        value|

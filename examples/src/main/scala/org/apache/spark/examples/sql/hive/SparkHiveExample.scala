@@ -37,9 +37,15 @@ object SparkHiveExample {
     // in the current directory and creates a directory configured by `spark.sql.warehouse.dir`,
     // which defaults to the directory `spark-warehouse` in the current directory that the spark
     // application is started.
-
+    /**
+      *使用Hive时，必须使用Hive支持实例化`SparkSession`,包括连接到持久性Hive Metastore,支持Hive serdes和Hive用户定义的函数。
+      * 没有现有Hive部署的用户仍然可以启用Hive支持,
+      * 当没有配置hive-site.xml时,上下文自动在当前目录中创建`metastore_db`,并创建一个由`spark.sql.warehouse.dir`配置的目录,
+      * 默认目录为`spark-warehouse` Spark应用程序启动的当前目录。
+      */
     // $example on:spark_hive$
     // warehouseLocation points to the default location for managed databases and tables
+    //warehouseLocation指向托管数据库和表的默认位置
     val warehouseLocation = new File("spark-warehouse").getAbsolutePath
 
     val spark = SparkSession
@@ -66,6 +72,7 @@ object SparkHiveExample {
     // ...
 
     // Aggregation queries are also supported.
+    //聚合查询也被支持
     sql("SELECT COUNT(*) FROM src").show()
     // +--------+
     // |count(1)|
@@ -74,9 +81,11 @@ object SparkHiveExample {
     // +--------+
 
     // The results of SQL queries are themselves DataFrames and support all normal functions.
+    //SQL查询的结果本身就是DataFrame,并支持所有正常的功能
     val sqlDF = sql("SELECT key, value FROM src WHERE key < 10 ORDER BY key")
 
     // The items in DataFrames are of type Row, which allows you to access each column by ordinal.
+    //DataFrame中的项目是Row类型的,它允许您按顺序访问每个列
     val stringsDS = sqlDF.map {
       case Row(key: Int, value: String) => s"Key: $key, Value: $value"
     }
@@ -90,10 +99,12 @@ object SparkHiveExample {
     // ...
 
     // You can also use DataFrames to create temporary views within a SparkSession.
+    //您也可以使用DataFrame在SparkSession中创建临时视图
     val recordsDF = spark.createDataFrame((1 to 100).map(i => Record(i, s"val_$i")))
     recordsDF.createOrReplaceTempView("records")
 
     // Queries can then join DataFrame data with data stored in Hive.
+    //查询然后可以将DataFrame数据与存储在Hive中的数据结合起来
     sql("SELECT * FROM records r JOIN src s ON r.key = s.key").show()
     // +---+------+---+------+
     // |key| value|key| value|
