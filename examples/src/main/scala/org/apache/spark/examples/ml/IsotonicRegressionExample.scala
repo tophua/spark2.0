@@ -25,6 +25,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * An example demonstrating Isotonic Regression.
+  * 保序回归是回归算法的一种
  * Run with
  * {{{
  * bin/run-example ml.IsotonicRegressionExample

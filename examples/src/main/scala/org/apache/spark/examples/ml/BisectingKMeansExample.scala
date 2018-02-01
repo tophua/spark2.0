@@ -26,6 +26,9 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * An example demonstrating bisecting k-means clustering.
+  * 证明二分k均值算法聚类的一个例子
+  * 二分k均值算法,它是k-means聚类算法的一个变体,主要是为了改进k-means算法随机选择初始质心的随机性造成聚类结果不确定性的问题,
+  * 而Bisecting k-means算法受随机选择初始质心的影响比较小
  * Run with
  * {{{
  * bin/run-example ml.BisectingKMeansExample
@@ -45,14 +48,17 @@ object BisectingKMeansExample {
     val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
     // Trains a bisecting k-means model.
+    //训练一个平分的k-means模型
     val bkm = new BisectingKMeans().setK(2).setSeed(1)
     val model = bkm.fit(dataset)
 
     // Evaluate clustering.
+    //评估聚类
     val cost = model.computeCost(dataset)
     println(s"Within Set Sum of Squared Errors = $cost")
 
     // Shows the result.
+    //显示结果
     println("Cluster Centers: ")
     val centers = model.clusterCenters
     centers.foreach(println)

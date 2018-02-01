@@ -41,18 +41,24 @@ object KMeansExample {
 
     // $example on$
     // Loads data.
+    //加载和解析数据文件
     val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
     // Trains a k-means model.
-    val kmeans = new KMeans().setK(2).setSeed(1L)
+    //训练一个k-means模型
+    val kmeans = new KMeans()
+      .setK(2)//聚类簇数
+      .setSeed(1L)
     val model = kmeans.fit(dataset)
 
     // Evaluate clustering by computing Within Set Sum of Squared Errors.
+   //通过计算平方误差平方和评估聚类
     val WSSSE = model.computeCost(dataset)
     println(s"Within Set Sum of Squared Errors = $WSSSE")
 
-    // Shows the result.
+    // Shows the result. 显示结果
     println("Cluster Centers: ")
+    //聚类中心点
     model.clusterCenters.foreach(println)
     // $example off$
 

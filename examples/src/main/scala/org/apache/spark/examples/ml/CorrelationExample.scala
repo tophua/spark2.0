@@ -27,6 +27,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * An example for computing correlation matrix.
+  * 计算相关矩阵的一个例子
  * Run with
  * {{{
  * bin/run-example ml.CorrelationExample
@@ -50,10 +51,13 @@ object CorrelationExample {
     )
 
     val df = data.map(Tuple1.apply).toDF("features")
+    //相关连分析
     val Row(coeff1: Matrix) = Correlation.corr(df, "features").head
+    //皮尔逊相关矩阵
     println("Pearson correlation matrix:\n" + coeff1.toString)
 
     val Row(coeff2: Matrix) = Correlation.corr(df, "features", "spearman").head
+    //斯皮尔曼相关矩阵
     println("Spearman correlation matrix:\n" + coeff2.toString)
     // $example off$
 

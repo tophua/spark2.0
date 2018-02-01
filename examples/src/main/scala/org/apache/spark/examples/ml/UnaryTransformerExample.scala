@@ -31,7 +31,7 @@ import org.apache.spark.util.Utils
 /**
  * An example demonstrating creating a custom [[org.apache.spark.ml.Transformer]] using
  * the [[UnaryTransformer]] abstraction.
- *
+ * 演示如何使用[[UnaryTransformer]]抽象创建自定义[[org.apache.spark.ml.Transformer]]
  * Run with
  * {{{
  * bin/run-example ml.UnaryTransformerExample
@@ -42,9 +42,10 @@ object UnaryTransformerExample {
   // $example on$
   /**
    * Simple Transformer which adds a constant value to input Doubles.
-   *
+   * 增加输入常数的简单变压器
    * [[UnaryTransformer]] can be used to create a stage usable within Pipelines.
    * It defines parameters for specifying input and output columns:
+    * 可用于创建管道内可用的阶段,定义用于指定输入和输出列的参数：
    * [[UnaryTransformer.inputCol]] and [[UnaryTransformer.outputCol]].
    * It can optionally handle schema validation.
    *
@@ -75,7 +76,7 @@ object UnaryTransformerExample {
 
   /**
    * Companion object for our simple Transformer.
-   *
+   * 简单变压器的对象。
    * [[DefaultParamsReadable]] provides a default implementation for loading instances
    * of this Transformer which were persisted using [[DefaultParamsWritable]].
    */

@@ -54,10 +54,12 @@ object FPGrowthExample {
     model.freqItemsets.show()
 
     // Display generated association rules.
+    //显示生成的关联规则
     model.associationRules.show()
 
     // transform examines the input items against all the association rules and summarize the
     // consequents as prediction
+    //根据所有关联规则检查输入项目,并将结果总结为预测
     model.transform(dataset).show()
     // $example off$
 

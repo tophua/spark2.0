@@ -26,6 +26,9 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * An example demonstrating AFTSurvivalRegression.
+  * accelerated failure time (AFT) regression
+  * 生存分析Survival regression
+  * 加速失效时间（AFT）模型回归
  * Run with
  * {{{
  * bin/run-example ml.AFTSurvivalRegressionExample
@@ -55,7 +58,8 @@ object AFTSurvivalRegressionExample {
     val model = aft.fit(training)
 
     // Print the coefficients, intercept and scale parameter for AFT survival regression
-    println(s"Coefficients: ${model.coefficients}")
+    //打印AFT生存回归的系数，截距和比例参数
+    println(s"Coefficients: ${model.coefficients}") //
     println(s"Intercept: ${model.intercept}")
     println(s"Scale: ${model.scale}")
     val mode=model.transform(training)//.show(false)

@@ -33,6 +33,7 @@ object LinearSVCExample {
 
     // $example on$
     // Load training data
+    //加载训练数据
     val training = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
 
     val lsvc = new LinearSVC()
@@ -43,6 +44,7 @@ object LinearSVCExample {
     val lsvcModel = lsvc.fit(training)
 
     // Print the coefficients and intercept for linear svc
+    //打印线性svc的系数和截距
     println(s"Coefficients: ${lsvcModel.coefficients} Intercept: ${lsvcModel.intercept}")
     // $example off$
 

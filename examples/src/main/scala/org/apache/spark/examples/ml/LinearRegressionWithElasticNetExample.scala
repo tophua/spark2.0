@@ -22,7 +22,9 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.regression.LinearRegression
 // $example off$
 import org.apache.spark.sql.SparkSession
-
+/**
+  * 线性回归网络神经例子
+  */
 object LinearRegressionWithElasticNetExample {
 
   def main(args: Array[String]): Unit = {
@@ -37,22 +39,27 @@ object LinearRegressionWithElasticNetExample {
       .load("data/mllib/sample_linear_regression_data.txt")
 
     val lr = new LinearRegression()
-      .setMaxIter(10)
-      .setRegParam(0.3)
-      .setElasticNetParam(0.8)
+      .setMaxIter(10)//设置最大迭代次数
+      .setRegParam(0.3)//设置正则化参数
+      .setElasticNetParam(0.8)//ElasticNetParam=0.0为L2正则化 1.0为L1正则化
 
     // Fit the model
+    //fit()方法将DataFrame转化为一个Transformer的算法
     val lrModel = lr.fit(training)
 
     // Print the coefficients and intercept for linear regression
+    //打印线性回归的系数和截距
     println(s"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}")
 
     // Summarize the model over the training set and print out some metrics
+    //总结训练集上的模型并打印出一些指标
     val trainingSummary = lrModel.summary
     println(s"numIterations: ${trainingSummary.totalIterations}")
     println(s"objectiveHistory: [${trainingSummary.objectiveHistory.mkString(",")}]")
     trainingSummary.residuals.show()
+    //rmse均方根误差说明样本的离散程度
     println(s"RMSE: ${trainingSummary.rootMeanSquaredError}")
+    //R2平方系统也称判定系数,用来评估模型拟合数据的好坏
     println(s"r2: ${trainingSummary.r2}")
     // $example off$
 

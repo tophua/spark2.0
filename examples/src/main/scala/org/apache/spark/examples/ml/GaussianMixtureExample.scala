@@ -26,6 +26,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * An example demonstrating Gaussian Mixture Model (GMM).
+  * 一个演示高斯混合模型（GMM）的例子
  * Run with
  * {{{
  * bin/run-example ml.GaussianMixtureExample
@@ -39,15 +40,17 @@ object GaussianMixtureExample {
         .getOrCreate()
 
     // $example on$
-    // Loads data
+    // Loads data 加载数据
     val dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
 
     // Trains Gaussian Mixture Model
+    //训练高斯混合模型
     val gmm = new GaussianMixture()
       .setK(2)
     val model = gmm.fit(dataset)
 
     // output parameters of mixture model model
+    //输出参数的混合模型模型
     for (i <- 0 until model.getK) {
       println(s"Gaussian $i:\nweight=${model.weights(i)}\n" +
           s"mu=${model.gaussians(i).mean}\nsigma=\n${model.gaussians(i).cov}\n")

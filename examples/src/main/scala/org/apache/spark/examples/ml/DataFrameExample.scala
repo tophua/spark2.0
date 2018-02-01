@@ -31,13 +31,14 @@ import org.apache.spark.util.Utils
 
 /**
  * An example of how to use [[DataFrame]] for ML. Run with
+  * 一个如何使用ML的[[DataFrame]]的例子
  * {{{
  * ./bin/run-example ml.DataFrameExample [options]
  * }}}
  * If you use it as a template to create your own app, please use `spark-submit` to submit your app.
  */
 object DataFrameExample {
-
+  //libSVM的数据格式
   case class Params(input: String = "data/mllib/sample_libsvm_data.txt")
     extends AbstractParams[Params]
 
@@ -70,14 +71,18 @@ object DataFrameExample {
     println(s"Loading LIBSVM file with UDT from ${params.input}.")
     val df: DataFrame = spark.read.format("libsvm").load(params.input).cache()
     println("Schema from LIBSVM:")
+    //打印RDD中数据的表模式
     df.printSchema()
     println(s"Loaded training data as a DataFrame with ${df.count()} records.")
 
     // Show statistical summary of labels.
+
+    //显示标签统计汇总
     val labelSummary = df.describe("label")
     labelSummary.show()
 
     // Convert features column to an RDD of vectors.
+    //转换特征列向量法
     val features = df.select("features").rdd.map { case Row(v: Vector) => v }
     val featureSummary = features.aggregate(new MultivariateOnlineSummarizer())(
       (summary, feat) => summary.add(Vectors.fromML(feat)),
@@ -85,15 +90,18 @@ object DataFrameExample {
     println(s"Selected features column with average values:\n ${featureSummary.mean.toString}")
 
     // Save the records in a parquet file.
+    //保存parquet记录文件
     val tmpDir = Utils.createTempDir()
     val outputDir = new File(tmpDir, "dataframe").toString
     println(s"Saving to $outputDir as Parquet file.")
     df.write.parquet(outputDir)
 
     // Load the records back.
+    //重新加载数据
     println(s"Loading Parquet file with UDT from $outputDir.")
     val newDF = spark.read.parquet(outputDir)
     println(s"Schema from Parquet:")
+    //打印RDD中数据的表模式
     newDF.printSchema()
 
     spark.stop()

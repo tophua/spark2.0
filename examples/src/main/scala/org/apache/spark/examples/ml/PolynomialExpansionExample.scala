@@ -27,6 +27,9 @@ object PolynomialExpansionExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
 
     // $example on$
+    /**
+      * 下面的示例会介绍如何将你的特征集拓展到3维多项式空间
+      */
     val data = Array(
       Vectors.dense(2.0, 1.0),
       Vectors.dense(0.0, 0.0),
@@ -36,8 +39,8 @@ object PolynomialExpansionExample extends SparkCommant{
     //多项式扩展(Polynomial expansion)是将n维的原始特征组合扩展到多项式空间的过程
     //在输入数据中增加非线性特征可以有效的提高模型的复杂度,简单且常用的方法就是使用多项式特征(polynomial features),可以得到特征的高阶交叉项：
     val polyExpansion = new PolynomialExpansion()
-      .setInputCol("features")
-      .setOutputCol("polyFeatures")
+      .setInputCol("features")//输入列
+      .setOutputCol("polyFeatures")//输出列
       .setDegree(3)
 
     val polyDF = polyExpansion.transform(df)

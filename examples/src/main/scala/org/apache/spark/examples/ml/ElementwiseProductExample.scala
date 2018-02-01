@@ -22,13 +22,16 @@ package org.apache.spark.examples.ml
 import org.apache.spark.ml.feature.ElementwiseProduct
 import org.apache.spark.ml.linalg.Vectors
 // $example off$
-
+/**
+  * ElementwiseProduct点乘,就是说每个矩阵元素对应相乘
+  */
 object ElementwiseProductExample extends SparkCommant{
   def main(args: Array[String]): Unit = {
 
 
     // $example on$
     // Create some vector data; also works for sparse vectors
+    //创建一些向量数据,也适用于稀疏向量
     val dataFrame = spark.createDataFrame(Seq(
       ("a", Vectors.dense(1.0, 2.0, 3.0)),
       ("b", Vectors.dense(4.0, 5.0, 6.0)))).toDF("id", "vector")
@@ -37,6 +40,7 @@ object ElementwiseProductExample extends SparkCommant{
     /**
       * ElementwiseProduct对输入向量的每个元素乘以一个权重向量的每个元素,对输入向量每个元素逐个进行放缩
       */
+    //ElementwiseProduct 点乘,就是说每个矩阵元素对应相乘
     val transformer = new ElementwiseProduct()
       .setScalingVec(transformingVector)
       .setInputCol("vector")

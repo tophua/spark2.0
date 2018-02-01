@@ -33,11 +33,12 @@ object MulticlassLogisticRegressionWithElasticNetExample {
 
     // $example on$
     // Load training data
+    //加载训练数据
     val training = spark
       .read
       .format("libsvm")
       .load("data/mllib/sample_multiclass_classification_data.txt")
-
+    //逻辑回归
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(0.3)
@@ -47,6 +48,7 @@ object MulticlassLogisticRegressionWithElasticNetExample {
     val lrModel = lr.fit(training)
 
     // Print the coefficients and intercept for multinomial logistic regression
+    //打印多项式逻辑回归的系数和截距
     println(s"Coefficients: \n${lrModel.coefficientMatrix}")
     println(s"Intercepts: ${lrModel.interceptVector}")
     // $example off$

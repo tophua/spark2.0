@@ -26,7 +26,9 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * An example of Multiclass to Binary Reduction with One Vs Rest,
+  * 一个Vs休息的多重到二进制减少的例子
  * using Logistic Regression as the base classifier.
+  * 使用Logistic回归作为基础分类器
  * Run with
  * {{{
  * ./bin/run-example ml.OneVsRestExample
@@ -42,32 +44,40 @@ object OneVsRestExample {
 
     // $example on$
     // load data file.
+    //加载数据
     val inputData = spark.read.format("libsvm")
       .load("data/mllib/sample_multiclass_classification_data.txt")
 
     // generate the train/test split.
+    //分割数据测试和训练
     val Array(train, test) = inputData.randomSplit(Array(0.8, 0.2))
 
     // instantiate the base classifier
+    //实例化基分类器
     val classifier = new LogisticRegression()
       .setMaxIter(10)
       .setTol(1E-6)
       .setFitIntercept(true)
 
     // instantiate the One Vs Rest Classifier.
+    //实例化One Vs Rest分类器
     val ovr = new OneVsRest().setClassifier(classifier)
 
     // train the multiclass model.
+    //训练多类模型
     val ovrModel = ovr.fit(train)
 
     // score the model on test data.
+    //在测试数据上评分模型
     val predictions = ovrModel.transform(test)
 
     // obtain evaluator.
+    //获得评估者
     val evaluator = new MulticlassClassificationEvaluator()
       .setMetricName("accuracy")
 
     // compute the classification error on test data.
+    //计算测试数据的分类错误
     val accuracy = evaluator.evaluate(predictions)
     println(s"Test Error = ${1 - accuracy}")
     // $example off$

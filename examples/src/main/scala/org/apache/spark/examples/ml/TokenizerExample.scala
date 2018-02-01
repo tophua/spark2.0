@@ -20,37 +20,68 @@ package org.apache.spark.examples.ml
 
 // $example on$
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
-import org.apache.spark.sql.functions._
 // $example off$
-
-object TokenizerExample extends SparkCommant{
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.types.StringType
+import org.apache.spark.sql.{SQLContext, DataFrame}
+/**
+ * Tokenizer(分词器)将文本划分为独立个体(通常为单词)
+ */
+object TokenizerExample {
   def main(args: Array[String]): Unit = {
+    
+     val conf = new SparkConf().setAppName("TokenizerExample").setMaster("local[4]")
+    val sc = new SparkContext(conf)
+  
+    val sqlContext = new SQLContext(sc)
+    import sqlContext.implicits._
 
     // $example on$
-    val sentenceDataFrame = spark.createDataFrame(Seq(
+    val sentenceDataFrame = sqlContext.createDataFrame(Seq(
       (0, "Hi I heard about Spark"),
       (1, "I wish Java could use case classes"),
       (2, "Logistic,regression,models,are,neat")
-    )).toDF("id", "sentence")
+    )).toDF("label", "sentence")
 
     val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
     val regexTokenizer = new RegexTokenizer()
       .setInputCol("sentence")
       .setOutputCol("words")
+      /**
+       * 基于正则表达式提供更多的划分选项,
+       * 默认情况下,参数“pattern”为划分文本的分隔符,
+       * 用户可以指定参数“gaps”来指明正则“patten”表示“tokens”而不是分隔符,
+       * 这样来为分词结果找到所有可能匹配的情况
+       */
       .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
-
-    val countTokens = udf { (words: Seq[String]) => words.length }
-
+	//transform()方法将DataFrame转化为另外一个DataFrame的算法
     val tokenized = tokenizer.transform(sentenceDataFrame)
-    tokenized.select("sentence", "words")
-        .withColumn("tokens", countTokens(col("words"))).show(false)
-
+    /**
+      +-----+--------------------+--------------------+
+      |label|            sentence|               words|
+      +-----+--------------------+--------------------+
+      |    0|Hi I heard about ...|[hi, i, heard, ab...|
+      |    1|I wish Java could...|[i, wish, java, c...|
+      |    2|Logistic,regressi...|[logistic,regress...|
+      +-----+--------------------+--------------------+*/
+    tokenized.show()
+    tokenized.select("words", "label").take(3).foreach(println)
+    //transform()方法将DataFrame转化为另外一个DataFrame的算法
     val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
-    regexTokenized.select("sentence", "words")
-        .withColumn("tokens", countTokens(col("words"))).show(false)
+    /**
+    +-----+--------------------+--------------------+
+    |label|            sentence|               words|
+    +-----+--------------------+--------------------+
+    |    0|Hi I heard about ...|[Hi, I, heard, ab...|
+    |    1|I wish Java could...|[I, wish, Java, c...|
+    |    2|Logistic,regressi...|[Logistic, regres...|
+    +-----+--------------------+--------------------+*/
+    regexTokenized.show()
+    regexTokenized.select("words", "label").take(3).foreach(println)
     // $example off$
 
-    spark.stop()
+    sc.stop()
   }
 }
 // scalastyle:on println
