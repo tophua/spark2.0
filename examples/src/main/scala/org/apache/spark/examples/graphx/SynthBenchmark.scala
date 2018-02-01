@@ -18,33 +18,41 @@
 // scalastyle:off println
 package org.apache.spark.examples.graphx
 
-import java.io.{FileOutputStream, PrintWriter}
-
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.SparkContext._
 import org.apache.spark.graphx.{GraphXUtils, PartitionStrategy}
+import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.graphx.util.GraphGenerators
+import java.io.{PrintWriter, FileOutputStream}
 
 /**
  * The SynthBenchmark application can be used to run various GraphX algorithms on
  * synthetic log-normal graphs.  The intent of this code is to enable users to
  * profile the GraphX system without access to large graph datasets.
+ * synthbenchmark???????????и?????????????,??δ???????????????????????д?????????
  */
 object SynthBenchmark {
 
   /**
    * To run this program use the following:
-   *
+   * ????д???????????
    * MASTER=spark://foobar bin/run-example graphx.SynthBenchmark -app=pagerank
    *
    * Options:
-   *   -app "pagerank" or "cc" for pagerank or connected components. (Default: pagerank)
+   *   -app "pagerank" or "cc" for pagerank or connected components. (Default: pagerank)   *   			
    *   -niters the number of iterations of pagerank to use (Default: 10)
+   *   			????????PageRank????
    *   -nverts the number of vertices in the graph (Default: 1000000)
+   *   			??е??????
    *   -numEPart the number of edge partitions in the graph (Default: number of cores)
+   *   			 ??е????????????
    *   -partStrategy the graph partitioning strategy to use
+   *   			 ???????????
    *   -mu the mean parameter for the log-normal graph (Default: 4.0)
+   *   			?????????????????
    *   -sigma the stdev parameter for the log-normal graph (Default: 1.3)
+   *   			 ????????????????
    *   -degFile the local file to save the degree information (Default: Empty)
+   *   			????????????????
    *   -seed seed to use for RNGs (Default: -1, picks seed randomly)
    */
   def main(args: Array[String]) {

@@ -27,6 +27,7 @@ import org.apache.spark.sql.SparkSession
 /**
  * An example use the Pregel operator to express computation
  * such as single source shortest path
+  * 一个例子使用Pregel算子来表达诸如单源最短路径之类的计算
  * Run with
  * {{{
  * bin/run-example graphx.SSSPExample
@@ -43,22 +44,24 @@ object SSSPExample {
 
     // $example on$
     // A graph with edge attributes containing distances
+    //具有包含距离的边缘属性的图形
     val graph: Graph[Long, Double] =
       GraphGenerators.logNormalGraph(sc, numVertices = 100).mapEdges(e => e.attr.toDouble)
-    val sourceId: VertexId = 42 // The ultimate source
+    val sourceId: VertexId = 42 // The ultimate source 最终的来源
     // Initialize the graph such that all vertices except the root have distance infinity.
+    //初始化图形,使得除根外的所有顶点都具有距离无穷大
     val initialGraph = graph.mapVertices((id, _) =>
         if (id == sourceId) 0.0 else Double.PositiveInfinity)
     val sssp = initialGraph.pregel(Double.PositiveInfinity)(
-      (id, dist, newDist) => math.min(dist, newDist), // Vertex Program
-      triplet => {  // Send Message
+      (id, dist, newDist) => math.min(dist, newDist), // Vertex Program 顶点程序
+      triplet => {  // Send Message 发送信息
         if (triplet.srcAttr + triplet.attr < triplet.dstAttr) {
           Iterator((triplet.dstId, triplet.srcAttr + triplet.attr))
         } else {
           Iterator.empty
         }
       },
-      (a, b) => math.min(a, b) // Merge Message
+      (a, b) => math.min(a, b) // Merge Message 合并消息
     )
     println(sssp.vertices.collect.mkString("\n"))
     // $example off$
