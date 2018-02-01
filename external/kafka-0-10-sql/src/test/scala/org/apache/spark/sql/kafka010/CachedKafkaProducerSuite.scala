@@ -52,7 +52,7 @@ class CachedKafkaProducerSuite extends SharedSQLContext with PrivateMethodTester
     val map = CachedKafkaProducer.invokePrivate(cacheMap())
     assert(map.size == 1)
   }
-  //应该关闭正确的kafka制作人为给定的kafkaprams
+  //应该关闭正确的kafka 生产者为给定的kafkaprams
   test("Should close the correct kafka producer for the given kafkaPrams.") {
     val kafkaParams = new ju.HashMap[String, Object]()
     kafkaParams.put("acks", "0")

@@ -20,7 +20,7 @@ package org.apache.spark.sql.kafka010
 import org.scalatest.PrivateMethodTester
 
 import org.apache.spark.sql.test.SharedSQLContext
-
+//缓存的Kafka消费者
 class CachedKafkaConsumerSuite extends SharedSQLContext with PrivateMethodTester {
   //正确reportdataloss报告错误原因
   test("SPARK-19886: Report error cause correctly in reportDataLoss") {

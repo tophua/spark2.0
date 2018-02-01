@@ -26,7 +26,7 @@ import org.scalatest.BeforeAndAfter
 import org.apache.spark.sql.QueryTest
 import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.util.Utils
-
+//Kafka关系套件
 class KafkaRelationSuite extends QueryTest with BeforeAndAfter with SharedSQLContext {
 
   import testImplicits._

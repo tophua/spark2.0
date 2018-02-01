@@ -32,7 +32,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming._
 import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.sql.types.{BinaryType, DataType}
-
+//Kafka水槽套件
 class KafkaSinkSuite extends StreamTest with SharedSQLContext {
   import testImplicits._
 
