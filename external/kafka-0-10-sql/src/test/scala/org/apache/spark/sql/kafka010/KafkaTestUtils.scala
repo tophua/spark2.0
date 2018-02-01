@@ -47,12 +47,15 @@ import org.apache.spark.util.Utils
 /**
  * This is a helper class for Kafka test suites. This has the functionality to set up
  * and tear down local Kafka servers, and to push data using Kafka producers.
+  * 这是一个Kafka测试套件的辅助类,这具有设置和拆除当地Kafka服务器的功能,并使用Kafka生产者推送数据
  *
  * The reason to put Kafka test utility class in src is to test Python related Kafka APIs.
+  * 在src中放入Kafka测试工具类的原因是测试Python相关的Kafka API
  */
 class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends Logging {
 
   // Zookeeper related configurations
+  //Zookeeper相关的配置
   private val zkHost = "localhost"
   private var zkPort: Int = 0
   private val zkConnectionTimeout = 60000
@@ -63,6 +66,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
   private var zkUtils: ZkUtils = _
 
   // Kafka broker related configurations
+  // Kafka broker相关配置
   private val brokerHost = "localhost"
   private var brokerPort = 0
   private var brokerConf: KafkaConfig = _
@@ -71,9 +75,11 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
   private var server: KafkaServer = _
 
   // Kafka producer
+  //Kafka 生产者
   private var producer: Producer[String, String] = _
 
   // Flag to test whether the system is correctly started
+  //标记以测试系统是否正确启动
   private var zkReady = false
   private var brokerReady = false
 
@@ -94,8 +100,10 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
   }
 
   // Set up the Embedded Zookeeper server and get the proper Zookeeper port
+  //设置Embedded Zookeeper服务器并获取适当的Zookeeper端口
   private def setupEmbeddedZookeeper(): Unit = {
     // Zookeeper server startup
+    //Zookeeper服务器启动
     zookeeper = new EmbeddedZookeeper(s"$zkHost:$zkPort")
     // Get the actual zookeeper binding port
     zkPort = zookeeper.actualPort
@@ -104,10 +112,12 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
   }
 
   // Set up the Embedded Kafka server
+  //设置嵌入式Kafka服务器
   private def setupEmbeddedKafkaServer(): Unit = {
     assert(zkReady, "Zookeeper should be set up beforehand")
 
     // Kafka broker startup
+    //Kafka broker启动
     Utils.startServiceOnPort(brokerPort, port => {
       brokerPort = port
       brokerConf = new KafkaConfig(brokerConfiguration, doLog = false)
@@ -120,13 +130,15 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     brokerReady = true
   }
 
-  /** setup the whole embedded servers, including Zookeeper and Kafka brokers */
+  /** setup the whole embedded servers, including Zookeeper and Kafka brokers
+    * 设置整个嵌入式服务器,包括Zookeeper和Kafka经纪人 */
   def setup(): Unit = {
     setupEmbeddedZookeeper()
     setupEmbeddedKafkaServer()
   }
 
-  /** Teardown the whole servers, including Kafka broker and Zookeeper */
+  /** Teardown the whole servers, including Kafka broker and Zookeeper
+    * 拆除整个服务器,包括Kafka broker和Zookeeper */
   def teardown(): Unit = {
     brokerReady = false
     zkReady = false
@@ -145,6 +157,8 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     // On Windows, `logDirs` is left open even after Kafka server above is completely shut down
     // in some cases. It leads to test failures on Windows if the directory deletion failure
     // throws an exception.
+    //在Windows上,即使在上面的Kafka服务器完全关闭之后,logDirs仍然是打开的。
+    //如果目录删除失败引发异常,则会导致Windows上的测试失败。
     brokerConf.logDirs.foreach { f =>
       try {
         Utils.deleteRecursively(new File(f))
@@ -165,7 +179,8 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     }
   }
 
-  /** Create a Kafka topic and wait until it is propagated to the whole cluster */
+  /** Create a Kafka topic and wait until it is propagated to the whole cluster
+    * 创建一个Kafka主题,并等到它传播到整个集群 */
   def createTopic(topic: String, partitions: Int, overwrite: Boolean = false): Unit = {
     var created = false
     while (!created) {
@@ -177,6 +192,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
       }
     }
     // wait until metadata is propagated
+    //等到元数据被传播
     (0 until partitions).foreach { p =>
       waitUntilMetadataIsPropagated(topic, p)
     }
@@ -186,19 +202,22 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     zkUtils.getPartitionsForTopics(zkUtils.getAllTopics()).mapValues(_.size).toSeq
   }
 
-  /** Create a Kafka topic and wait until it is propagated to the whole cluster */
+  /** Create a Kafka topic and wait until it is propagated to the whole cluster
+    * 创建一个Kafka主题，并等到它传播到整个集群*/
   def createTopic(topic: String): Unit = {
     createTopic(topic, 1)
   }
 
-  /** Delete a Kafka topic and wait until it is propagated to the whole cluster */
+  /** Delete a Kafka topic and wait until it is propagated to the whole cluster
+    * 删除一个Kafka主题，并等待它传播到整个集群*/
   def deleteTopic(topic: String): Unit = {
     val partitions = zkUtils.getPartitionsForTopics(Seq(topic))(topic).size
     AdminUtils.deleteTopic(zkUtils, topic)
     verifyTopicDeletionWithRetries(zkUtils, topic, partitions, List(this.server))
   }
 
-  /** Add new paritions to a Kafka topic */
+  /** Add new paritions to a Kafka topic
+    * 将新分区添加到Kafka主题*/
   def addPartitions(topic: String, partitions: Int): Unit = {
     AdminUtils.addPartitions(zkUtils, topic, partitions)
     // wait until metadata is propagated
@@ -207,23 +226,27 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     }
   }
 
-  /** Java-friendly function for sending messages to the Kafka broker */
+  /** Java-friendly function for sending messages to the Kafka broker
+    * 用于将消息发送给Kafka代理的Java友好功能*/
   def sendMessages(topic: String, messageToFreq: JMap[String, JInt]): Unit = {
     sendMessages(topic, Map(messageToFreq.asScala.mapValues(_.intValue()).toSeq: _*))
   }
 
-  /** Send the messages to the Kafka broker */
+  /** Send the messages to the Kafka broker
+    * 发送消息给卡Kafka broker*/
   def sendMessages(topic: String, messageToFreq: Map[String, Int]): Unit = {
     val messages = messageToFreq.flatMap { case (s, freq) => Seq.fill(freq)(s) }.toArray
     sendMessages(topic, messages)
   }
 
-  /** Send the array of messages to the Kafka broker */
+  /** Send the array of messages to the Kafka broker
+    * 将消息数组发送给Kafka代理*/
   def sendMessages(topic: String, messages: Array[String]): Seq[(String, RecordMetadata)] = {
     sendMessages(topic, messages, None)
   }
 
-  /** Send the array of messages to the Kafka broker using specified partition */
+  /** Send the array of messages to the Kafka broker using specified partition
+    * 使用指定的分区将消息数组发送到Kafka代理 */
   def sendMessages(
       topic: String,
       messages: Array[String],
@@ -317,7 +340,8 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     props
   }
 
-  /** Verify topic is deleted in all places, e.g, brokers, zookeeper. */
+  /** Verify topic is deleted in all places, e.g, brokers, zookeeper.
+    * 验证主题在所有地方被删除，例如brokers，zookeeper。 */
   private def verifyTopicDeletion(
       topic: String,
       numPartitions: Int,
@@ -326,19 +350,23 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
 
     import ZkUtils._
     // wait until admin path for delete topic is deleted, signaling completion of topic deletion
+    //等到删除话题的管理路径被删除，信令完成话题删除
     assert(
       !zkUtils.pathExists(getDeleteTopicPath(topic)),
       s"${getDeleteTopicPath(topic)} still exists")
     assert(!zkUtils.pathExists(getTopicPath(topic)), s"${getTopicPath(topic)} still exists")
     // ensure that the topic-partition has been deleted from all brokers' replica managers
+    //确保主题分区已从所有代理的副本管理器中删除
     assert(servers.forall(server => topicAndPartitions.forall(tp =>
       server.replicaManager.getPartition(tp.topic, tp.partition) == None)),
       s"topic $topic still exists in the replica manager")
     // ensure that logs from all replicas are deleted if delete topic is marked successful
+    //确保删除主题标记为成功时，删除所有副本中的日志
     assert(servers.forall(server => topicAndPartitions.forall(tp =>
       server.getLogManager().getLog(tp).isEmpty)),
       s"topic $topic still exists in log mananger")
     // ensure that topic is removed from all cleaner offsets
+    //确保从所有清除偏移中删除主题
     assert(servers.forall(server => topicAndPartitions.forall { tp =>
       val checkpoints = server.getLogManager().logDirs.map { logDir =>
         new OffsetCheckpoint(new File(logDir, "cleaner-offset-checkpoint")).read()
@@ -346,12 +374,14 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
       checkpoints.forall(checkpointsPerLogDir => !checkpointsPerLogDir.contains(tp))
     }), s"checkpoint for topic $topic still exists")
     // ensure the topic is gone
+    //确保话题消失
     assert(
       !zkUtils.getAllTopics().contains(topic),
       s"topic $topic still exists on zookeeper")
   }
 
-  /** Verify topic is deleted. Retry to delete the topic if not. */
+  /** Verify topic is deleted. Retry to delete the topic if not.
+    * 确认主题已删除。 如果不是，请重试删除主题*/
   private def verifyTopicDeletionWithRetries(
       zkUtils: ZkUtils,
       topic: String,
@@ -370,7 +400,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
       }
     }
   }
-
+  //等到元数据被传播
   private def waitUntilMetadataIsPropagated(topic: String, partition: Int): Unit = {
     def isPropagated = server.apis.metadataCache.getPartitionInfo(topic, partition) match {
       case Some(partitionState) =>

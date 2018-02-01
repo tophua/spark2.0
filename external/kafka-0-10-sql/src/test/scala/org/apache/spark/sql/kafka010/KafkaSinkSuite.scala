@@ -54,7 +54,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       super.afterAll()
     }
   }
-
+  //批量 - 写给kafka
   test("batch - write to kafka") {
     val topic = newTopic()
     testUtils.createTopic(topic)
@@ -68,7 +68,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       createKafkaReader(topic).selectExpr("CAST(value as STRING) value"),
       Row("1") :: Row("2") :: Row("3") :: Row("4") :: Row("5") :: Nil)
   }
-
+  //批量 -空主题字段值，并且没有主题选项
   test("batch - null topic field value, and no topic option") {
     val df = Seq[(String, String)](null.asInstanceOf[String] -> "1").toDF("topic", "value")
     val ex = intercept[SparkException] {
@@ -80,13 +80,14 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains(
       "null topic present in the data"))
   }
-
+  //批量- 不受支持的保存模式
   test("batch - unsupported save modes") {
     val topic = newTopic()
     testUtils.createTopic(topic)
     val df = Seq[(String, String)](null.asInstanceOf[String] -> "1").toDF("topic", "value")
 
     // Test bad save mode Ignore
+    //测试不良保存模式忽略
     var ex = intercept[AnalysisException] {
       df.write
         .format("kafka")
@@ -98,6 +99,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       s"save mode ignore not allowed for kafka"))
 
     // Test bad save mode Overwrite
+    //测试不良保存模式覆盖
     ex = intercept[AnalysisException] {
       df.write
         .format("kafka")
@@ -108,7 +110,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains(
       s"save mode overwrite not allowed for kafka"))
   }
-
+  //批量执行分析计划
   test("SPARK-20496: batch - enforce analyzed plans") {
     val inputEvents =
       spark.range(1, 1000)
@@ -123,7 +125,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       .option("topic", topic)
       .save()
   }
-
+  //流 - 写与主题字段的kafka
   test("streaming - write to kafka with topic field") {
     val input = MemoryStream[String]
     val topic = newTopic()
@@ -156,7 +158,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       writer.stop()
     }
   }
-
+  //流式传输 - 不带主题字段的写入聚合,带有主题选项
   test("streaming - write aggregation w/o topic field, with topic option") {
     val input = MemoryStream[String]
     val topic = newTopic()
@@ -188,7 +190,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       writer.stop()
     }
   }
-
+  //流式聚合与主题字段和主题选项
   test("streaming - aggregation with topic field and topic option") {
     /* The purpose of this test is to ensure that the topic option
      * overrides the topic field. We begin by writing some data that
@@ -228,8 +230,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       writer.stop()
     }
   }
-
-
+  //流式传输 - 用错误的模式写入数据
   test("streaming - write data with bad schema") {
     val input = MemoryStream[String]
     val topic = newTopic()
@@ -268,7 +269,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains(
       "required attribute 'value' not found"))
   }
-
+  //流式传输 - 使用有效的模式写入数据，但类型错误
   test("streaming - write data with valid schema but wrong types") {
     val input = MemoryStream[String]
     val topic = newTopic()
@@ -320,7 +321,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains(
       "key attribute type must be a string or binarytype"))
   }
-
+  //流 - 写入不存在的主题
   test("streaming - write to non-existing topic") {
     val input = MemoryStream[String]
     val topic = newTopic()
@@ -338,7 +339,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     }
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains("job aborted"))
   }
-
+  //流 - 配置序列化器的异常
   test("streaming - exception on config serializer") {
     val input = MemoryStream[String]
     var writer: StreamingQuery = null
@@ -359,7 +360,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains(
       "kafka option 'value.serializer' is not supported"))
   }
-
+  //通用 - 用小生产者缓冲区写大数据
   test("generic - write big data with small producer buffer") {
     /* This test ensures that we understand the semantics of Kafka when
     * is comes to blocking on a call to send when the send buffer is full.

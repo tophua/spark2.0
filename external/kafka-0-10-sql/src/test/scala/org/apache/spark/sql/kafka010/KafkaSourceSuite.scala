@@ -73,7 +73,7 @@ abstract class KafkaSourceTest extends StreamTest with SharedSQLContext {
 
   /**
    * Add data to Kafka.
-   *
+   * 将数据添加到Kafka
    * `topicAction` can be used to run actions for each topic before inserting data.
    */
   case class AddKafkaData(topics: Set[String], data: Int*)
@@ -85,6 +85,7 @@ abstract class KafkaSourceTest extends StreamTest with SharedSQLContext {
     override def addData(query: Option[StreamExecution]): (Source, Offset) = {
       if (query.get.isActive) {
         // Make sure no Spark job is running when deleting a topic
+        //确保在删除主题时没有正在运行的Spark作业
         query.get.processAllAvailable()
       }
 
@@ -98,6 +99,7 @@ abstract class KafkaSourceTest extends StreamTest with SharedSQLContext {
       }
 
       // Read all topics again in case some topics are delete.
+      //如果删除了一些主题,请再次阅读所有主题
       val allTopics = testUtils.getAllTopicsAndPartitionSize().toMap.keys
       require(
         query.nonEmpty,
@@ -123,6 +125,7 @@ abstract class KafkaSourceTest extends StreamTest with SharedSQLContext {
         s"Sent ${m._1} to partition ${m._2.partition()}, offset ${m._2.offset()}"
       }
       // Verify that the test data gets inserted into multiple partitions
+      //验证测试数据是否被插入到多个分区中
       if (ensureDataInMultiplePartition) {
         require(
           sentMetadata.groupBy(_._2.partition).size > 1,
@@ -145,7 +148,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
   import testImplicits._
 
   private val topicId = new AtomicInteger(0)
-
+  //使用Spark反序列化初始偏移量
   testWithUninterruptibleThread(
     "deserialization of initial offset with Spark 2.1.0") {
     withTempDir { metadataPath =>
@@ -162,6 +165,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       source.getOffset.get // Write initial offset
 
       // Make sure Spark 2.1.0 will throw an exception when reading the new log
+      //确保Spark 2.1.0在读取新日志时会抛出异常
       intercept[java.lang.IllegalArgumentException] {
         // Simulate how Spark 2.1.0 reads the log
         Utils.tryWithResource(new FileInputStream(metadataPath.getAbsolutePath + "/0")) { in =>
@@ -173,7 +177,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       }
     }
   }
-
+  //由Spark 2.1.0编写的初始偏移量的反序列化
   testWithUninterruptibleThread("deserialization of initial offset written by Spark 2.1.0") {
     withTempDir { metadataPath =>
       val topic = "kafka-initial-offset-2-1-0"
@@ -197,7 +201,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       assert(referenceOffset == deserializedOffset)
     }
   }
-
+  //将来版本的初始偏移量的反序列化
   testWithUninterruptibleThread("deserialization of initial offset written by future version") {
     withTempDir { metadataPath =>
       val futureMetadataLog =
@@ -236,7 +240,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       }
     }
   }
-
+  //序列化的初始偏移量
   test("(de)serialization of initial offsets") {
     val topic = newTopic()
     testUtils.createTopic(topic, partitions = 64)
@@ -253,7 +257,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       StartStream(),
       StopStream)
   }
-
+  //每触发最大偏移量
   ignore("maxOffsetsPerTrigger") {
     val topic = newTopic()
     testUtils.createTopic(topic, partitions = 3)
@@ -292,10 +296,12 @@ class KafkaSourceSuite extends KafkaSourceTest {
       StartStream(ProcessingTime(100), clock),
       waitUntilBatchProcessed,
       // 1 from smallest, 1 from middle, 8 from biggest
+      //最小1个，中间1个，最大8个
       CheckAnswer(1, 10, 100, 101, 102, 103, 104, 105, 106, 107),
       AdvanceManualClock(100),
       waitUntilBatchProcessed,
       // smallest now empty, 1 more from middle, 9 more from biggest
+      //现在最小的是空的，中间是1，最大的是9
       CheckAnswer(1, 10, 100, 101, 102, 103, 104, 105, 106, 107,
         11, 108, 109, 110, 111, 112, 113, 114, 115, 116
       ),
@@ -317,7 +323,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       )
     )
   }
-
+  //不能阻止Kafka流
   test("cannot stop Kafka stream") {
     val topic = newTopic()
     testUtils.createTopic(topic, partitions = 5)
@@ -342,6 +348,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
   }
 
   for (failOnDataLoss <- Seq(true, false)) {
+    //从最新的偏移量分配
     test(s"assign from latest offsets (failOnDataLoss: $failOnDataLoss)") {
       val topic = newTopic()
       testFromLatestOffsets(
@@ -350,7 +357,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         failOnDataLoss = failOnDataLoss,
         "assign" -> assignString(topic, 0 to 4))
     }
-
+  //从最早的偏移量分配
     test(s"assign from earliest offsets (failOnDataLoss: $failOnDataLoss)") {
       val topic = newTopic()
       testFromEarliestOffsets(
@@ -359,7 +366,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         failOnDataLoss = failOnDataLoss,
         "assign" -> assignString(topic, 0 to 4))
     }
-
+  //从特定的偏移量分配
     ignore(s"assign from specific offsets (failOnDataLoss: $failOnDataLoss)") {
       val topic = newTopic()
       testFromSpecificOffsets(
@@ -368,7 +375,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         "assign" -> assignString(topic, 0 to 4),
         "failOnDataLoss" -> failOnDataLoss.toString)
     }
-
+  //从最新的偏移量名称订阅主题
     test(s"subscribing topic by name from latest offsets (failOnDataLoss: $failOnDataLoss)") {
       val topic = newTopic()
       testFromLatestOffsets(
@@ -377,7 +384,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         failOnDataLoss = failOnDataLoss,
         "subscribe" -> topic)
     }
-
+  //从最早的偏移量按名称订阅主题
     test(s"subscribing topic by name from earliest offsets (failOnDataLoss: $failOnDataLoss)") {
       val topic = newTopic()
       testFromEarliestOffsets(
@@ -386,12 +393,12 @@ class KafkaSourceSuite extends KafkaSourceTest {
         failOnDataLoss = failOnDataLoss,
         "subscribe" -> topic)
     }
-
+    //按特定偏移量名称订阅主题
     ignore(s"subscribing topic by name from specific offsets (failOnDataLoss: $failOnDataLoss)") {
       val topic = newTopic()
       testFromSpecificOffsets(topic, failOnDataLoss = failOnDataLoss, "subscribe" -> topic)
     }
-
+    //从最新的偏移量模式订阅话题
     test(s"subscribing topic by pattern from latest offsets (failOnDataLoss: $failOnDataLoss)") {
       val topicPrefix = newTopic()
       val topic = topicPrefix + "-suffix"
@@ -401,7 +408,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         failOnDataLoss = failOnDataLoss,
         "subscribePattern" -> s"$topicPrefix-.*")
     }
-
+    //从最早的偏移量模式订阅话题
     test(s"subscribing topic by pattern from earliest offsets (failOnDataLoss: $failOnDataLoss)") {
       val topicPrefix = newTopic()
       val topic = topicPrefix + "-suffix"
@@ -411,7 +418,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         failOnDataLoss = failOnDataLoss,
         "subscribePattern" -> s"$topicPrefix-.*")
     }
-
+    //从特定的偏移量模式订阅话题
     ignore(s"subscribing topic by pattern from specific offsets (failOnDataLoss: $failOnDataLoss)") {
       val topicPrefix = newTopic()
       val topic = topicPrefix + "-suffix"
@@ -421,7 +428,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
         "subscribePattern" -> s"$topicPrefix-.*")
     }
   }
-
+  //按主题删除模式订阅主题
   test("subscribing topic by pattern with topic deletions") {
     val topicPrefix = newTopic()
     val topic = topicPrefix + "-seems"
@@ -456,7 +463,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       CheckAnswer(2, 3, 4, 5, 6, 7)
     )
   }
-
+  //起始偏移量默认是最新的
   test("starting offset is latest by default") {
     val topic = newTopic()
     testUtils.createTopic(topic, partitions = 5)
@@ -480,7 +487,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       CheckAnswer(1, 2, 3)  // should not have 0
     )
   }
-
+  //不好的来源选项
   test("bad source options") {
     def testBadOptions(options: (String, String)*)(expectedMsgs: String*): Unit = {
       val ex = intercept[IllegalArgumentException] {
@@ -495,13 +502,13 @@ class KafkaSourceSuite extends KafkaSourceTest {
       }
     }
 
-    // Specifying an ending offset
+    // Specifying an ending offset 指定结束偏移量
     testBadOptions("endingOffsets" -> "latest")("Ending offset not valid in streaming queries")
 
-    // No strategy specified
+    // No strategy specified 没有指定策略
     testBadOptions()("options must be specified", "subscribe", "subscribePattern")
 
-    // Multiple strategies specified
+    // Multiple strategies specified 指定多个策略
     testBadOptions("subscribe" -> "t", "subscribePattern" -> "t.*")(
       "only one", "options can be specified")
 
@@ -512,7 +519,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     testBadOptions("subscribe" -> "")("no topics to subscribe")
     testBadOptions("subscribePattern" -> "")("pattern to subscribe is empty")
   }
-
+  //不受支持的kafka配置
   test("unsupported kafka configs") {
     def testUnsupportedConfig(key: String, value: String = "someValue"): Unit = {
       val ex = intercept[IllegalArgumentException] {
@@ -539,7 +546,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     testUnsupportedConfig("kafka.auto.offset.reset", "earliest")
     testUnsupportedConfig("kafka.auto.offset.reset", "latest")
   }
-
+  //输入行度量
   test("input row metrics") {
     val topic = newTopic()
     testUtils.createTopic(topic, partitions = 5)
@@ -567,7 +574,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       }
     )
   }
-
+  //当Spark作业正在运行时删除一个主题
   test("delete a topic when a Spark job is running") {
     KafkaSourceSuite.collectedData.clear()
 
@@ -593,6 +600,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     KafkaSourceSuite.globalTestUtils = testUtils
     // The following ForeachWriter will delete the topic before fetching data from Kafka
     // in executors.
+    //下面的ForeachWriter将在从执行者中从Kafka获取数据之前删除主题
     val query = kafka.map(kv => kv._2.toInt).writeStream.foreach(new ForeachWriter[Int] {
       override def open(partitionId: Long, version: Long): Boolean = {
         KafkaSourceSuite.globalTestUtils.deleteTopic(topic)
@@ -610,7 +618,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     // `failOnDataLoss` is `false`, we should not fail the query
     assert(query.exception.isEmpty)
   }
-
+  //从不区分大小写的参数中获得偏移量
   test("get offsets from case insensitive parameters") {
     for ((optionKey, optionValue, answer) <- Seq(
       (STARTING_OFFSETS_OPTION_KEY, "earLiEst", EarliestOffsetRangeLimit),
@@ -650,14 +658,19 @@ class KafkaSourceSuite extends KafkaSourceTest {
 
     testUtils.createTopic(topic, partitions = 5)
     // part 0 starts at earliest, these should all be seen
+    //第0部分最早开始,这些都应该被看到
     testUtils.sendMessages(topic, Array(-20, -21, -22).map(_.toString), Some(0))
     // part 1 starts at latest, these should all be skipped
+    //第1部分最迟开始,这些都应该被跳过
     testUtils.sendMessages(topic, Array(-10, -11, -12).map(_.toString), Some(1))
     // part 2 starts at 0, these should all be seen
+    //第二部分从0开始,这些都应该被看到
     testUtils.sendMessages(topic, Array(0, 1, 2).map(_.toString), Some(2))
     // part 3 starts at 1, first should be skipped
+    //第3部分从1开始,首先应该跳过
     testUtils.sendMessages(topic, Array(10, 11, 12).map(_.toString), Some(3))
     // part 4 starts at 2, first and second should be skipped
+    //第4部分从2开始,第1和第2应该跳过
     testUtils.sendMessages(topic, Array(20, 21, 22).map(_.toString), Some(4))
     require(testUtils.getLatestOffsets(Set(topic)).size === 5)
 
@@ -685,7 +698,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       StopStream
     )
   }
-
+  //Kafka列类型
   test("Kafka column types") {
     val now = System.currentTimeMillis()
     val topic = newTopic()
@@ -792,10 +805,13 @@ class KafkaSourceSuite extends KafkaSourceTest {
       CheckAnswer(2, 3, 4),
       StopStream,
       StartStream(),
+      //应该把数据恢复到恢复状态
       CheckAnswer(2, 3, 4), // Should get the data back on recovery
       StopStream,
+      //流停止时添加数据
       AddKafkaData(Set(topic), 4, 5, 6), // Add data when stream is stopped
       StartStream(),
+      //应该得到添加的数据
       CheckAnswer(2, 3, 4, 5, 6, 7), // Should get the added data
       AddKafkaData(Set(topic), 7, 8),
       CheckAnswer(2, 3, 4, 5, 6, 7, 8, 9),
@@ -833,6 +849,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     val mapped = kafka.map(kv => kv._2.toInt + 1)
 
     testStream(mapped)(
+      //流停止时添加数据
       AddKafkaData(Set(topic), 4, 5, 6), // Add data when stream is stopped
       CheckAnswer(2, 3, 4, 5, 6, 7),
       StopStream,
@@ -873,7 +890,7 @@ class KafkaSourceStressSuite extends KafkaSourceTest {
   private def nextInt(start: Int, end: Int): Int = {
     start + Random.nextInt(start + end - 1)
   }
-
+  //压力测试与多个主题和分区
   ignore("stress test with multiple topics and partitions")  {
     topics.foreach { topic =>
       testUtils.createTopic(topic, partitions = nextInt(1, 6))
@@ -881,6 +898,7 @@ class KafkaSourceStressSuite extends KafkaSourceTest {
     }
 
     // Create Kafka source that reads from latest offset
+    //创建从最新的偏移量中读取的Kafka源文件
     val kafka =
       spark.readStream
         .format(classOf[KafkaSourceProvider].getCanonicalName.stripSuffix("$"))
@@ -910,6 +928,7 @@ class KafkaSourceStressSuite extends KafkaSourceTest {
           case 1 if running =>
             // Only delete a topic when the query is running. Otherwise, we may lost data and
             // cannot check the correctness.
+            //查询运行时只能删除一个主题,否则,我们可能会丢失数据,无法检查正确性。
             val deletedTopic = topics(Random.nextInt(topics.size))
             if (deletedTopic != topics.head) {
               topics = topics.filterNot(_ == deletedTopic)
@@ -917,6 +936,7 @@ class KafkaSourceStressSuite extends KafkaSourceTest {
             AddKafkaData(topics.toSet, d: _*)(message = s"Delete topic $deletedTopic",
               topicAction = (topic, partition) => {
                 // Never remove the first topic to make sure we have at least one topic
+                //切勿删除第一个主题,以确保至少有一个主题
                 if (topic == deletedTopic && deletedTopic != topics.head) {
                   testUtils.deleteTopic(deletedTopic)
                 }
@@ -976,7 +996,7 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
       super.afterAll()
     }
   }
-
+  //压力测试failOnDataLoss = false
   test("stress test for failOnDataLoss=false") {
     val reader = spark
       .readStream
@@ -998,6 +1018,7 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
 
       override def process(value: Int): Unit = {
         // Slow down the processing speed so that messages may be aged out.
+        //减慢处理速度,以便消息可能老化
         Thread.sleep(Random.nextInt(500))
       }
 
@@ -1007,9 +1028,9 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
 
     val testTime = 1.minutes
     val startTime = System.currentTimeMillis()
-    // Track the current existing topics
+    // Track the current existing topics 跟踪当前现有的主题
     val topics = mutable.ArrayBuffer[String]()
-    // Track topics that have been deleted
+    // Track topics that have been deleted 跟踪已删除的主题
     val deletedTopics = mutable.Set[String]()
     while (System.currentTimeMillis() - testTime.toMillis < startTime) {
       Random.nextInt(10) match {
@@ -1018,14 +1039,18 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
           topics += topic
           // As pushing messages into Kafka updates Zookeeper asynchronously, there is a small
           // chance that a topic will be recreated after deletion due to the asynchronous update.
+          //当向Kafka推送消息异步更新Zookeeper时,由于异步更新,在删除主题之后很少有机会重新创建主题。
           // Hence, always overwrite to handle this race condition.
+          //因此,总是覆盖来处理这种竞争条件
           testUtils.createTopic(topic, partitions = 1, overwrite = true)
           logInfo(s"Create topic $topic")
+          //删除现有的主题
         case 1 if topics.nonEmpty => // Delete an existing topic
           val topic = topics.remove(Random.nextInt(topics.size))
           testUtils.deleteTopic(topic)
           logInfo(s"Delete topic $topic")
           deletedTopics += topic
+          //重新创建已删除的主题
         case 2 if deletedTopics.nonEmpty => // Recreate a topic that was deleted.
           val topic = deletedTopics.toSeq(Random.nextInt(deletedTopics.size))
           deletedTopics -= topic
@@ -1046,6 +1071,7 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
           }
       }
       // `failOnDataLoss` is `false`, we should not fail the query
+      //`failOnDataLoss`是`false`,我们不应该失败查询
       if (query.exception.nonEmpty) {
         throw query.exception.get
       }

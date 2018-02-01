@@ -22,7 +22,7 @@ import org.apache.kafka.common.TopicPartition
 import org.apache.spark.SparkFunSuite
 
 class JsonUtilsSuite extends SparkFunSuite {
-
+  //解析分区
   test("parsing partitions") {
     val parsed = JsonUtils.partitions("""{"topicA":[0,1],"topicB":[4,6]}""")
     val expected = Array(
@@ -33,7 +33,7 @@ class JsonUtilsSuite extends SparkFunSuite {
     )
     assert(parsed.toSeq === expected.toSeq)
   }
-
+  //解析分区偏移
   test("parsing partitionOffsets") {
     val parsed = JsonUtils.partitionOffsets(
       """{"topicA":{"0":23,"1":-1},"topicB":{"0":-2}}""")

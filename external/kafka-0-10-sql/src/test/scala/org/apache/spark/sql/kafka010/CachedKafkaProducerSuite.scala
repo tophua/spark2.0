@@ -35,11 +35,12 @@ class CachedKafkaProducerSuite extends SharedSQLContext with PrivateMethodTester
     val clear = PrivateMethod[Unit]('clear)
     CachedKafkaProducer.invokePrivate(clear())
   }
-
+  //如果缓存实例同参数调用getorcreate返回
   test("Should return the cached instance on calling getOrCreate with same params.") {
     val kafkaParams = new ju.HashMap[String, Object]()
     kafkaParams.put("acks", "0")
     // Here only host should be resolvable, it does not need a running instance of kafka server.
+    //这里只有主机应该是可以解决的,它不需要一个运行实例kafka服务器。
     kafkaParams.put("bootstrap.servers", "127.0.0.1:9022")
     kafkaParams.put("key.serializer", classOf[ByteArraySerializer].getName)
     kafkaParams.put("value.serializer", classOf[ByteArraySerializer].getName)
@@ -51,7 +52,7 @@ class CachedKafkaProducerSuite extends SharedSQLContext with PrivateMethodTester
     val map = CachedKafkaProducer.invokePrivate(cacheMap())
     assert(map.size == 1)
   }
-
+  //应该关闭正确的kafka制作人为给定的kafkaprams
   test("Should close the correct kafka producer for the given kafkaPrams.") {
     val kafkaParams = new ju.HashMap[String, Object]()
     kafkaParams.put("acks", "0")
@@ -62,6 +63,7 @@ class CachedKafkaProducerSuite extends SharedSQLContext with PrivateMethodTester
     kafkaParams.put("acks", "1")
     val producer2: KP = CachedKafkaProducer.getOrCreate(kafkaParams)
     // With updated conf, a new producer instance should be created.
+    //最新的会议,一个新的生产者应创建实例
     assert(producer != producer2)
 
     val cacheMap = PrivateMethod[ConcurrentMap[Seq[(String, Object)], KP]]('getAsMap)

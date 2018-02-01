@@ -22,7 +22,7 @@ import org.scalatest.PrivateMethodTester
 import org.apache.spark.sql.test.SharedSQLContext
 
 class CachedKafkaConsumerSuite extends SharedSQLContext with PrivateMethodTester {
-
+  //正确reportdataloss报告错误原因
   test("SPARK-19886: Report error cause correctly in reportDataLoss") {
     val cause = new Exception("D'oh!")
     val reportDataLoss = PrivateMethod[Unit]('reportDataLoss0)

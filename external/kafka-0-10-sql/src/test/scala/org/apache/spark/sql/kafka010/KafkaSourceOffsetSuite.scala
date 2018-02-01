@@ -48,16 +48,17 @@ class KafkaSourceOffsetSuite extends OffsetSuite with SharedSQLContext {
 
   compare(KafkaSourceOffset(SerializedOffset(kso1.json)),
     KafkaSourceOffset(SerializedOffset(kso2.json)))
-
+  //基本序列化 - 反序列化
   test("basic serialization - deserialization") {
     assert(KafkaSourceOffset.getPartitionOffsets(kso1) ==
       KafkaSourceOffset.getPartitionOffsets(SerializedOffset(kso1.json)))
   }
 
-
+  //OffsetSeqLog序列化 - 反序列化
   test("OffsetSeqLog serialization - deserialization") {
     withTempDir { temp =>
       // use non-existent directory to test whether log make the dir
+      //使用不存在的目录来测试日志是否生成目录
       val dir = new File(temp, "dir")
       val metadataLog = new OffsetSeqLog(spark, dir.getAbsolutePath)
       val batch0 = OffsetSeq.fill(kso1)
@@ -81,6 +82,7 @@ class KafkaSourceOffsetSuite extends OffsetSuite with SharedSQLContext {
         Array(0 -> batch0Serialized, 1 -> batch1Serialized))
 
       // Adding the same batch does nothing
+      //添加相同的批次不做任何事情
       metadataLog.add(1, OffsetSeq.fill(LongOffset(3)))
       assert(metadataLog.get(0) === Some(batch0Serialized))
       assert(metadataLog.get(1) === Some(batch1Serialized))
