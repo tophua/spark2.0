@@ -19,8 +19,9 @@
 package org.apache.spark.examples
 
 import org.apache.spark.sql.SparkSession
-
-
+/**
+  * HDFS测试
+  */
 object HdfsTest {
 
   /** Usage: HdfsTest [file] */

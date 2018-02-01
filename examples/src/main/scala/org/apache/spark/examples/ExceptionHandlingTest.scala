@@ -18,7 +18,9 @@
 package org.apache.spark.examples
 
 import org.apache.spark.sql.SparkSession
-
+/**
+  * 测试异常处理
+  */
 object ExceptionHandlingTest {
   def main(args: Array[String]) {
     val spark = SparkSession
@@ -28,6 +30,7 @@ object ExceptionHandlingTest {
 
     spark.sparkContext.parallelize(0 until spark.sparkContext.defaultParallelism).foreach { i =>
       if (math.random > 0.75) {
+        //测试异常处理
         throw new Exception("Testing exception handling")
       }
     }

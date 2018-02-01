@@ -41,6 +41,7 @@ object SkewedGroupByTest {
       val ranGen = new Random
 
       // map output sizes linearly increase from the 1st to the last
+      //map输出的大小线性增加从第一到最后
       numKVPairs = (1.0 * (p + 1) / numMappers * numKVPairs).toInt
 
       val arr1 = new Array[(Int, Array[Byte])](numKVPairs)
@@ -52,6 +53,7 @@ object SkewedGroupByTest {
       arr1
     }.cache()
     // Enforce that everything has been calculated and in cache
+    //执行所有的计算和缓存
     pairs1.count()
 
     println(pairs1.groupByKey(numReducers).count())

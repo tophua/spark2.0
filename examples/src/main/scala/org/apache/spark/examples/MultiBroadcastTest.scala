@@ -24,6 +24,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * Usage: MultiBroadcastTest [partitions] [numElem]
+  * 使用:多广播
  */
 object MultiBroadcastTest {
   def main(args: Array[String]) {
@@ -52,6 +53,7 @@ object MultiBroadcastTest {
       (barr1.value.length, barr2.value.length)
     }
     // Collect the small RDD so we can print the observed sizes locally.
+   //收集小RDD,以便我们可以在本地打印观察到的大小
     observedSizes.collect().foreach(i => println(i))
 
     spark.stop()

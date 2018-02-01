@@ -42,11 +42,14 @@ object GroupByTest {
       val arr1 = new Array[(Int, Array[Byte])](numKVPairs)
       for (i <- 0 until numKVPairs) {
         val byteArr = new Array[Byte](valSize)
+        //用于生成随机字节并将其置于用户提供的字节数组
+        //nextInt用于获取一个伪随机,在0(包括)和指定值(不包括),从此随机数生成器的序列中取出均匀分布的int值
         ranGen.nextBytes(byteArr)
         arr1(i) = (ranGen.nextInt(Int.MaxValue), byteArr)
       }
       arr1
     }.cache()
+    //执行所有的计算和缓存
     // Enforce that everything has been calculated and in cache
     pairs1.count()
 

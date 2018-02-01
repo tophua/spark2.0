@@ -28,7 +28,7 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * Logistic regression based classification.
- *
+ * 基于逻辑回归的分类
  * This is an example implementation for learning how to use Spark. For more conventional use,
  * please refer to org.apache.spark.ml.classification.LogisticRegression.
  */
@@ -74,16 +74,18 @@ object SparkHdfsLR {
     val inputPath = args(0)
     val lines = spark.read.textFile(inputPath).rdd
 
-    val points = lines.map(parsePoint).cache()
-    val ITERATIONS = args(1).toInt
+    val points = lines.map(parsePoint).cache() //缓存
+    val ITERATIONS = args(1).toInt //args(1).toInt 迭代次数
 
     // Initialize w to a random value
+    //初始化W到一个随机值
     val w = DenseVector.fill(D) {2 * rand.nextDouble - 1}
     println("Initial w: " + w)
 
     for (i <- 1 to ITERATIONS) {
       println("On iteration " + i)
       val gradient = points.map { p =>
+        //p代表DataPoint Vector
         p.x * (1 / (1 + exp(-p.y * (w.dot(p.x)))) - 1) * p.y
       }.reduce(_ + _)
       w -= gradient

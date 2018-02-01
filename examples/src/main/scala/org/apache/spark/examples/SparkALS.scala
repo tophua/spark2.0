@@ -24,25 +24,27 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * Alternating least squares matrix factorization.
- *
+ * 交替最小二乘矩阵分解
  * This is an example implementation for learning how to use Spark. For more conventional use,
- * please refer to org.apache.spark.ml.recommendation.ALS.
+ * 这是学习如何使用Spark的示例实现,对于更传统的使用,
+  * please refer to org.apache.spark.ml.recommendation.ALS.
  */
 object SparkALS {
 
   // Parameters set through command line arguments
-  var M = 0 // Number of movies
-  var U = 0 // Number of users
-  var F = 0 // Number of features
+  //通过命令行参数设置的参数
+  var M = 0 // Number of movies 电影数
+  var U = 0 // Number of users  用户数
+  var F = 0 // Number of features 特征数
   var ITERATIONS = 0
-  val LAMBDA = 0.01 // Regularization coefficient
+  val LAMBDA = 0.01 // Regularization coefficient 正则化系数
 
   def generateR(): RealMatrix = {
     val mh = randomMatrix(M, F)
     val uh = randomMatrix(U, F)
     mh.multiply(uh.transpose())
   }
-
+  //rmse均方根误差说明样本的离散程度
   def rmse(targetR: RealMatrix, ms: Array[RealVector], us: Array[RealVector]): Double = {
     val r = new Array2DRowRealMatrix(M, U)
     for (i <- 0 until M; j <- 0 until U) {
@@ -63,6 +65,7 @@ object SparkALS {
     var XtX: RealMatrix = new Array2DRowRealMatrix(F, F)
     var Xty: RealVector = new ArrayRealVector(F)
     // For each user that rated the movie
+    //为每一个用户评价的电影
     for (j <- 0 until U) {
       val u = us(j)
       // Add u * u^t to XtX

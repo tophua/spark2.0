@@ -24,15 +24,16 @@ import breeze.linalg.{DenseVector, Vector}
 
 /**
  * Logistic regression based classification.
- *
+ * 基于逻辑回归的分类
  * This is an example implementation for learning how to use Spark. For more conventional use,
  * please refer to org.apache.spark.ml.classification.LogisticRegression.
+  * 这是学习如何使用Spark的示例实现,更传统的使用方法,请参考LogisticRegression
  */
 object LocalLR {
-  val N = 10000  // Number of data points
-  val D = 10   // Number of dimensions
-  val R = 0.7  // Scaling factor
-  val ITERATIONS = 5
+  val N = 10000  // Number of data points 数据点
+  val D = 10   // Number of dimensions 维度
+  val R = 0.7  // Scaling factor 比例因子
+  val ITERATIONS = 5 //迭代次数
   val rand = new Random(42)
 
   case class DataPoint(x: Vector[Double], y: Double)
@@ -60,13 +61,14 @@ object LocalLR {
 
     val data = generateData
     // Initialize w to a random value
+    //初始化W到一个随机值
     val w = DenseVector.fill(D) {2 * rand.nextDouble - 1}
     println("Initial w: " + w)
 
-    for (i <- 1 to ITERATIONS) {
+    for (i <- 1 to ITERATIONS) {//迭代次数
       println("On iteration " + i)
       val gradient = DenseVector.zeros[Double](D)
-      for (p <- data) {
+      for (p <- data) {//密集向量维度10
         val scale = (1 / (1 + math.exp(-p.y * (w.dot(p.x)))) - 1) * p.y
         gradient +=  p.x * scale
       }

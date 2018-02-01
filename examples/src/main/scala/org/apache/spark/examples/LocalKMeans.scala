@@ -27,9 +27,10 @@ import breeze.linalg.{squaredDistance, DenseVector, Vector}
 
 /**
  * K-means clustering.
- *
+ * k-均值聚类
  * This is an example implementation for learning how to use Spark. For more conventional use,
- * please refer to org.apache.spark.ml.clustering.KMeans.
+  *这是一个学习如何使用Spark的例子实现,更传统的使用
+  * please refer to org.apache.spark.ml.clustering.KMeans.
  */
 object LocalKMeans {
   val N = 1000
@@ -68,6 +69,7 @@ object LocalKMeans {
         |Please use org.apache.spark.ml.clustering.KMeans
         |for more conventional use.
       """.stripMargin)
+    //String.stripMargin 移除每行字符串开头的空格和第一个遇到的垂直分割符|
   }
 
   def main(args: Array[String]) {
@@ -75,6 +77,7 @@ object LocalKMeans {
     showWarning()
 
     val data = generateData
+    //可变HashSet
     val points = new HashSet[Vector[Double]]
     val kPoints = new HashMap[Int, Vector[Double]]
     var tempDist = 1.0
