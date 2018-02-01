@@ -21,15 +21,19 @@ import org.apache.log4j.{Level, Logger}
 
 import org.apache.spark.internal.Logging
 
-/** Utility functions for Spark Streaming examples. */
+/** Utility functions for Spark Streaming examples.
+  *  Spark流的实用功能的例子
+  *  */
 object StreamingExamples extends Logging {
 
-  /** Set reasonable logging levels for streaming if the user has not configured log4j. */
+  /** Set reasonable logging levels for streaming if the user has not configured log4j.
+    * 如果用户没有配置log4j,为流设置合理的日志记录级别,*/
   def setStreamingLogLevels() {
     val log4jInitialized = Logger.getRootLogger.getAllAppenders.hasMoreElements
     if (!log4jInitialized) {
       // We first log something to initialize Spark's default logging, then we override the
       // logging level.
+      //我们首先记录一些东西来初始化Spark的默认日志记录,然后我们重写日志记录级别
       logInfo("Setting log level to [WARN] for streaming example." +
         " To override add a custom log4j.properties to the classpath.")
       Logger.getRootLogger.setLevel(Level.WARN)

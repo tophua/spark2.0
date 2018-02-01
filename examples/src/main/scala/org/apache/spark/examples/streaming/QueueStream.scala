@@ -22,21 +22,24 @@ import scala.collection.mutable.Queue
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-
+//队列流
 object QueueStream {
 
   def main(args: Array[String]) {
 
     StreamingExamples.setStreamingLogLevels()
+
     val sparkConf = new SparkConf().setAppName("QueueStream")
-    // Create the context
+    // Create the context 创建上下文,批次间隔
     val ssc = new StreamingContext(sparkConf, Seconds(1))
 
     // Create the queue through which RDDs can be pushed to
     // a QueueInputDStream
+    //创建队列,通过RDDs可以推到一个queueinputdstream
     val rddQueue = new Queue[RDD[Int]]()
 
     // Create the QueueInputDStream and use it do some processing
+    //创建queueinputdstream用它做一些处理
     val inputStream = ssc.queueStream(rddQueue)
     val mappedStream = inputStream.map(x => (x % 10, 1))
     val reducedStream = mappedStream.reduceByKey(_ + _)

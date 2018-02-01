@@ -49,10 +49,12 @@ object DirectKafkaWordCount {
     val Array(brokers, topics) = args
 
     // Create context with 2 second batch interval
+    //用2秒的批处理间隔创建上下文
     val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount")
     val ssc = new StreamingContext(sparkConf, Seconds(2))
 
     // Create direct kafka stream with brokers and topics
+   //创建具有brokers和topics主题的kafka直接流
     val topicsSet = topics.split(",").toSet
     val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
     val messages = KafkaUtils.createDirectStream[String, String](
@@ -61,6 +63,7 @@ object DirectKafkaWordCount {
       ConsumerStrategies.Subscribe[String, String](topicsSet, kafkaParams))
 
     // Get the lines, split them into words, count the words and print
+    //获取行,将它们分割成单词,计算单词和打印
     val lines = messages.map(_.value)
     val words = lines.flatMap(_.split(" "))
     val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)

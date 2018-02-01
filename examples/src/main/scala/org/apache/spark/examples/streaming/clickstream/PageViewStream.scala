@@ -25,7 +25,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 /**
  * Analyses a streaming dataset of web page views. This class demonstrates several types of
  * operators available in Spark streaming.
- *
+ * 分析了一个Web页面视图的流数据集,这个类演示了在Spark流中可用的几种类型的操作人员
  * This should be used in tandem with PageViewStream.scala. Example:
  * To run the generator
  * `$ bin/run-example org.apache.spark.examples.streaming.clickstream.PageViewGenerator 44444 10`
