@@ -29,7 +29,7 @@ import org.apache.spark.unsafe.types.CalendarInterval
 /**
  * A trigger that runs a query periodically based on the processing time. If `interval` is 0,
  * the query will run as fast as possible.
- *
+ * 基于处理时间定期运行查询的触发器,如果interval为0,查询将尽可能快地运行
  * Scala Example:
  * {{{
  *   df.writeStream.trigger(ProcessingTime("10 seconds"))
@@ -65,7 +65,7 @@ object ProcessingTime {
 
   /**
    * Create a [[ProcessingTime]]. If `interval` is 0, the query will run as fast as possible.
-   *
+   * 创建一个[[ProcessingTime]],如果interval为0,查询将尽可能快地运行
    * Example:
    * {{{
    *   df.writeStream.trigger(ProcessingTime("10 seconds"))
@@ -96,7 +96,7 @@ object ProcessingTime {
 
   /**
    * Create a [[ProcessingTime]]. If `interval` is 0, the query will run as fast as possible.
-   *
+   * 创建一个[[ProcessingTime]],如果interval为0,查询将尽可能快地运行
    * Example:
    * {{{
    *   import scala.concurrent.duration._
@@ -113,7 +113,7 @@ object ProcessingTime {
 
   /**
    * Create a [[ProcessingTime]]. If `interval` is 0, the query will run as fast as possible.
-   *
+   * 创建一个[[ProcessingTime]],如果interval为0,查询将尽可能快地运行
    * Example:
    * {{{
    *   df.writeStream.trigger(ProcessingTime.create("10 seconds"))
@@ -129,7 +129,7 @@ object ProcessingTime {
 
   /**
    * Create a [[ProcessingTime]]. If `interval` is 0, the query will run as fast as possible.
-   *
+   * 创建一个[[ProcessingTime]],如果interval为0,查询将尽可能快地运行
    * Example:
    * {{{
    *   import java.util.concurrent.TimeUnit

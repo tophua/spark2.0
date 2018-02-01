@@ -26,7 +26,7 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalGroupState
  *
  * Wrapper class for interacting with per-group state data in `mapGroupsWithState` and
  * `flatMapGroupsWithState` operations on `KeyValueGroupedDataset`.
- *
+ * 用于与`mapGroupsWithState`中的每个组状态数据交互的Wrapper类和`KeyValueGroupedDataset`上的`flatMapGroupsWithState`操作。
  * Detail description on `[map/flatMap]GroupsWithState` operation
  * --------------------------------------------------------------
  * Both, `mapGroupsWithState` and `flatMapGroupsWithState` in `KeyValueGroupedDataset`
@@ -195,35 +195,41 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalGroupState
 @InterfaceStability.Evolving
 trait GroupState[S] extends LogicalGroupState[S] {
 
-  /** Whether state exists or not. */
+  /** Whether state exists or not.
+    * Whether是否存在*/
   def exists: Boolean
 
-  /** Get the state value if it exists, or throw NoSuchElementException. */
+  /** Get the state value if it exists, or throw NoSuchElementException.
+    * 如果它存在的价值,或抛出NoSuchElementException*/
   @throws[NoSuchElementException]("when state does not exist")
   def get: S
 
-  /** Get the state value as a scala Option. */
+  /** Get the state value as a scala Option.
+    * 获取状态值作为Scala选项 */
   def getOption: Option[S]
 
   /**
    * Update the value of the state. Note that `null` is not a valid value, and it throws
    * IllegalArgumentException.
+    * 更新状态的值,请注意`null`不是一个有效的值,它会抛出IllegalArgumentException
    */
   @throws[IllegalArgumentException]("when updating with null")
   def update(newState: S): Unit
 
-  /** Remove this state. */
+  /** Remove this state.
+    * 删除这个状态*/
   def remove(): Unit
 
   /**
    * Whether the function has been called because the key has timed out.
+    * 是否因为key超时而调用该函数
    * @note This can return true only when timeouts are enabled in `[map/flatmap]GroupsWithStates`.
    */
   def hasTimedOut: Boolean
 
   /**
    * Set the timeout duration in ms for this key.
-   *
+    * 设置该键的超时时间,单位为ms
    * @note ProcessingTimeTimeout must be enabled in `[map/flatmap]GroupsWithStates`.
    */
   @throws[IllegalArgumentException]("if 'durationMs' is not positive")
@@ -234,7 +240,7 @@ trait GroupState[S] extends LogicalGroupState[S] {
 
   /**
    * Set the timeout duration for this key as a string. For example, "1 hour", "2 days", etc.
-   *
+   * 将此key的超时持续时间设置为字符串,例如 “1小时”，“2天”等
    * @note ProcessingTimeTimeout must be enabled in `[map/flatmap]GroupsWithStates`.
    */
   @throws[IllegalArgumentException]("if 'duration' is not a valid duration")
@@ -250,7 +256,7 @@ trait GroupState[S] extends LogicalGroupState[S] {
   /**
    * Set the timeout timestamp for this key as milliseconds in epoch time.
    * This timestamp cannot be older than the current watermark.
-   *
+   * 将此key的超时时间戳设置为纪元时间的毫秒数,此时间戳不能比当前的水印更早
    * @note EventTimeTimeout must be enabled in `[map/flatmap]GroupsWithStates`.
    */
   def setTimeoutTimestamp(timestampMs: Long): Unit
@@ -262,9 +268,10 @@ trait GroupState[S] extends LogicalGroupState[S] {
   /**
    * Set the timeout timestamp for this key as milliseconds in epoch time and an additional
    * duration as a string (e.g. "1 hour", "2 days", etc.).
+    * 将此key的超时时间戳设置为纪元时间的毫秒数和额外的持续时间（如“1小时”，“2天”等）。
    * The final timestamp (including the additional duration) cannot be older than the
    * current watermark.
-   *
+   * 最后的时间戳(包括附加持续时间)不能比当前的水印更旧
    * @note EventTimeTimeout must be enabled in `[map/flatmap]GroupsWithStates`.
    */
   def setTimeoutTimestamp(timestampMs: Long, additionalDuration: String): Unit
@@ -275,7 +282,7 @@ trait GroupState[S] extends LogicalGroupState[S] {
   /**
    * Set the timeout timestamp for this key as a java.sql.Date.
    * This timestamp cannot be older than the current watermark.
-   *
+   * 将此密钥的超时时间戳设置为java.sql.Date,此时间戳不能比当前水印更早
    * @note EventTimeTimeout must be enabled in `[map/flatmap]GroupsWithStates`.
    */
   def setTimeoutTimestamp(timestamp: java.sql.Date): Unit
@@ -287,9 +294,10 @@ trait GroupState[S] extends LogicalGroupState[S] {
   /**
    * Set the timeout timestamp for this key as a java.sql.Date and an additional
    * duration as a string (e.g. "1 hour", "2 days", etc.).
+    * 将此Key的超时时间戳记设置为java.sql.Date,并将额外的持续时间设置为字符串(例如“1小时”,“2天”等)。
    * The final timestamp (including the additional duration) cannot be older than the
    * current watermark.
-   *
+   * 最后的时间戳(包括附加持续时间)不能比当前的水印更旧
    * @note EventTimeTimeout must be enabled in `[map/flatmap]GroupsWithStates`.
    */
   def setTimeoutTimestamp(timestamp: java.sql.Date, additionalDuration: String): Unit

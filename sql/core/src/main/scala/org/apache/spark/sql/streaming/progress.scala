@@ -33,6 +33,7 @@ import org.apache.spark.annotation.InterfaceStability
 
 /**
  * Information about updates made to stateful operators in a [[StreamingQuery]] during a trigger.
+  * 触发期间[[StreamingQuery]]中有状态操作员更新的信息
  */
 @InterfaceStability.Evolving
 class StateOperatorProgress private[sql](
@@ -41,10 +42,12 @@ class StateOperatorProgress private[sql](
     val memoryUsedBytes: Long
   ) extends Serializable {
 
-  /** The compact JSON representation of this progress. */
+  /** The compact JSON representation of this progress.
+    * 这个进展的紧凑的JSON表示 */
   def json: String = compact(render(jsonValue))
 
-  /** The pretty (i.e. indented) JSON representation of this progress. */
+  /** The pretty (i.e. indented) JSON representation of this progress.
+    * 这个进展的漂亮的(即缩进的)JSON表示 */
   def prettyJson: String = pretty(render(jsonValue))
 
   private[sql] def copy(newNumRowsUpdated: Long): StateOperatorProgress =
@@ -63,7 +66,8 @@ class StateOperatorProgress private[sql](
  * Information about progress made in the execution of a [[StreamingQuery]] during
  * a trigger. Each event relates to processing done for a single trigger of the streaming
  * query. Events are emitted even when no new data is available to be processed.
- *
+ * 在触发期间执行[[StreamingQuery]]的进度信息,每个事件都与流式查询的单个触发器的处理相关,
+  * 即使没有新的数据可供处理,也会发射事件。
  * @param id An unique query id that persists across restarts. See `StreamingQuery.id()`.
  * @param runId A query id that is unique for every start/restart. See `StreamingQuery.runId()`.
  * @param name User-specified name of the query, null if not specified.
@@ -98,19 +102,24 @@ class StreamingQueryProgress private[sql](
   val sources: Array[SourceProgress],
   val sink: SinkProgress) extends Serializable {
 
-  /** The aggregate (across all sources) number of records processed in a trigger. */
+  /** The aggregate (across all sources) number of records processed in a trigger.
+    * 在触发器中处理的记录总数(跨越所有来源)*/
   def numInputRows: Long = sources.map(_.numInputRows).sum
 
-  /** The aggregate (across all sources) rate of data arriving. */
+  /** The aggregate (across all sources) rate of data arriving.
+    * 数据到达的汇总(跨所有来源)*/
   def inputRowsPerSecond: Double = sources.map(_.inputRowsPerSecond).sum
 
-  /** The aggregate (across all sources) rate at which Spark is processing data. */
+  /** The aggregate (across all sources) rate at which Spark is processing data.
+    * Spark正在处理数据的汇总(所有数据源)*/
   def processedRowsPerSecond: Double = sources.map(_.processedRowsPerSecond).sum
 
-  /** The compact JSON representation of this progress. */
+  /** The compact JSON representation of this progress.
+    * 这个进展的紧凑的JSON表示*/
   def json: String = compact(render(jsonValue))
 
-  /** The pretty (i.e. indented) JSON representation of this progress. */
+  /** The pretty (i.e. indented) JSON representation of this progress.
+    * 这个进展的漂亮的(即缩进)JSON表示*/
   def prettyJson: String = pretty(render(jsonValue))
 
   override def toString: String = prettyJson
@@ -120,7 +129,8 @@ class StreamingQueryProgress private[sql](
       if (value.isNaN || value.isInfinity) JNothing else JDouble(value)
     }
 
-    /** Convert map to JValue while handling empty maps. Also, this sorts the keys. */
+    /** Convert map to JValue while handling empty maps. Also, this sorts the keys.
+      * 处理空地图时将地图转换为JValue,此外,这种排序的关键*/
     def safeMapToJValue[T](map: ju.Map[String, T], valueToJValue: T => JValue): JValue = {
       if (map.isEmpty) return JNothing
       val keys = map.asScala.keySet.toSeq.sorted
@@ -146,14 +156,15 @@ class StreamingQueryProgress private[sql](
 /**
  * Information about progress made for a source in the execution of a [[StreamingQuery]]
  * during a trigger. See [[StreamingQueryProgress]] for more information.
+  * 信息取得的进展在一个streamingquery执行源时触发,看到streamingqueryprogress的更多信息。
  *
- * @param description            Description of the source.
- * @param startOffset            The starting offset for data being read.
- * @param endOffset              The ending offset for data being read.
- * @param numInputRows           The number of records read from this source.
- * @param inputRowsPerSecond     The rate at which data is arriving from this source.
+ * @param description            Description of the source. 来源说明
+ * @param startOffset            The starting offset for data being read. 正在读取数据的起始偏移量
+ * @param endOffset              The ending offset for data being read. 正在读取数据的结束偏移量
+ * @param numInputRows           The number of records read from this source.从这个源读取的记录数
+ * @param inputRowsPerSecond     The rate at which data is arriving from this source.数据从这个源到达的速率
  * @param processedRowsPerSecond The rate at which data from this source is being procressed by
- *                               Spark.
+ *                               速度从源数据被Spark处理
  * @since 2.1.0
  */
 @InterfaceStability.Evolving
@@ -165,10 +176,12 @@ class SourceProgress protected[sql](
   val inputRowsPerSecond: Double,
   val processedRowsPerSecond: Double) extends Serializable {
 
-  /** The compact JSON representation of this progress. */
+  /** The compact JSON representation of this progress.
+    * 这一进展的紧凑JSON表示法 */
   def json: String = compact(render(jsonValue))
 
-  /** The pretty (i.e. indented) JSON representation of this progress. */
+  /** The pretty (i.e. indented) JSON representation of this progress.
+    * 这个进程的漂亮(即缩进)JSON表示 */
   def prettyJson: String = pretty(render(jsonValue))
 
   override def toString: String = prettyJson
@@ -204,10 +217,12 @@ class SourceProgress protected[sql](
 class SinkProgress protected[sql](
     val description: String) extends Serializable {
 
-  /** The compact JSON representation of this progress. */
+  /** The compact JSON representation of this progress.
+    * 这一进展的紧凑JSON表示法 */
   def json: String = compact(render(jsonValue))
 
-  /** The pretty (i.e. indented) JSON representation of this progress. */
+  /** The pretty (i.e. indented) JSON representation of this progress.
+    * 这个进程的漂亮(即缩进)JSON表示*/
   def prettyJson: String = pretty(render(jsonValue))
 
   override def toString: String = prettyJson

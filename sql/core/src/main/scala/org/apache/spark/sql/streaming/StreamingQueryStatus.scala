@@ -26,7 +26,7 @@ import org.apache.spark.annotation.InterfaceStability
 
 /**
  * Reports information about the instantaneous status of a streaming query.
- *
+ * 报告有关流式查询的即时状态的信息
  * @param message A human readable description of what the stream is currently doing.
  * @param isDataAvailable True when there is new data to be processed.
  * @param isTriggerActive True when the trigger is actively firing, false when waiting for the

@@ -24,7 +24,9 @@ import org.apache.spark.scheduler.SparkListenerEvent
 
 /**
  * Interface for listening to events related to [[StreamingQuery StreamingQueries]].
+  * 用于监听与[[StreamingQuery StreamingQueries]]相关的事件的接口
  * @note The methods are not thread-safe as they may be called from different threads.
+  *       这些方法不是线程安全的,因为它们可以从不同的线程中调用
  *
  * @since 2.0.0
  */
@@ -34,7 +36,7 @@ abstract class StreamingQueryListener {
   import StreamingQueryListener._
 
   /**
-   * Called when a query is started.
+   * Called when a query is started.查询开始时调用
    * @note This is called synchronously with
    *       [[org.apache.spark.sql.streaming.DataStreamWriter `DataStreamWriter.start()`]],
    *       that is, `onQueryStart` will be called on all listeners before
@@ -46,7 +48,7 @@ abstract class StreamingQueryListener {
 
   /**
    * Called when there is some status update (ingestion rate updated, etc.)
-   *
+   * 当有一些状态更新时调用(更新摄取率等)
    * @note This method is asynchronous. The status in [[StreamingQuery]] will always be
    *       latest no matter when this method is called. Therefore, the status of [[StreamingQuery]]
    *       may be changed before/when you process the event. E.g., you may find [[StreamingQuery]]
@@ -57,6 +59,7 @@ abstract class StreamingQueryListener {
 
   /**
    * Called when a query is stopped, with or without error.
+    * 当查询停止时调用,有或没有错误
    * @since 2.0.0
    */
   def onQueryTerminated(event: QueryTerminatedEvent): Unit
@@ -72,6 +75,7 @@ object StreamingQueryListener {
 
   /**
    * Base type of [[StreamingQueryListener]] events
+    * [StreamingQueryListener]事件的基本类型
    * @since 2.0.0
    */
   @InterfaceStability.Evolving
@@ -79,6 +83,7 @@ object StreamingQueryListener {
 
   /**
    * Event representing the start of a query
+    * 表示查询开始的事件
    * @param id An unique query id that persists across restarts. See `StreamingQuery.id()`.
    * @param runId A query id that is unique for every start/restart. See `StreamingQuery.runId()`.
    * @param name User-specified name of the query, null if not specified.
@@ -92,6 +97,7 @@ object StreamingQueryListener {
 
   /**
    * Event representing any progress updates in a query.
+    * 表示查询中任何进度更新的事件
    * @param progress The query progress updates.
    * @since 2.1.0
    */
@@ -100,7 +106,7 @@ object StreamingQueryListener {
 
   /**
    * Event representing that termination of a query.
-   *
+   * 表示查询终止的事件
    * @param id An unique query id that persists across restarts. See `StreamingQuery.id()`.
    * @param runId A query id that is unique for every start/restart. See `StreamingQuery.runId()`.
    * @param exception The exception message of the query if the query was terminated

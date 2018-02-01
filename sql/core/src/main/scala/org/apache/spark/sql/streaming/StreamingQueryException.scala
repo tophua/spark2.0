@@ -22,6 +22,7 @@ import org.apache.spark.annotation.InterfaceStability
 /**
  * Exception that stopped a [[StreamingQuery]]. Use `cause` get the actual exception
  * that caused the failure.
+  * 阻止[[StreamingQuery]]的异常,使用`cause`得到导致失败的实际异常
  * @param message     Message of this exception
  * @param cause       Internal cause of this exception
  * @param startOffset Starting offset in json of the range of data in which exception occurred
@@ -37,7 +38,8 @@ class StreamingQueryException private[sql](
     val endOffset: String)
   extends Exception(message, cause) {
 
-  /** Time when the exception occurred */
+  /** Time when the exception occurred
+    * 发生异常的时间*/
   val time: Long = System.currentTimeMillis
 
   override def toString(): String =

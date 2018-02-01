@@ -31,7 +31,7 @@ import org.apache.spark.sql.execution.streaming.{ForeachSink, MemoryPlan, Memory
 /**
  * Interface used to write a streaming `Dataset` to external storage systems (e.g. file systems,
  * key-value stores, etc). Use `Dataset.writeStream` to access this.
- *
+ * 用于向外部存储系统(例如文件系统,键值存储等)写入数据流的接口,使用`Dataset.writeStream`来访问它
  * @since 2.0.0
  */
 @InterfaceStability.Evolving
@@ -41,14 +41,19 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Specifies how data of a streaming DataFrame/Dataset is written to a streaming sink.
+    * 指定如何将数据流数据帧/数据集的数据写入流式接收器
    *   - `OutputMode.Append()`: only the new rows in the streaming DataFrame/Dataset will be
    *                            written to the sink
+    *                            只有数据流DataFrame / Dataset中的新行才会写入接收器
    *   - `OutputMode.Complete()`: all the rows in the streaming DataFrame/Dataset will be written
    *                              to the sink every time these is some updates
+    *                              DataFrame流/数据集中的所有行都会在每次更新时写入接收器
    *   - `OutputMode.Update()`: only the rows that were updated in the streaming DataFrame/Dataset
    *                            will be written to the sink every time there are some updates. If
    *                            the query doesn't contain aggregations, it will be equivalent to
    *                            `OutputMode.Append()` mode.
+    *                            每当有更新时,只有在数据流DataFrame/Dataset中更新的行才会被写入接收器,
+    *                            如果查询不包含聚合,它将等同于OutputMode.Append()模式
    *
    * @since 2.0.0
    */
@@ -59,13 +64,18 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Specifies how data of a streaming DataFrame/Dataset is written to a streaming sink.
+    * 指定如何将数据流数据帧/数据集的数据写入流式接收器
    *   - `append`:   only the new rows in the streaming DataFrame/Dataset will be written to
    *                 the sink
+    *                 只有数据流DataFrame / Dataset中的新行才会写入接收器
    *   - `complete`: all the rows in the streaming DataFrame/Dataset will be written to the sink
    *                 every time these is some updates
+    *                 DataFrame数据流/数据集中的所有行都会在每次更新时写入接收器
    *   - `update`:   only the rows that were updated in the streaming DataFrame/Dataset will
    *                 be written to the sink every time there are some updates. If the query doesn't
    *                 contain aggregations, it will be equivalent to `append` mode.
+    *                每当有更新时,只有在数据流DataFrame/Dataset中更新的行才会被写入接收器,
+    *                如果查询不包含聚合,它将相当于`append`模式。
    * @since 2.0.0
    */
   def outputMode(outputMode: String): DataStreamWriter[T] = {
@@ -76,7 +86,7 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
   /**
    * Set the trigger for the stream query. The default value is `ProcessingTime(0)` and it will run
    * the query as fast as possible.
-   *
+   * 设置流查询的触发器,默认值是'ProcessingTime(0),它将尽可能快地运行查询
    * Scala Example:
    * {{{
    *   df.writeStream.trigger(ProcessingTime("10 seconds"))
@@ -102,7 +112,9 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Specifies the name of the [[StreamingQuery]] that can be started with `start()`.
+    * 指定可以用`start（）`开始的[[StreamingQuery]]的名称
    * This name must be unique among all the currently active queries in the associated SQLContext.
+    * 该名称在关联的SQLContext中的所有当前活动查询中必须是唯一的
    *
    * @since 2.0.0
    */
@@ -113,7 +125,7 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Specifies the underlying output data source.
-   *
+   * 指定基础输出数据源
    * @since 2.0.0
    */
   def format(source: String): DataStreamWriter[T] = {
@@ -125,14 +137,18 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
    * Partitions the output by the given columns on the file system. If specified, the output is
    * laid out on the file system similar to Hive's partitioning scheme. As an example, when we
    * partition a dataset by year and then month, the directory layout would look like:
-   *
+   * 按文件系统上的给定列对输出进行分区,如果指定,则输出将在文件系统上进行布局,类似于Hive的分区方案。
+    * 例如,当我们按年份和月份对数据集进行分区时,目录布局将如下所示：
    *   - year=2016/month=01/
    *   - year=2016/month=02/
    *
    * Partitioning is one of the most widely used techniques to optimize physical data layout.
+    * 分区是优化物理数据布局的最广泛使用的技术之一
    * It provides a coarse-grained index for skipping unnecessary data reads when queries have
    * predicates on the partitioned columns. In order for partitioning to work well, the number
    * of distinct values in each column should typically be less than tens of thousands.
+    * 它提供了一个粗粒度索引,用于在查询对分区列进行谓词时跳过不必要的数据读取,
+    * 为了使分区运行良好,每列中不同值的数量通常应小于几万。
    *
    * @since 2.0.0
    */
@@ -144,11 +160,13 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Adds an output option for the underlying data source.
-   *
+   * 添加底层数据源的输出选项
    * You can set the following option(s):
+    * 您可以设置以下选项：
    * <ul>
    * <li>`timeZone` (default session local timezone): sets the string that indicates a timezone
    * to be used to format timestamps in the JSON/CSV datasources or partition values.</li>
+    * 将指定时区的字符串设置为用于格式化JSON / CSV数据源或分区值中的时间戳
    * </ul>
    *
    * @since 2.0.0
@@ -160,28 +178,28 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Adds an output option for the underlying data source.
-   *
+   * 添加底层数据源的输出选项
    * @since 2.0.0
    */
   def option(key: String, value: Boolean): DataStreamWriter[T] = option(key, value.toString)
 
   /**
    * Adds an output option for the underlying data source.
-   *
+   * 添加底层数据源的输出选项
    * @since 2.0.0
    */
   def option(key: String, value: Long): DataStreamWriter[T] = option(key, value.toString)
 
   /**
    * Adds an output option for the underlying data source.
-   *
+   * 添加底层数据源的输出选项
    * @since 2.0.0
    */
   def option(key: String, value: Double): DataStreamWriter[T] = option(key, value.toString)
 
   /**
    * (Scala-specific) Adds output options for the underlying data source.
-   *
+   * 特定于Scala为基础数据源添加输出选项
    * You can set the following option(s):
    * <ul>
    * <li>`timeZone` (default session local timezone): sets the string that indicates a timezone
@@ -197,7 +215,7 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
 
   /**
    * Adds output options for the underlying data source.
-   *
+   * 添加底层数据源的输出选项
    * You can set the following option(s):
    * <ul>
    * <li>`timeZone` (default session local timezone): sets the string that indicates a timezone
@@ -215,7 +233,8 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
    * Starts the execution of the streaming query, which will continually output results to the given
    * path as new data arrives. The returned [[StreamingQuery]] object can be used to interact with
    * the stream.
-   *
+   * 启动流式查询的执行,当新数据到达时,将连续输出结果到给定的路径。
+    * 返回的[[StreamingQuery]]对象可用于与流进行交互
    * @since 2.0.0
    */
   def start(path: String): StreamingQuery = {
@@ -226,6 +245,7 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
    * Starts the execution of the streaming query, which will continually output results to the given
    * path as new data arrives. The returned [[StreamingQuery]] object can be used to interact with
    * the stream.
+    * 开始流式查询的执行,当新数据到达时,查询将不断地输出结果到给定的路径,返回的[[StreamingQuery]]对象可用于与流进行交互
    *
    * @since 2.0.0
    */
@@ -295,7 +315,8 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
    * Starts the execution of the streaming query, which will continually send results to the given
    * `ForeachWriter` as new data arrives. The `ForeachWriter` can be used to send the data
    * generated by the `DataFrame`/`Dataset` to an external system.
-   *
+   * 开始流式查询的执行,当新数据到达时,查询将不断地将结果发送给给定的“ForeachWriter”,
+    * `ForeachWriter`可以用来将`DataFrame` /`Dataset`生成的数据发送到外部系统
    * Scala example:
    * {{{
    *   datasetOfString.writeStream.foreach(new ForeachWriter[String] {
@@ -355,6 +376,8 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
    * The given column name may not be equal to any of the existing column names if we were in
    * case-insensitive context. Normalize the given column name to the real one so that we don't
    * need to care about case sensitivity afterwards.
+    * 如果我们在不区分大小写的上下文中,给定的列名可能不等于任何现有的列名,
+    * 将给定的列名称标准化为真实的名称,以便以后不需要关心区分大小写。
    */
   private def normalize(columnName: String, columnType: String): String = {
     val validColumnNames = df.logicalPlan.output.map(_.name)
@@ -370,7 +393,7 @@ final class DataStreamWriter[T] private[sql](ds: Dataset[T]) {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  // Builder pattern config options
+  // Builder pattern config options 生成器模式配置选项
   ///////////////////////////////////////////////////////////////////////////////////////
 
   private var source: String = df.sparkSession.sessionState.conf.defaultDataSourceName

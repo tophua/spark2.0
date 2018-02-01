@@ -35,7 +35,7 @@ import org.apache.spark.util.{Clock, SystemClock, Utils}
 
 /**
  * A class to manage all the [[StreamingQuery]] active in a `SparkSession`.
- *
+ * 在SparkSession中管理所有[[StreamingQuery]]活动的类
  * @since 2.0.0
  */
 @InterfaceStability.Evolving
@@ -55,7 +55,7 @@ class StreamingQueryManager private[sql] (sparkSession: SparkSession) extends Lo
 
   /**
    * Returns a list of active queries associated with this SQLContext
-   *
+   * 返回与此SQLContext关联的活动查询的列表
    * @since 2.0.0
    */
   def active: Array[StreamingQuery] = activeQueriesLock.synchronized {
@@ -64,7 +64,7 @@ class StreamingQueryManager private[sql] (sparkSession: SparkSession) extends Lo
 
   /**
    * Returns the query if there is an active query with the given id, or null.
-   *
+   * 如果存在具有给定ID的活动查询,则返回查询,或返回null。
    * @since 2.1.0
    */
   def get(id: UUID): StreamingQuery = activeQueriesLock.synchronized {
@@ -73,7 +73,7 @@ class StreamingQueryManager private[sql] (sparkSession: SparkSession) extends Lo
 
   /**
    * Returns the query if there is an active query with the given id, or null.
-   *
+   * 如果存在具有给定ID的活动查询,则返回查询,或返回null
    * @since 2.1.0
    */
   def get(id: String): StreamingQuery = get(UUID.fromString(id))
@@ -151,7 +151,7 @@ class StreamingQueryManager private[sql] (sparkSession: SparkSession) extends Lo
   /**
    * Forget about past terminated queries so that `awaitAnyTermination()` can be used again to
    * wait for new terminations.
-   *
+   * 忘记过去的终止查询,以便可以再次使用awaitAnyTermination（）来等待新的终止
    * @since 2.0.0
    */
   def resetTerminated(): Unit = {
@@ -321,7 +321,8 @@ class StreamingQueryManager private[sql] (sparkSession: SparkSession) extends Lo
     query
   }
 
-  /** Notify (by the StreamingQuery) that the query has been terminated */
+  /** Notify (by the StreamingQuery) that the query has been terminated
+    * 通知(通过StreamingQuery)查询已终止*/
   private[sql] def notifyQueryTermination(terminatedQuery: StreamingQuery): Unit = {
     activeQueriesLock.synchronized {
       activeQueries -= terminatedQuery.id
