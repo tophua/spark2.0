@@ -22,7 +22,7 @@ import java.io.File
 import org.apache.spark.sql.execution.streaming._
 import org.apache.spark.sql.streaming.OffsetSuite
 import org.apache.spark.sql.test.SharedSQLContext
-
+//Kafka源偏移套件
 class KafkaSourceOffsetSuite extends OffsetSuite with SharedSQLContext {
 
   compare(
@@ -91,7 +91,7 @@ class KafkaSourceOffsetSuite extends OffsetSuite with SharedSQLContext {
         Array(0 -> batch0Serialized, 1 -> batch1Serialized))
     }
   }
-
+  //读取Spark 2.1.0偏移量格式
   test("read Spark 2.1.0 offset format") {
     val offset = readFromResource("kafka-source-offset-version-2.1.0.txt")
     assert(KafkaSourceOffset(offset) ===

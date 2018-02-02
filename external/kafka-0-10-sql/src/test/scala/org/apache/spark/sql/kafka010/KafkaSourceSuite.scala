@@ -42,7 +42,7 @@ import org.apache.spark.sql.streaming.{ProcessingTime, StreamTest}
 import org.apache.spark.sql.streaming.util.StreamManualClock
 import org.apache.spark.sql.test.{SharedSQLContext, TestSparkSession}
 import org.apache.spark.util.Utils
-
+//卡夫卡源测试
 abstract class KafkaSourceTest extends StreamTest with SharedSQLContext {
 
   protected var testUtils: KafkaTestUtils = _
@@ -62,11 +62,14 @@ abstract class KafkaSourceTest extends StreamTest with SharedSQLContext {
       super.afterAll()
     }
   }
-
+  //确保获得偏移量
   protected def makeSureGetOffsetCalled = AssertOnQuery { q =>
     // Because KafkaSource's initialPartitionOffsets is set lazily, we need to make sure
     // its "getOffset" is called before pushing any data. Otherwise, because of the race contion,
     // we don't know which data should be fetched when `startingOffsets` is latest.
+    //因为KafkaSource的initialpartitionoffsets是懒洋洋地,
+    // 我们需要确保它的“getoffset”是任何数据前推,
+    // 否则,因为比赛的条件,我们不知道哪些数据应该拿来当` startingoffsets `是新的。
     q.processAllAvailable()
     true
   }
@@ -309,6 +312,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       StartStream(ProcessingTime(100), clock),
       waitUntilBatchProcessed,
       // smallest now empty, 1 more from middle, 9 more from biggest
+      //最小的现在是空的，1个是中间的，9个是最大的。
       CheckAnswer(1, 10, 100, 101, 102, 103, 104, 105, 106, 107,
         11, 108, 109, 110, 111, 112, 113, 114, 115, 116,
         12, 117, 118, 119, 120, 121, 122, 123, 124, 125
@@ -316,6 +320,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
       AdvanceManualClock(100),
       waitUntilBatchProcessed,
       // smallest now empty, 1 more from middle, 9 more from biggest
+      //最小的现在是空的，1个是中间的，9个是最大的。
       CheckAnswer(1, 10, 100, 101, 102, 103, 104, 105, 106, 107,
         11, 108, 109, 110, 111, 112, 113, 114, 115, 116,
         12, 117, 118, 119, 120, 121, 122, 123, 124, 125,
@@ -589,8 +594,11 @@ class KafkaSourceSuite extends KafkaSourceTest {
       .option("kafka.metadata.max.age.ms", "1")
       .option("subscribe", topic)
       // If a topic is deleted and we try to poll data starting from offset 0,
+      //如果某个主题被删除,我们尝试从偏移量0开始轮询数据
       // the Kafka consumer will just block until timeout and return an empty result.
+      //卡夫卡消费者只会阻塞到超时并返回空结果
       // So set the timeout to 1 second to make this test fast.
+      //所以将超时设置为1秒使测试快速
       .option("kafkaConsumer.pollTimeoutMs", "1000")
       .option("startingOffsets", "earliest")
       .option("failOnDataLoss", "false")
@@ -616,6 +624,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     query.processAllAvailable()
     query.stop()
     // `failOnDataLoss` is `false`, we should not fail the query
+    //` failondataloss `是`假`，我们不应该失败的查询
     assert(query.exception.isEmpty)
   }
   //从不区分大小写的参数中获得偏移量
@@ -642,7 +651,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
   private def assignString(topic: String, partitions: Iterable[Int]): String = {
     JsonUtils.partitions(partitions.map(p => new TopicPartition(topic, p)))
   }
-
+  //来自特定偏移量的测试
   private def testFromSpecificOffsets(
       topic: String,
       failOnDataLoss: Boolean,
@@ -731,11 +740,12 @@ class KafkaSourceSuite extends KafkaSourceTest {
     assert(row.getAs[Long]("offset") === 0L, s"Unexpected results: $row")
     // We cannot check the exact timestamp as it's the time that messages were inserted by the
     // producer. So here we just use a low bound to make sure the internal conversion works.
+    //我们不能检查确切的时间戳,因为它是由生产者插入消息的时间,这里我们只使用一个下限来确保内部转换工作。
     assert(row.getAs[java.sql.Timestamp]("timestamp").getTime >= now, s"Unexpected results: $row")
     assert(row.getAs[Int]("timestampType") === 0, s"Unexpected results: $row")
     query.stop()
   }
-
+  //Kafka Source水印
   test("KafkaSource with watermark") {
     val now = System.currentTimeMillis()
     val topic = newTopic()
@@ -776,7 +786,7 @@ class KafkaSourceSuite extends KafkaSourceTest {
     assert(row.getAs[Int]("count") === 1, s"Unexpected results: $row")
     query.stop()
   }
-
+  //从最新的偏移量进行测试
   private def testFromLatestOffsets(
       topic: String,
       addPartitions: Boolean,
@@ -917,7 +927,7 @@ class KafkaSourceStressSuite extends KafkaSourceTest {
       Seq(makeSureGetOffsetCalled),
       (d, running) => {
         Random.nextInt(5) match {
-          case 0 => // Add a new topic
+          case 0 => // Add a new topic 添加一个新主题
             topics = topics ++ Seq(newStressTopic)
             AddKafkaData(topics.toSet, d: _*)(message = s"Add topic $newStressTopic",
               topicAction = (topic, partition) => {
@@ -941,12 +951,12 @@ class KafkaSourceStressSuite extends KafkaSourceTest {
                   testUtils.deleteTopic(deletedTopic)
                 }
               })
-          case 2 => // Add new partitions
+          case 2 => // Add new partitions 添加新的分区
             AddKafkaData(topics.toSet, d: _*)(message = "Add partition",
               topicAction = (topic, partition) => {
                 testUtils.addPartitions(topic, partition.get + nextInt(1, 6))
               })
-          case _ => // Just add new data
+          case _ => // Just add new data 只需添加新数据
             AddKafkaData(topics.toSet, d: _*)
         }
       },
@@ -966,6 +976,7 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
 
   override def createSparkSession(): TestSparkSession = {
     // Set maxRetries to 3 to handle NPE from `poll` when deleting a topic
+    //删除主题时，将maxRetries设置为3以处理来自“poll”的NPE
     new TestSparkSession(new SparkContext("local[2,3]", "test-sql-context", sparkConf))
   }
 
@@ -977,6 +988,9 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
         // Try to make Kafka clean up messages as fast as possible. However, there is a hard-code
         // 30 seconds delay (kafka.log.LogManager.InitialTaskDelayMs) so this test should run at
         // least 30 seconds.
+        //尽量让卡夫卡尽快清理邮件,但是,
+        // 有一个30秒的硬件延迟（kafka.log.LogManager.InitialTaskDelayMs),
+        //所以这个测试应该至少运行30秒
         props.put("log.cleaner.backoff.ms", "100")
         props.put("log.segment.bytes", "40")
         props.put("log.retention.bytes", "40")
@@ -1034,7 +1048,7 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
     val deletedTopics = mutable.Set[String]()
     while (System.currentTimeMillis() - testTime.toMillis < startTime) {
       Random.nextInt(10) match {
-        case 0 => // Create a new topic
+        case 0 => // Create a new topic 创建一个新的主题
           val topic = newTopic()
           topics += topic
           // As pushing messages into Kafka updates Zookeeper asynchronously, there is a small
@@ -1058,11 +1072,13 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
           // As pushing messages into Kafka updates Zookeeper asynchronously, there is a small
           // chance that a topic will be recreated after deletion due to the asynchronous update.
           // Hence, always overwrite to handle this race condition.
+          //当向Kafka推送消息异步更新Zookeeper时,由于异步更新,
+          // 在删除主题之后很少有机会重新创建主题,因此,总是覆盖来处理这种竞争条件
           testUtils.createTopic(topic, partitions = 1, overwrite = true)
           logInfo(s"Create topic $topic")
         case 3 =>
           Thread.sleep(1000)
-        case _ => // Push random messages
+        case _ => // Push random messages 推送随机消息
           for (topic <- topics) {
             val size = Random.nextInt(10)
             for (_ <- 0 until size) {
@@ -1079,6 +1095,7 @@ class KafkaSourceStressForDontFailOnDataLossSuite extends StreamTest with Shared
 
     query.stop()
     // `failOnDataLoss` is `false`, we should not fail the query
+    //failOnDataLoss`是`false`，我们不应该失败查询
     if (query.exception.nonEmpty) {
       throw query.exception.get
     }

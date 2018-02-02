@@ -116,14 +116,14 @@ class KafkaRelationSuite extends QueryTest with BeforeAndAfter with SharedSQLCon
     // Test explicitly specified offsets
     //显式指定偏移测试
     val startPartitionOffsets = Map(
-      new TopicPartition(topic, 0) -> -2L, // -2 => earliest
+      new TopicPartition(topic, 0) -> -2L, // -2 => earliest 最早
       new TopicPartition(topic, 1) -> -2L,
-      new TopicPartition(topic, 2) -> 0L   // explicit earliest
+      new TopicPartition(topic, 2) -> 0L   // explicit earliest 显式最早
     )
     val startingOffsets = JsonUtils.partitionOffsets(startPartitionOffsets)
 
     val endPartitionOffsets = Map(
-      new TopicPartition(topic, 0) -> -1L, // -1 => latest
+      new TopicPartition(topic, 0) -> -1L, // -1 => latest 最新
       new TopicPartition(topic, 1) -> -1L,
       //显式偏移量=最新
       new TopicPartition(topic, 2) -> 1L  // explicit offset happens to = the latest
@@ -171,7 +171,7 @@ class KafkaRelationSuite extends QueryTest with BeforeAndAfter with SharedSQLCon
         * 以下设置将确保所有日志记录都删除后,调用cleanuplogs
        */
       val brokerProps = Map[String, Object](
-        "log.retention.bytes" -> 1.asInstanceOf[AnyRef], // retain nothing
+        "log.retention.bytes" -> 1.asInstanceOf[AnyRef], // retain nothing 什么都不保留
         "log.retention.ms" -> 1.asInstanceOf[AnyRef]     // no wait time
       )
       kafkaUtils = new KafkaTestUtils(withBrokerProps = brokerProps)

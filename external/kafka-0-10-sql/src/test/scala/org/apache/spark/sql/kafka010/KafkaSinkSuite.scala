@@ -198,6 +198,8 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
      * option. Then when we read from the topic specified in the option
      * we should see the data i.e., the data was written to the topic
      * option, and not to the topic in the data e.g., foo
+     * 此测试的目的是确保主题选项覆盖主题字段,我们首先编写一些包含主题字段和值的数据（例如“foo”）以及主题选项,
+      * 然后,当我们从选项中指定的主题读取数据时,我们应该看到数据,即数据被写入主题选项,而不是数据中的主题,例如foo
      */
     val input = MemoryStream[String]
     val topic = newTopic()
@@ -236,7 +238,8 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     val topic = newTopic()
     testUtils.createTopic(topic)
 
-    /* No topic field or topic option */
+    /* No topic field or topic option
+    * 没有主题字段或主题选项*/
     var writer: StreamingQuery = null
     var ex: Exception = null
     try {
@@ -255,7 +258,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
       .contains("topic option required when no 'topic' attribute is present"))
 
     try {
-      /* No value field */
+      /* No value field  没有值字段*/
       ex = intercept[StreamingQueryException] {
         writer = createKafkaWriter(input.toDF())(
           withSelectExpr = s"'$topic' as topic", "value as key"
@@ -278,7 +281,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     var writer: StreamingQuery = null
     var ex: Exception = null
     try {
-      /* topic field wrong type */
+      /* topic field wrong type 主题字段错误类型*/
       ex = intercept[StreamingQueryException] {
         writer = createKafkaWriter(input.toDF())(
           withSelectExpr = s"CAST('1' as INT) as topic", "value"
@@ -292,7 +295,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     assert(ex.getMessage.toLowerCase(Locale.ROOT).contains("topic type must be a string"))
 
     try {
-      /* value field wrong type */
+      /* value field wrong type 值字段错误类型 */
       ex = intercept[StreamingQueryException] {
         writer = createKafkaWriter(input.toDF())(
           withSelectExpr = s"'$topic' as topic", "CAST(value as INT) as value"
@@ -308,7 +311,7 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
 
     try {
       ex = intercept[StreamingQueryException] {
-        /* key field wrong type */
+        /* key field wrong type  键字段错误类型*/
         writer = createKafkaWriter(input.toDF())(
           withSelectExpr = s"'$topic' as topic", "CAST(value as INT) as key", "value"
         )
@@ -367,6 +370,9 @@ class KafkaSinkSuite extends StreamTest with SharedSQLContext {
     * This test will configure the smallest possible producer buffer and
     * indicate that we should block when it is full. Thus, no exception should
     * be thrown in the case of a full buffer.
+    * 这个测试可以确保我们理解Kafka的语义,当发送缓冲区已满时,要阻止发送的调用。
+    * 此测试将配置尽可能最小的生产者缓冲区,并指示我们应该在其满时阻塞,
+    * 因此,在一个完整的缓冲区的情况下,不应该抛出异常。
     */
     val topic = newTopic()
     testUtils.createTopic(topic, 1)

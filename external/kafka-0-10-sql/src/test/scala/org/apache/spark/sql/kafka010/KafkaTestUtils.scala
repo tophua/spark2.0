@@ -87,12 +87,12 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     assert(zkReady, "Zookeeper not setup yet or already torn down, cannot get zookeeper address")
     s"$zkHost:$zkPort"
   }
-
+  //代理地址
   def brokerAddress: String = {
     assert(brokerReady, "Kafka not setup yet or already torn down, cannot get broker address")
     s"$brokerHost:$brokerPort"
   }
-
+  //zookeeper客户端
   def zookeeperClient: ZkUtils = {
     assert(zkReady, "Zookeeper not setup yet or already torn down, cannot get zookeeper client")
     Option(zkUtils).getOrElse(
@@ -197,7 +197,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
       waitUntilMetadataIsPropagated(topic, p)
     }
   }
-
+  //获取所有主题和分区大小
   def getAllTopicsAndPartitionSize(): Seq[(String, Int)] = {
     zkUtils.getPartitionsForTopics(zkUtils.getAllTopics()).mapValues(_.size).toSeq
   }
@@ -275,7 +275,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
   def cleanupLogs(): Unit = {
     server.logManager.cleanupLogs()
   }
-
+  //得到最早的偏移
   def getEarliestOffsets(topics: Set[String]): Map[TopicPartition, Long] = {
     val kc = new KafkaConsumer[String, String](consumerConfiguration)
     logInfo("Created consumer to get earliest offsets")
@@ -289,7 +289,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     logInfo("Closed consumer to get earliest offsets")
     offsets
   }
-
+  //获取最新的偏移
   def getLatestOffsets(topics: Set[String]): Map[TopicPartition, Long] = {
     val kc = new KafkaConsumer[String, String](consumerConfiguration)
     logInfo("Created consumer to get latest offsets")
@@ -303,7 +303,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     logInfo("Closed consumer to get latest offsets")
     offsets
   }
-
+  //代理配置
   protected def brokerConfiguration: Properties = {
     val props = new Properties()
     props.put("broker.id", "0")
@@ -319,7 +319,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     props.putAll(withBrokerProps.asJava)
     props
   }
-
+  //生产配置
   private def producerConfiguration: Properties = {
     val props = new Properties()
     props.put("bootstrap.servers", brokerAddress)
@@ -329,7 +329,7 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     props.put("acks", "all")
     props
   }
-
+  //消费配置
   private def consumerConfiguration: Properties = {
     val props = new Properties()
     props.put("bootstrap.servers", brokerAddress)
@@ -395,6 +395,8 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
           // As pushing messages into Kafka updates Zookeeper asynchronously, there is a small
           // chance that a topic will be recreated after deletion due to the asynchronous update.
           // Hence, delete the topic and retry.
+          //当向Kafka推送消息异步更新Zookeeper时,由于异步更新,
+          // 在删除主题之后很少有机会重新创建主题,因此,删除主题并重试。
           AdminUtils.deleteTopic(zkUtils, topic)
           throw e
       }
@@ -436,8 +438,11 @@ class KafkaTestUtils(withBrokerProps: Map[String, Object] = Map.empty) extends L
     def shutdown() {
       factory.shutdown()
       // The directories are not closed even if the ZooKeeper server is shut down.
+      //该目录是不是即使ZooKeeper服务器关闭关闭
       // Please see ZOOKEEPER-1844, which is fixed in 3.4.6+. It leads to test failures
       // on Windows if the directory deletion failure throws an exception.
+      //请看zookeeper-1844,它固定在3.4.6 +,
+      // 如果目录删除失败引发异常,则导致Windows上的测试失败。
       try {
         Utils.deleteRecursively(snapshotDir)
       } catch {

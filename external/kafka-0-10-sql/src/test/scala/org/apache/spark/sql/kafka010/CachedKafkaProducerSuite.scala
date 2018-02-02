@@ -25,7 +25,7 @@ import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.scalatest.PrivateMethodTester
 
 import org.apache.spark.sql.test.SharedSQLContext
-
+//缓存Kafka生产Suite
 class CachedKafkaProducerSuite extends SharedSQLContext with PrivateMethodTester {
 
   type KP = KafkaProducer[Array[Byte], Array[Byte]]
