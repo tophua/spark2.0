@@ -152,6 +152,8 @@ class FileStreamSinkLogSuite extends SparkFunSuite with SharedSQLContext {
   test("delete expired file") {
     // Set FILE_SINK_LOG_CLEANUP_DELAY to 0 so that we can detect the deleting behaviour
     // deterministically and one min batches to retain
+    //将FILE_SINK_LOG_CLEANUP_DELAY设置为0,
+    // 以便我们可以确定性地检测删除行为,并保留一分钟的批次
     withSQLConf(
       SQLConf.FILE_SINK_LOG_COMPACT_INTERVAL.key -> "3",
       SQLConf.FILE_SINK_LOG_CLEANUP_DELAY.key -> "0",

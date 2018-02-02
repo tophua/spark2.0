@@ -30,7 +30,7 @@ import org.scalatest.time.SpanSugar._
 import org.apache.spark.SparkFunSuite
 import org.apache.spark.sql.streaming.ProcessingTime
 import org.apache.spark.sql.streaming.util.StreamManualClock
-
+//处理时间执行器套件
 class ProcessingTimeExecutorSuite extends SparkFunSuite {
 
   val timeout = 10.seconds
@@ -114,6 +114,7 @@ class ProcessingTimeExecutorSuite extends SparkFunSuite {
     }
 
     // nextBatchTime should be 1000
+    //下一个批次应该是1000
     assert(nextBatchTime === intervalMS * ITERATION)
   }
 

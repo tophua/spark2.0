@@ -34,7 +34,7 @@ import org.apache.spark.sql.catalyst.util.quietly
 import org.apache.spark.sql.execution.streaming.StatefulOperatorStateInfo
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.apache.spark.util.{CompletionIterator, Utils}
-
+//状态存储RDD套件
 class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
   import StateStoreTestsHelper._
@@ -52,7 +52,7 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
     super.afterAll()
     Utils.deleteRecursively(new File(tempDir))
   }
-
+  //versioning and immutability
   ignore("versioning and immutability") {
     withSparkSession(SparkSession.builder.config(sparkConf).getOrCreate()) { spark =>
       val path = Utils.createDirectory(tempDir, Random.nextString(10)).toString
@@ -61,17 +61,18 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
             increment)
       assert(rdd1.collect().toSet === Set("a" -> 2, "b" -> 1))
 
-      // Generate next version of stores
+      // Generate next version of stores 生成下一个版本的存储
       val rdd2 = makeRDD(spark.sparkContext, Seq("a", "c")).mapPartitionsWithStateStore(
         spark.sqlContext, operatorStateInfo(path, version = 1), keySchema, valueSchema, None)(
         increment)
       assert(rdd2.collect().toSet === Set("a" -> 3, "b" -> 1, "c" -> 1))
 
       // Make sure the previous RDD still has the same data.
+      //确保以前的RDD仍然具有相同的数据
       assert(rdd1.collect().toSet === Set("a" -> 2, "b" -> 1))
     }
   }
-
+  //恢复文件
   ignore("recovering from files") {
     val path = Utils.createDirectory(tempDir, Random.nextString(10)).toString
 
@@ -86,6 +87,7 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
     }
 
     // Generate RDDs and state store data
+    //生成RDD和状态存储数据
     withSparkSession(SparkSession.builder.config(sparkConf).getOrCreate()) { spark =>
       for (i <- 1 to 20) {
         require(makeStoreRDD(spark, Seq("a"), i - 1).collect().toSet === Set("a" -> i))
@@ -93,11 +95,12 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
     }
 
     // With a new context, try using the earlier state store data
+    //在新的上下文中,尝试使用较早的状态存储数据
     withSparkSession(SparkSession.builder.config(sparkConf).getOrCreate()) { spark =>
       assert(makeStoreRDD(spark, Seq("a"), 20).collect().toSet === Set("a" -> 21))
     }
   }
-
+  //迭代器的使用 - 只能得到，只能放
   test("usage with iterators - only gets and only puts") {
     withSparkSession(SparkSession.builder.config(sparkConf).getOrCreate()) { spark =>
       implicit val sqlContext = spark.sqlContext
@@ -105,6 +108,7 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
       val opId = 0
 
       // Returns an iterator of the incremented value made into the store
+      //返回存储器中增加值的迭代器
       def iteratorOfPuts(store: StateStore, iter: Iterator[String]): Iterator[(String, Int)] = {
         val resIterator = iter.map { s =>
           val key = stringToRow(s)
@@ -144,7 +148,7 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
       assert(rddOfGets2.collect().toSet === Set("a" -> Some(2), "b" -> Some(1), "c" -> None))
     }
   }
-
+  //使用状态存储协调器的首选位置
   ignore("preferred locations using StateStoreCoordinator") {
     quietly {
       val queryRunId = UUID.randomUUID
@@ -180,7 +184,7 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
       }
     }
   }
-
+  //分布式测试
   ignore("distributed test") {
     quietly {
 
@@ -195,12 +199,13 @@ class StateStoreRDDSuite extends SparkFunSuite with BeforeAndAfter with BeforeAn
           sqlContext, operatorStateInfo(path, version = 0), keySchema, valueSchema, None)(increment)
         assert(rdd1.collect().toSet === Set("a" -> 2, "b" -> 1))
 
-        // Generate next version of stores
+        // Generate next version of stores 生成下一个版本的存储
         val rdd2 = makeRDD(spark.sparkContext, Seq("a", "c")).mapPartitionsWithStateStore(
           sqlContext, operatorStateInfo(path, version = 1), keySchema, valueSchema, None)(increment)
         assert(rdd2.collect().toSet === Set("a" -> 3, "b" -> 1, "c" -> 1))
 
         // Make sure the previous RDD still has the same data.
+        //确保以前的RDD仍然具有相同的数据
         assert(rdd1.collect().toSet === Set("a" -> 2, "b" -> 1))
       }
     }

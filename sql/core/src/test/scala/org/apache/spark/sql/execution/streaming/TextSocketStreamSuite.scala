@@ -29,7 +29,7 @@ import org.apache.spark.sql.AnalysisException
 import org.apache.spark.sql.streaming.StreamTest
 import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.sql.types.{StringType, StructField, StructType, TimestampType}
-
+//文本套接字流套件
 class TextSocketStreamSuite extends StreamTest with SharedSQLContext with BeforeAndAfterEach {
   import testImplicits._
 
@@ -202,7 +202,7 @@ class TextSocketStreamSuite extends StreamTest with SharedSQLContext with Before
       source = null
     }
   }
-
+  //服务器线程
   private class ServerThread extends Thread with Logging {
     private val serverSocket = new ServerSocket(0)
     private val messageQueue = new LinkedBlockingQueue[String]()

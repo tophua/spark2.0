@@ -28,7 +28,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.execution.streaming.{MemoryStream, StreamingQueryWrapper}
 import org.apache.spark.sql.functions.count
 import org.apache.spark.util.Utils
-
+//状态存储协调员套件
 class StateStoreCoordinatorSuite extends SparkFunSuite with SharedSparkContext {
 
   import StateStoreCoordinatorSuite._

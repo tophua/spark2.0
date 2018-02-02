@@ -34,7 +34,7 @@ import org.apache.spark.sql.execution.streaming.FakeFileSystem._
 import org.apache.spark.sql.execution.streaming.HDFSMetadataLog.{FileContextManager, FileManager, FileSystemManager}
 import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.util.UninterruptibleThread
-
+//HDFS的元数据日志套件
 class HDFSMetadataLogSuite extends SparkFunSuite with SharedSQLContext {
 
   /** To avoid caching of FS objects
@@ -194,6 +194,7 @@ class HDFSMetadataLogSuite extends SparkFunSuite with SharedSQLContext {
             } catch {
               case e: ConcurrentModificationException =>
               // This is expected since there are multiple writers
+              //这是预期的,因为有多个写
             } finally {
               waiter.dismiss()
             }
@@ -229,7 +230,7 @@ class HDFSMetadataLogSuite extends SparkFunSuite with SharedSQLContext {
     assert(fm.list(basePath, acceptAllFilter).exists(_.getPath.getName == "dir"))
     assert(fm.list(basePath, rejectAllFilter).length === 0)
 
-    // Create
+    // Create 创建
     val path = new Path(s"$dir/file")
     assert(!fm.exists(path))
     fm.create(path).close()
@@ -263,7 +264,7 @@ class HDFSMetadataLogSuite extends SparkFunSuite with SharedSQLContext {
       fm.rename(path2, path3)
     }
   }
-
+  //验证批次ID
   test("verifyBatchIds") {
     import HDFSMetadataLog.verifyBatchIds
     verifyBatchIds(Seq(1L, 2L, 3L), Some(1L), Some(3L))

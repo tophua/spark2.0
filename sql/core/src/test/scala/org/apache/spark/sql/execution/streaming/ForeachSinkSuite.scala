@@ -227,8 +227,10 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
     try {
       inputData.addData(10, 11, 12)
       query.processAllAvailable()
+      //将水印提前至15秒
       inputData.addData(25) // Advance watermark to 15 seconds
       query.processAllAvailable()
+      //将项目不比以前的水印
       inputData.addData(25) // Evict items less than previous watermark
       query.processAllAvailable()
 
@@ -302,7 +304,8 @@ object ForeachSinkSuite {
   }
 }
 
-/** A [[ForeachWriter]] that writes collected events to ForeachSinkSuite */
+/** A [[ForeachWriter]] that writes collected events to ForeachSinkSuite
+  * 一个foreachwriter写收集的事件foreachsinksuite*/
 class TestForeachWriter extends ForeachWriter[Int] {
   ForeachSinkSuite.clear()
 

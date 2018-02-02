@@ -23,7 +23,7 @@ import org.apache.spark.sql.AnalysisException
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{StreamingQueryException, StreamTest}
 import org.apache.spark.util.ManualClock
-
+//速率源套件
 class RateSourceSuite extends StreamTest {
 
   import testImplicits._

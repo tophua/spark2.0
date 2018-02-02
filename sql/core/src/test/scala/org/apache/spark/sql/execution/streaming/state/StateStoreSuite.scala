@@ -44,7 +44,7 @@ import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.UTF8String
 import org.apache.spark.util.Utils
-
+//状态存储套件
 class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
   with BeforeAndAfter with PrivateMethodTester {
   type MapType = mutable.HashMap[UnsafeRow, UnsafeRow]
@@ -64,7 +64,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     StateStore.stop()
     require(!StateStore.isMaintenanceRunning)
   }
-
+  //快照
   test("snapshotting") {
     val provider = newStoreProvider(opId = Random.nextInt, partition = 0, minDeltasForSnapshot = 5)
 
@@ -81,15 +81,19 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
 
     updateVersionTo(2)
     require(getData(provider) === Set("a" -> 2))
+    //不应生成快照文件
     provider.doMaintenance()               // should not generate snapshot files
     assert(getData(provider) === Set("a" -> 2))
 
     for (i <- 1 to currentVersion) {
+      //所有delta文件当前
       assert(fileExists(provider, i, isSnapshot = false))  // all delta files present
+      //没有快照文件
       assert(!fileExists(provider, i, isSnapshot = true))  // no snapshot files present
     }
 
     // After version 6, snapshotting should generate one snapshot file
+    //6版本后,快照应该生成一个快照文件
     updateVersionTo(6)
     require(getData(provider) === Set("a" -> 6), "store not updated correctly")
     provider.doMaintenance()       // should generate snapshot files
@@ -105,6 +109,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
       "snapshotting messed up the data of the final version")
 
     // After version 20, snapshotting should generate newer snapshot files
+    //20版本后，快照应该生成新快照文件
     updateVersionTo(20)
     require(getData(provider) === Set("a" -> 20), "store not updated correctly")
     provider.doMaintenance()       // do snapshot
@@ -117,7 +122,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     deleteFilesEarlierThanVersion(provider, latestSnapshotVersion.get)
     assert(getData(provider) === Set("a" -> 20), "snapshotting messed up the data")
   }
-
+  //清理
   test("cleaning") {
     val provider = newStoreProvider(opId = Random.nextInt, partition = 0, minDeltasForSnapshot = 5)
 
@@ -134,6 +139,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     assert(!fileExists(provider, version = 1, isSnapshot = false)) // first file should be deleted
 
     // last couple of versions should be retrievable
+    //最后对版本可以还原
     assert(getData(provider, 20) === Set("a" -> 20))
     assert(getData(provider, 19) === Set("a" -> 19))
   }
@@ -211,6 +217,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
         StateStore.get(
           storeId, keySchema, valueSchema, None, -1, storeConf, hadoopConf)
       }
+      //版本1不应尝试加载存储区
       assert(!StateStore.isLoaded(storeId)) // version -1 should not attempt to load the store
 
       intercept[IllegalStateException] {
@@ -234,12 +241,14 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
       assert(rowsToSet(store1.iterator()) === Set("a" -> 1))
 
       // Verify that you can also load older version
+      //验证您还可以加载旧版本
       val store0reloaded = StateStore.get(
         storeId, keySchema, valueSchema, None, 0, storeConf, hadoopConf)
       assert(store0reloaded.version === 0)
       assert(rowsToSet(store0reloaded.iterator()) === Set.empty)
 
       // Verify that you can remove the store and still reload and use it
+      //验证您可以删除存储并继续重新加载并使用它
       StateStore.unload(storeId)
       assert(!StateStore.isLoaded(storeId))
 
@@ -252,12 +261,13 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
       assert(rowsToSet(store1reloaded.iterator()) === Set("a" -> 2))
     }
   }
-
+  //维修
   test("maintenance") {
     val conf = new SparkConf()
       .setMaster("local")
       .setAppName("test")
       // Make maintenance thread do snapshots and cleanups very fast
+      //使维护线程做快照和清理的很快
       .set(StateStore.MAINTENANCE_INTERVAL_CONFIG, "10ms")
       // Make sure that when SparkContext stops, the StateStore maintenance thread 'quickly'
       // fails to talk to the StateStoreCoordinator and unloads all the StateStores
@@ -291,17 +301,21 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
           require(!StateStore.isMaintenanceRunning, "StateStore is unexpectedly running")
 
           // Generate sufficient versions of store for snapshots
+          //为快照生成足够的存储版本
           generateStoreVersions()
 
           eventually(timeout(timeoutDuration)) {
             // Store should have been reported to the coordinator
+            //存储应该向协调员报告。
             assert(coordinatorRef.getLocation(storeProviderId).nonEmpty,
               "active instance was not reported")
 
             // Background maintenance should clean up and generate snapshots
+            //后台维护应该清理并生成快照
             assert(StateStore.isMaintenanceRunning, "Maintenance task is not running")
 
             // Some snapshots should have been generated
+            //应该生成一些快照
             val snapshotVersions = (1 to latestStoreVersion).filter { version =>
               fileExists(provider, version, isSnapshot = true)
             }
@@ -310,32 +324,36 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
 
           // Generate more versions such that there is another snapshot and
           // the earliest delta file will be cleaned up
+          //生成更多的版本,以便有另一个快照,最早的delta文件将被清理
           generateStoreVersions()
 
           // Earliest delta file should get cleaned up
+          //最早的delta文件应该清理干净
           eventually(timeout(timeoutDuration)) {
             assert(!fileExists(provider, 1, isSnapshot = false), "earliest file not deleted")
           }
 
           // If driver decides to deactivate all stores related to a query run,
           // then this instance should be unloaded
+          //如果驱动程序决定停用与查询运行相关的所有存储,则应卸载此实例
           coordinatorRef.deactivateInstances(storeProviderId.queryRunId)
           eventually(timeout(timeoutDuration)) {
             assert(!StateStore.isLoaded(storeProviderId))
           }
 
-          // Reload the store and verify
+          // Reload the store and verify 重新加载存储并验证
           StateStore.get(storeProviderId, keySchema, valueSchema, indexOrdinal = None,
             latestStoreVersion, storeConf, hadoopConf)
           assert(StateStore.isLoaded(storeProviderId))
 
           // If some other executor loads the store, then this instance should be unloaded
+          //如果其他执行器加载该存储,则应卸载此实例。
           coordinatorRef.reportActiveInstance(storeProviderId, "other-host", "other-exec")
           eventually(timeout(timeoutDuration)) {
             assert(!StateStore.isLoaded(storeProviderId))
           }
 
-          // Reload the store and verify
+          // Reload the store and verify 重新加载存储并验证
           StateStore.get(storeProviderId, keySchema, valueSchema, indexOrdinal = None,
             latestStoreVersion, storeConf, hadoopConf)
           assert(StateStore.isLoaded(storeProviderId))
@@ -343,6 +361,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
       }
 
       // Verify if instance is unloaded if SparkContext is stopped
+      //如果停止实例验证sparkcontext卸载
       eventually(timeout(timeoutDuration)) {
         require(SparkEnv.get === null)
         assert(!StateStore.isLoaded(storeProviderId))
@@ -350,7 +369,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
       }
     }
   }
-
+  //重命名失败时提交失败
   test("SPARK-18342: commit fails when rename fails") {
     import RenameReturnsFalseFileSystem._
     val dir = scheme + "://" + newDir()
@@ -363,7 +382,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     val e = intercept[IllegalStateException](store.commit())
     assert(e.getCause.getMessage.contains("Failed to rename"))
   }
-
+  //在更新存储之前,不要创建临时delta文件
   test("SPARK-18416: do not create temp delta file until the store is updated") {
     val dir = newDir()
     val storeId = StateStoreProviderId(StateStoreId(dir, 0, 0), UUID.randomUUID)
@@ -391,22 +410,26 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     }
 
     // Getting the store should not create temp file
+    //获取存储不应该创建临时文件
     val store0 = shouldNotCreateTempFile {
       StateStore.get(
         storeId, keySchema, valueSchema, indexOrdinal = None, version = 0, storeConf, hadoopConf)
     }
 
     // Put should create a temp file
+    //应该创建一个临时文件
     put(store0, "a", 1)
     assert(numTempFiles === 1)
     assert(numDeltaFiles === 0)
 
     // Commit should remove temp file and create a delta file
+    //提交应该删除临时文件并创建一个增量文件
     store0.commit()
     assert(numTempFiles === 0)
     assert(numDeltaFiles === 1)
 
     // Remove should create a temp file
+    //删除应该创建一个临时文件
     val store1 = shouldNotCreateTempFile {
       StateStore.get(
         storeId, keySchema, valueSchema, indexOrdinal = None, version = 1, storeConf, hadoopConf)
@@ -416,11 +439,13 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     assert(numDeltaFiles === 1)
 
     // Commit should remove temp file and create a delta file
+    //提交应该删除临时文件并创建一个增量文件
     store1.commit()
     assert(numTempFiles === 0)
     assert(numDeltaFiles === 2)
 
     // Commit without any updates should create a delta file
+    //没有任何更新的提交应该创建一个增量文件
     val store2 = shouldNotCreateTempFile {
       StateStore.get(
         storeId, keySchema, valueSchema, indexOrdinal = None, version = 2, storeConf, hadoopConf)
@@ -429,7 +454,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
     assert(numTempFiles === 0)
     assert(numDeltaFiles === 3)
   }
-
+  //重新启动查询创建新的提供程序实例
   test("SPARK-21145: Restarted queries create new provider instances") {
     try {
       val checkpointLocation = Utils.createTempDir().getAbsoluteFile
@@ -442,7 +467,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
 
       def runQueryAndGetLoadedProviders(): Seq[StateStoreProvider] = {
         val aggregated = inputData.toDF().groupBy("value").agg(count("*"))
-        // stateful query
+        // stateful query 状态查询
         val query = aggregated.writeStream
           .format("memory")
           .outputMode("complete")
@@ -451,6 +476,7 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
           .start()
         inputData.addData(1, 2, 3)
         query.processAllAvailable()
+        //启动后至少有一批处理
         require(query.lastProgress != null) // at least one batch processed after start
         val loadedProvidersMethod =
           PrivateMethod[mutable.HashMap[StateStoreProviderId, StateStoreProvider]]('loadedProviders)
@@ -464,9 +490,11 @@ class StateStoreSuite extends StateStoreSuiteBase[HDFSBackedStateStoreProvider]
       require(loadedProvidersAfterRun1.length === 1)
 
       val loadedProvidersAfterRun2 = runQueryAndGetLoadedProviders()
+      //两个提供2次运行的提供者
       assert(loadedProvidersAfterRun2.length === 2)   // two providers loaded for 2 runs
 
       // Both providers should have the same StateStoreId, but the should be different objects
+      //两个提供者应该有相同的StateStoreId，但是应该是不同的对象
       assert(loadedProvidersAfterRun2(0).stateStoreId === loadedProvidersAfterRun2(1).stateStoreId)
       assert(loadedProvidersAfterRun2(0) ne loadedProvidersAfterRun2(1))
 
@@ -565,6 +593,7 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     val provider = newStoreProvider()
 
     // Verify state before starting a new set of updates
+    //在开始一组新的更新之前验证状态
     assert(getLatestData(provider).isEmpty)
 
     val store = provider.getStore(0)
@@ -574,6 +603,7 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     assert(store.metrics.numKeys === 0)
 
     // Verify state after updating
+    //更新后验证状态
     put(store, "a", 1)
     assert(get(store, "a") === Some(1))
     assert(store.metrics.numKeys === 1)
@@ -582,6 +612,7 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     assert(getLatestData(provider).isEmpty)
 
     // Make updates, commit and then verify state
+    //进行更新,提交然后验证状态
     put(store, "b", 2)
     put(store, "aa", 3)
     assert(store.metrics.numKeys === 3)
@@ -594,6 +625,7 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     assert(getLatestData(provider) === Set("b" -> 2))
 
     // Trying to get newer versions should fail
+    //试图获得更新的版本应该失败
     intercept[Exception] {
       provider.getStore(2)
     }
@@ -602,6 +634,7 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     }
 
     // New updates to the reloaded store with new version, and does not change old version
+    //重新装载新版本的新版本,不会更改旧版本
     val reloadedProvider = newStoreProvider(store.id)
     val reloadedStore = reloadedProvider.getStore(1)
     assert(reloadedStore.metrics.numKeys === 1)
@@ -612,17 +645,19 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     assert(getLatestData(provider) === Set("b" -> 2, "c" -> 4))
     assert(getData(provider, version = 1) === Set("b" -> 2))
   }
-
+  //在迭代时删除
   test("removing while iterating") {
     val provider = newStoreProvider()
 
     // Verify state before starting a new set of updates
+    //在开始一组新的更新之前验证状态
     assert(getLatestData(provider).isEmpty)
     val store = provider.getStore(0)
     put(store, "a", 1)
     put(store, "b", 2)
 
     // Updates should work while iterating of filtered entries
+    //更新应该在迭代过滤条目时工作
     val filtered = store.iterator.filter { tuple => rowToString(tuple.key) == "a" }
     filtered.foreach { tuple =>
       store.put(tuple.key, intToRow(rowToInt(tuple.value) + 1))
@@ -630,11 +665,12 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     assert(get(store, "a") === Some(2))
 
     // Removes should work while iterating of filtered entries
+    //删除应该在迭代过滤的条目时工作
     val filtered2 = store.iterator.filter { tuple => rowToString(tuple.key) == "b" }
     filtered2.foreach { tuple => store.remove(tuple.key) }
     assert(get(store, "b") === None)
   }
-
+  //退出
   test("abort") {
     val provider = newStoreProvider()
     val store = provider.getStore(0)
@@ -643,11 +679,12 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     assert(rowsToSet(store.iterator()) === Set("a" -> 1))
 
     // cancelUpdates should not change the data in the files
+    //cancelUpdates不应该更改文件中的数据
     val store1 = provider.getStore(1)
     put(store1, "b", 1)
     store1.abort()
   }
-
+  //getStore with invalid versions
   test("getStore with invalid versions") {
     val provider = newStoreProvider()
 
@@ -681,24 +718,27 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     checkInvalidVersion(-1)
     checkInvalidVersion(3)
   }
-
+  //两个并发的StateStore - 一个用于只读，一个用于读写
   test("two concurrent StateStores - one for read-only and one for read-write") {
     // During Streaming Aggregation, we have two StateStores per task, one used as read-only in
     // `StateStoreRestoreExec`, and one read-write used in `StateStoreSaveExec`. `StateStore.abort`
     // will be called for these StateStores if they haven't committed their results. We need to
     // make sure that `abort` in read-only store after a `commit` in the read-write store doesn't
     // accidentally lead to the deletion of state.
+    //在Streaming Aggregation期间,每个任务有两个StateStore,一个在StateStoreRestoreExec中只读,一个在StateStoreSaveExec中使用。
+    // 如果这些StateStore没有提交结果,将会调用StateStore.abort
+    // 我们需要确保在读写存储中的`commit`后的只读存储中的`abort`不会意外地导致状态的删除。
     val dir = newDir()
     val storeId = StateStoreId(dir, 0L, 1)
     val provider0 = newStoreProvider(storeId)
-    // prime state
+    // prime state 主要状态
     val store = provider0.getStore(0)
     val key = "a"
     put(store, key, 1)
     store.commit()
     assert(rowsToSet(store.iterator()) === Set(key -> 1))
 
-    // two state stores
+    // two state stores 两状态存储
     val provider1 = newStoreProvider(storeId)
     val restoreStore = provider1.getStore(1)
     val saveStore = provider1.getStore(1)
@@ -708,23 +748,28 @@ abstract class StateStoreSuiteBase[ProviderClass <: StateStoreProvider]
     restoreStore.abort()
 
     // check that state is correct for next batch
+    //检查下一批次的状态是否正确
     val provider2 = newStoreProvider(storeId)
     val finalStore = provider2.getStore(2)
     assert(rowsToSet(finalStore.iterator()) === Set(key -> 2))
   }
 
-  /** Return a new provider with a random id */
+  /** Return a new provider with a random id
+    * 用随机id返回一个新的提供者*/
   def newStoreProvider(): ProviderClass
 
-  /** Return a new provider with the given id */
+  /** Return a new provider with the given id
+    * 返回给定ID的新提供者*/
   def newStoreProvider(storeId: StateStoreId): ProviderClass
 
-  /** Get the latest data referred to by the given provider but not using this provider */
+  /** Get the latest data referred to by the given provider but not using this provider
+    * 获取给定提供者引用的最新数据,但不使用此提供程序。*/
   def getLatestData(storeProvider: ProviderClass): Set[(String, Int)]
 
   /**
    * Get a specific version of data referred to by the given provider but not using
    * this provider
+    * 获取给定提供者引用的数据的特定版本,但不使用此提供程序
    */
   def getData(storeProvider: ProviderClass, version: Int): Set[(String, Int)]
 }
@@ -778,6 +823,7 @@ object StateStoreTestsHelper {
 /**
  * Fake FileSystem that simulates HDFS rename semantic, i.e. renaming a file atop an existing
  * one should return false.
+  * 假文件系统HDFS重命名重命名模拟语义,即在现有的一个文件应该返回false
  * See hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/filesystem/filesystem.html
  */
 class RenameLikeHDFSFileSystem extends RawLocalFileSystem {
@@ -793,6 +839,7 @@ class RenameLikeHDFSFileSystem extends RawLocalFileSystem {
 /**
  * Fake FileSystem to test that the StateStore throws an exception while committing the
  * delta file, when `fs.rename` returns `false`.
+  * 假FileSystem测试StateStore在提交delta文件时抛出一个异常,当`fs.rename`返回`false`时
  */
 class RenameReturnsFalseFileSystem extends RawLocalFileSystem {
   import RenameReturnsFalseFileSystem._

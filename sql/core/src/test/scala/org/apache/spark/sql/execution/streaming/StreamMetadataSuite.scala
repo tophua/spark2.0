@@ -24,7 +24,7 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 
 import org.apache.spark.sql.streaming.StreamTest
-
+//流元数据套件
 class StreamMetadataSuite extends StreamTest {
   //写和读
   test("writing and reading") {

@@ -24,7 +24,7 @@ import org.apache.spark.{SparkConf, SparkFunSuite}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.execution.streaming.FakeFileSystem._
 import org.apache.spark.sql.test.SharedSQLContext
-
+  //兼容的文件流日志套件
 class CompactibleFileStreamLogSuite extends SparkFunSuite with SharedSQLContext {
 
   /** To avoid caching of FS objects
@@ -162,8 +162,11 @@ class CompactibleFileStreamLogSuite extends SparkFunSuite with SharedSQLContext 
       def newFakeCompactibleFileStreamLog(version: Int): FakeCompactibleFileStreamLog =
         new FakeCompactibleFileStreamLog(
           version,
+          //这个参数在这个测试用例中并不重要
           _fileCleanupDelayMs = Long.MaxValue, // this param does not matter here in this test case
+          //这个参数在这个测试用例中并不重要
           _defaultCompactInterval = 3,         // this param does not matter here in this test case
+          //这个参数在这个测试用例中并不重要
           _defaultMinBatchesToRetain = 1,      // this param does not matter here in this test case
           spark,
           dir.getCanonicalPath)

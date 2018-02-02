@@ -60,7 +60,7 @@ class OffsetSeqLogSuite extends SparkFunSuite with SharedSQLContext {
     assert(OffsetSeqMetadata(1, 2, getConfWith(shufflePartitions = 3)) ===
       OffsetSeqMetadata(s"""{"batchWatermarkMs":1,"batchTimestampMs":2,"conf": {"$key":3}}"""))
 
-    // Drop unknown fields
+    // Drop unknown fields 删除未知的字段
     assert(OffsetSeqMetadata(1, 2, getConfWith(shufflePartitions = 3)) ===
       OffsetSeqMetadata(
         s"""{"batchWatermarkMs":1,"batchTimestampMs":2,"conf": {"$key":3}},"unknown":1"""))
