@@ -31,6 +31,8 @@ import org.apache.spark.util.SerializableConfiguration
  * An RDD that allows computations to be executed against [[StateStore]]s. It
  * uses the [[StateStoreCoordinator]] to get the locations of loaded state stores
  * and use that as the preferred locations.
+  * 一个RDD,允许对[[StateStore]]执行计算,它使用[[StateStoreCoordinator]]获取加载的状态存储的位置,
+  * 并将其用作首选位置。
  */
 class StateStoreRDD[T: ClassTag, U: ClassTag](
     dataRDD: RDD[T],
@@ -49,6 +51,7 @@ class StateStoreRDD[T: ClassTag, U: ClassTag](
   private val storeConf = new StateStoreConf(sessionState.conf)
 
   // A Hadoop Configuration can be about 10 KB, which is pretty big, so broadcast it
+  //一个Hadoop配置可以是大约10 KB,这是相当大的,所以广播它
   private val hadoopConfBroadcast = dataRDD.context.broadcast(
     new SerializableConfiguration(sessionState.newHadoopConf()))
 
@@ -57,6 +60,7 @@ class StateStoreRDD[T: ClassTag, U: ClassTag](
   /**
    * Set the preferred location of each partition using the executor that has the related
    * [[StateStoreProvider]] already loaded.
+    * 使用已经加载了相关[[StateStoreProvider]]的执行程序设置每个分区的首选位置
    */
   override def getPreferredLocations(partition: Partition): Seq[String] = {
     val stateStoreProviderId = StateStoreProviderId(

@@ -70,17 +70,22 @@ import org.apache.spark.util.{SizeEstimator, Utils}
 private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider with Logging {
 
   // ConcurrentHashMap is used because it generates fail-safe iterators on filtering
+  //使用ConcurrentHashMap是因为它在过滤时生成故障安全迭代器
   // - The iterator is weakly consistent with the map, i.e., iterator's data reflect the values in
   //   the map when the iterator was created
+  //   迭代器与Map的一致性很弱,即当创建迭代器时,迭代器的数据反映地图中的值
   // - Any updates to the map while iterating through the filtered iterator does not throw
+  //    迭代通过过滤迭代器时对映射的任何更新都不会抛出
   //   java.util.ConcurrentModificationException
   type MapType = java.util.concurrent.ConcurrentHashMap[UnsafeRow, UnsafeRow]
 
-  /** Implementation of [[StateStore]] API which is backed by a HDFS-compatible file system */
+  /** Implementation of [[StateStore]] API which is backed by a HDFS-compatible file system
+    * 执行由[HDSt兼容的文件系统支持的[[StateStore]] API*/
   class HDFSBackedStateStore(val version: Long, mapToUpdate: MapType)
     extends StateStore {
 
-    /** Trait and classes representing the internal state of the store */
+    /** Trait and classes representing the internal state of the store
+      * 代表存储内部状态的特质和类*/
     trait STATE
     case object UPDATING extends STATE
     case object COMMITTED extends STATE
@@ -121,7 +126,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
       iterator()
     }
 
-    /** Commit all the updates that have been made to the store, and return the new version. */
+    /** Commit all the updates that have been made to the store, and return the new version.
+      * 提交已经对存储进行的所有更新,并返回新版本*/
     override def commit(): Long = {
       verify(state == UPDATING, "Cannot commit after already committed or aborted")
 
@@ -138,7 +144,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
       }
     }
 
-    /** Abort all the updates made on this store. This store will not be usable any more. */
+    /** Abort all the updates made on this store. This store will not be usable any more.
+      * 中止在这家存储做的所有更新,这家存储将不再可用*/
     override def abort(): Unit = {
       verify(state == UPDATING || state == ABORTED, "Cannot abort after already committed")
       try {
@@ -153,6 +160,7 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
         case c: ClosedChannelException =>
           // This can happen when underlying file output stream has been closed before the
           // compression stream.
+          //在压缩流之前关闭基础文件输出流时会发生这种情况
           logDebug(s"Error aborting version $newVersion into $this", c)
 
         case e: Exception =>
@@ -162,8 +170,9 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
     }
 
     /**
-     * Get an iterator of all the store data.
+     * Get an iterator of all the store data.获取所有存储数据的迭代器
      * This can be called only after committing all the updates made in the current thread.
+      * 这只能在提交当前线程中进行的所有更新之后调用
      */
     override def iterator(): Iterator[UnsafeRowPair] = {
       val unsafeRowPair = new UnsafeRowPair()
@@ -178,6 +187,7 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
 
     /**
      * Whether all updates have been committed
+      * 是否所有更新都已经提交
      */
     override def hasCommitted: Boolean = {
       state == COMMITTED
@@ -188,7 +198,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
     }
   }
 
-  /** Get the state store for making updates to create a new `version` of the store. */
+  /** Get the state store for making updates to create a new `version` of the store.
+    * 获取状态存储进行更新以创建存储的新“版本” */
   override def getStore(version: Long): StateStore = synchronized {
     require(version >= 0, "Version cannot be less than 0")
     val newMap = new MapType()
@@ -217,7 +228,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
 
   override def stateStoreId: StateStoreId = stateStoreId_
 
-  /** Do maintenance backing data files, including creating snapshots and cleaning up old files */
+  /** Do maintenance backing data files, including creating snapshots and cleaning up old files
+    * 做维护支持数据文件,包括创建快照和清理旧文件*/
   override def doMaintenance(): Unit = {
     try {
       doSnapshot()
@@ -241,7 +253,7 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
       s"id = (op=${stateStoreId.operatorId},part=${stateStoreId.partitionId}),dir = $baseDir]"
   }
 
-  /* Internal fields and methods */
+  /* Internal fields and methods 内部的字段和方法*/
 
   @volatile private var stateStoreId_ : StateStoreId = _
   @volatile private var keySchema: StructType = _
@@ -256,7 +268,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
 
   private case class StoreFile(version: Long, path: Path, isSnapshot: Boolean)
 
-  /** Commit a set of updates to the store with the given new version */
+  /** Commit a set of updates to the store with the given new version
+    * 使用给定的新版本向存储提交一组更新 */
   private def commitUpdates(newVersion: Long, map: MapType, tempDeltaFile: Path): Path = {
     synchronized {
       val finalDeltaFile = deltaFile(newVersion)
@@ -281,7 +294,9 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
 
   /**
    * Get iterator of all the data of the latest version of the store.
+    * 获取最新版本存储的所有数据的迭代器
    * Note that this will look up the files to determined the latest known version.
+    * 请注意,这将查找文件来确定最新的已知版本
    */
   private[state] def latestIterator(): Iterator[UnsafeRowPair] = synchronized {
     val versionsInFiles = fetchFiles().map(_.version).toSet
@@ -295,7 +310,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
     } else Iterator.empty
   }
 
-  /** Load the required version of the map data from the backing files */
+  /** Load the required version of the map data from the backing files
+    * 从支持文件加载所需版本的Map数据*/
   private def loadMap(version: Long): MapType = {
     if (version <= 0) return new MapType
     synchronized { loadedMaps.get(version) }.getOrElse {
@@ -465,7 +481,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
   }
 
 
-  /** Perform a snapshot of the store to allow delta files to be consolidated */
+  /** Perform a snapshot of the store to allow delta files to be consolidated
+    * 执行存储的快照以允许合并增量文件*/
   private def doSnapshot(): Unit = {
     try {
       val files = fetchFiles()
@@ -493,6 +510,7 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
    * Clean up old snapshots and delta files that are not needed any more. It ensures that last
    * few versions of the store can be recovered from the files, so re-executed RDD operations
    * can re-apply updates on the past versions of the store.
+    * 清理不再需要的旧快照和增量文件,它确保可以从文件中恢复最后几个版本的存储,所以重新执行的RDD操作可以重新应用商店的以前版本的更新。
    */
   private[state] def cleanup(): Unit = {
     try {
@@ -519,7 +537,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
     }
   }
 
-  /** Files needed to recover the given version of the store */
+  /** Files needed to recover the given version of the store
+    * 恢复给定版本的存储所需的文件*/
   private def filesForVersion(allFiles: Seq[StoreFile], version: Long): Seq[StoreFile] = {
     require(version >= 0)
     require(allFiles.exists(_.version == version))
@@ -546,7 +565,8 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
     latestSnapshotFileBeforeVersion.toSeq ++ deltaBatchFiles
   }
 
-  /** Fetch all the files that back the store */
+  /** Fetch all the files that back the store
+    * 获取所有的存储文件*/
   private def fetchFiles(): Seq[StoreFile] = {
     val files: Seq[FileStatus] = try {
       fs.listStatus(baseDir)
@@ -563,6 +583,7 @@ private[state] class HDFSBackedStateStoreProvider extends StateStoreProvider wit
         nameParts(1).toLowerCase(Locale.ROOT) match {
           case "delta" =>
             // ignore the file otherwise, snapshot file already exists for that batch id
+            //否则忽略该文件,快照文件已经存在该批次ID
             if (!versionToFiles.contains(version)) {
               versionToFiles.put(version, StoreFile(version, path, isSnapshot = false))
             }

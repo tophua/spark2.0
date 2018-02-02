@@ -23,6 +23,7 @@ import org.apache.spark.sql.streaming.Trigger
 /**
  * A [[Trigger]] that process only one batch of data in a streaming query then terminates
  * the query.
+  * 该过程仅在流式查询中处理一批数据,然后终止查询
  */
 @Experimental
 @InterfaceStability.Evolving

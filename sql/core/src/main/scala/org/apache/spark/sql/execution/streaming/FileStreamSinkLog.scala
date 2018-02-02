@@ -29,14 +29,14 @@ import org.apache.spark.sql.internal.SQLConf
 /**
  * The status of a file outputted by [[FileStreamSink]]. A file is visible only if it appears in
  * the sink log and its action is not "delete".
- *
- * @param path the file path.
- * @param size the file size.
- * @param isDir whether this file is a directory.
- * @param modificationTime the file last modification time.
- * @param blockReplication the block replication.
- * @param blockSize the block size.
- * @param action the file action. Must be either "add" or "delete".
+ * 由[[FileStreamSink]]输出的文件的状态,只有当文件出现在接收器日志中并且其操作不是“删除”时,该文件才可见。
+ * @param path the file path. 文件路径
+ * @param size the file size. 文件大小
+ * @param isDir whether this file is a directory. 无论这个文件是一个目录
+ * @param modificationTime the file last modification time. 文件上次修改时间
+ * @param blockReplication the block replication.块复制
+ * @param blockSize the block size. 块大小
+ * @param action the file action. Must be either "add" or "delete". 文件操作,必须是“添加”或“删除”。
  */
 case class SinkFileStatus(
     path: String,
@@ -71,6 +71,8 @@ object SinkFileStatus {
  * of the log file is the version number, and there are multiple JSON lines following. Each JSON
  * line is a JSON format of [[SinkFileStatus]].
  *
+  * [[FileStreamSink]]的特殊日志,它会为每个批次写入一个日志文件,日志文件的第一行是版本号,下面有多条JSON行。 每条JSON行都是[[SinkFileStatus]]的JSON格式
+  *
  * As reading from many small files is usually pretty slow, [[FileStreamSinkLog]] will compact log
  * files every "spark.sql.sink.file.log.compactLen" batches into a big file. When doing a
  * compaction, it will read all old log files and merge them with the new batch. During the

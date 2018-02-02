@@ -40,13 +40,13 @@ class StreamManualClock(time: Long = 0L) extends ManualClock(time) with Serializ
   }
 
   /** Is the streaming thread waiting for the clock to advance when it is at the given time
-    * 流媒体线程是否在给定的时间等待时钟前进 */
+    * 在给定的时间内,等待时钟前进的流线程是否在等待？ */
   def isStreamWaitingAt(time: Long): Boolean = synchronized {
     waitStartTime == Some(time)
   }
 
   /** Is the streaming thread waiting for clock to advance to the given time
-    * 流线程是否等待时钟前进到给定时间 */
+    * 流线程等待时钟提前到给定的时间吗？*/
   def isStreamWaitingFor(target: Long): Boolean = synchronized {
     waitTargetTime == Some(target)
   }

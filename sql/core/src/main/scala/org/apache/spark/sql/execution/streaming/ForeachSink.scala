@@ -24,7 +24,7 @@ import org.apache.spark.sql.catalyst.encoders.encoderFor
 /**
  * A [[Sink]] that forwards all data into [[ForeachWriter]] according to the contract defined by
  * [[ForeachWriter]].
- *
+ * A [[Sink]],根据[[ForeachWriter]]定义的契约将所有数据转发到[[ForeachWriter]]
  * @param writer The [[ForeachWriter]] to process all data.
  * @tparam T The expected type of the sink.
  */

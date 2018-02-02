@@ -26,7 +26,8 @@ import org.apache.spark.sql.types.MetadataBuilder
 import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.util.AccumulatorV2
 
-/** Class for collecting event time stats with an accumulator */
+/** Class for collecting event time stats with an accumulator
+  * 使用累加器收集事件时间统计信息的类*/
 case class EventTimeStats(var max: Long, var min: Long, var avg: Double, var count: Long) {
   def add(eventTime: Long): Unit = {
     this.max = math.max(this.max, eventTime)
@@ -48,7 +49,8 @@ object EventTimeStats {
     max = Long.MinValue, min = Long.MaxValue, avg = 0.0, count = 0L)
 }
 
-/** Accumulator that collects stats on event time in a batch. */
+/** Accumulator that collects stats on event time in a batch.
+  * 在批处理中收集事件时间统计信息的累加器 */
 class EventTimeStatsAccum(protected var currentStats: EventTimeStats = EventTimeStats.zero)
   extends AccumulatorV2[Long, EventTimeStats] {
 
@@ -75,6 +77,9 @@ class EventTimeStatsAccum(protected var currentStats: EventTimeStats = EventTime
  * time. Based on the maximum observed time and a user specified delay, we can calculate the
  * `watermark` after which we assume we will no longer see late records for a particular time
  * period. Note that event time is measured in milliseconds.
+  * 用于将列标记为包含给定记录的事件时间,除了向此列添加适当的元数据之外,
+  * 此操作员还会跟踪观察到的最大事件时间,根据最大观察时间和用户指定的延迟,
+  * 我们可以计算出“水印”,之后我们假设在特定时间段内我们将不再看到延迟记录,请注意,事件时间以毫秒为单位进行测量。
  */
 case class EventTimeWatermarkExec(
     eventTime: Attribute,
@@ -97,6 +102,7 @@ case class EventTimeWatermarkExec(
   }
 
   // Update the metadata on the eventTime column to include the desired delay.
+  //更新的eventtime列的元数据包括预期的延迟
   override val output: Seq[Attribute] = child.output.map { a =>
     if (a semanticEquals eventTime) {
       val updatedMetadata = new MetadataBuilder()

@@ -19,7 +19,8 @@ package org.apache.spark.sql.execution.streaming.state
 
 import org.apache.spark.sql.internal.SQLConf
 
-/** A class that contains configuration parameters for [[StateStore]]s. */
+/** A class that contains configuration parameters for [[StateStore]]s.
+  * 包含[[StateStore]]的配置参数的类 */
 class StateStoreConf(@transient private val sqlConf: SQLConf)
   extends Serializable {
 
@@ -28,21 +29,25 @@ class StateStoreConf(@transient private val sqlConf: SQLConf)
   /**
    * Minimum number of delta files in a chain after which HDFSBackedStateStore will
    * consider generating a snapshot.
+    * HDFSBackedStateStore将考虑生成快照之后,链中的最小数量的增量文件
    */
   val minDeltasForSnapshot: Int = sqlConf.stateStoreMinDeltasForSnapshot
 
-  /** Minimum versions a State Store implementation should retain to allow rollbacks */
+  /** Minimum versions a State Store implementation should retain to allow rollbacks
+    * State Store实现应保留的最小版本允许回滚*/
   val minVersionsToRetain: Int = sqlConf.minBatchesToRetain
 
   /**
    * Optional fully qualified name of the subclass of [[StateStoreProvider]]
    * managing state data. That is, the implementation of the State Store to use.
+    * [[StateStoreProvider]]管理状态数据的子类的可选完全限定名称,也就是说,存储的实施使用
    */
   val providerClass: String = sqlConf.stateStoreProviderClass
 
   /**
    * Additional configurations related to state store. This will capture all configs in
-   * SQLConf that start with `spark.sql.streaming.stateStore.` */
+   * SQLConf that start with `spark.sql.streaming.stateStore.`
+    * 与状态存储相关的其他配置,这将捕获以`spark.sql.streaming.stateStore.`开头的SQLConf中的所有配置*/
   val confs: Map[String, String] =
     sqlConf.getAllConfs.filter(_._1.startsWith("spark.sql.streaming.stateStore."))
 }

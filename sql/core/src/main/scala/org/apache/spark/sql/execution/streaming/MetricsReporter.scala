@@ -30,6 +30,7 @@ import org.apache.spark.util.Clock
 /**
  * Serves metrics from a [[org.apache.spark.sql.streaming.StreamingQuery]] to
  * Codahale/DropWizard metrics
+  * 将指标从[[org.apache.spark.sql.streaming.StreamingQuery]]传输到Codahale / DropWizard指标
  */
 class MetricsReporter(
     stream: StreamExecution,

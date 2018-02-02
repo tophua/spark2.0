@@ -44,8 +44,10 @@ object TextSocketSource {
 
 /**
  * A source that reads text lines through a TCP socket, designed only for tutorials and debugging.
+  * 通过TCP套接字读取文本行的源代码,仅用于教程和调试
  * This source will *not* work in production applications due to multiple reasons, including no
  * support for fault recovery and keeping all of the text read in memory forever.
+  * 由于多种原因,此源不会在生产应用程序中工作,包括不支持故障恢复,并将所有文本永久保存在内存中
  */
 class TextSocketSource(host: String, port: Int, includeTimestamp: Boolean, sqlContext: SQLContext)
   extends Source with Logging {
@@ -59,6 +61,8 @@ class TextSocketSource(host: String, port: Int, includeTimestamp: Boolean, sqlCo
   /**
    * All batches from `lastCommittedOffset + 1` to `currentOffset`, inclusive.
    * Stored in a ListBuffer to facilitate removing committed batches.
+    * 从“lastCommittedOffset + 1”到“currentOffset”的所有批次(包括),
+    * 存储在ListBuffer中以便于删除已提交的批次
    */
   @GuardedBy("this")
   protected val batches = new ListBuffer[(String, Timestamp)]
@@ -103,7 +107,8 @@ class TextSocketSource(host: String, port: Int, includeTimestamp: Boolean, sqlCo
     readThread.start()
   }
 
-  /** Returns the schema of the data from this source */
+  /** Returns the schema of the data from this source
+    * 返回此源数据的模式*/
   override def schema: StructType = if (includeTimestamp) TextSocketSource.SCHEMA_TIMESTAMP
   else TextSocketSource.SCHEMA_REGULAR
 
@@ -115,13 +120,15 @@ class TextSocketSource(host: String, port: Int, includeTimestamp: Boolean, sqlCo
     }
   }
 
-  /** Returns the data that is between the offsets (`start`, `end`]. */
+  /** Returns the data that is between the offsets (`start`, `end`].
+    * 返回偏移量之间的数据（`start`，`end`] */
   override def getBatch(start: Option[Offset], end: Offset): DataFrame = synchronized {
     val startOrdinal =
       start.flatMap(LongOffset.convert).getOrElse(LongOffset(-1)).offset.toInt + 1
     val endOrdinal = LongOffset.convert(end).getOrElse(LongOffset(-1)).offset.toInt + 1
 
     // Internal buffer only holds the batches after lastOffsetCommitted
+    //内部缓冲区只保存lastOffsetCommitted后的批处理
     val rawList = synchronized {
       val sliceStart = startOrdinal - lastOffsetCommitted.offset.toInt - 1
       val sliceEnd = endOrdinal - lastOffsetCommitted.offset.toInt - 1
@@ -150,7 +157,7 @@ class TextSocketSource(host: String, port: Int, includeTimestamp: Boolean, sqlCo
     lastOffsetCommitted = newOffset
   }
 
-  /** Stop this source. */
+  /** Stop this source.停止这个来源 */
   override def stop(): Unit = synchronized {
     if (socket != null) {
       try {
@@ -176,7 +183,8 @@ class TextSocketSourceProvider extends StreamSourceProvider with DataSourceRegis
     }
   }
 
-  /** Returns the name and schema of the source that can be used to continually read data. */
+  /** Returns the name and schema of the source that can be used to continually read data.
+    * 返回可用于连续读取数据的源的名称和模式*/
   override def sourceSchema(
       sqlContext: SQLContext,
       schema: Option[StructType],
@@ -214,6 +222,7 @@ class TextSocketSourceProvider extends StreamSourceProvider with DataSourceRegis
     new TextSocketSource(host, port, parseIncludeTimestamp(parameters), sqlContext)
   }
 
-  /** String that represents the format that this data source provider uses. */
+  /** String that represents the format that this data source provider uses.
+    * 表示此数据源提供程序使用的格式的字符串*/
   override def shortName(): String = "socket"
 }

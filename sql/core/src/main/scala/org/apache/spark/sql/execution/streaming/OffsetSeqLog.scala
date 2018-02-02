@@ -27,12 +27,16 @@ import org.apache.spark.sql.SparkSession
 
 /**
  * This class is used to log offsets to persistent files in HDFS.
+  * 这个类用于将偏移量记录到HDFS中的持久性文件
  * Each file corresponds to a specific batch of offsets. The file
  * format contain a version string in the first line, followed
  * by a the JSON string representation of the offsets separated
  * by a newline character. If a source offset is missing, then
  * that line will contain a string value defined in the
  * SERIALIZED_VOID_OFFSET variable in [[OffsetSeqLog]] companion object.
+  * 每个文件对应于一个特定批次的偏移量,文件格式在第一行中包含一个版本字符串,
+  * 后跟由换行符分隔的偏移量的JSON字符串表示形式,如果缺少源偏移量,
+  * 则该行将包含在[[OffsetSeqLog]]伴随对象中的SERIALIZED_VOID_OFFSET变量中定义的字符串值。
  * For instance, when dealing with [[LongOffset]] types:
  *   v1        // version 1
  *   metadata
@@ -47,6 +51,7 @@ class OffsetSeqLog(sparkSession: SparkSession, path: String)
 
   override protected def deserialize(in: InputStream): OffsetSeq = {
     // called inside a try-finally where the underlying stream is closed in the caller
+    //在调用程序中关闭底层流的try-finally内调用
     def parseOffset(value: String): Offset = value match {
       case OffsetSeqLog.SERIALIZED_VOID_OFFSET => null
       case json => SerializedOffset(json)
@@ -68,13 +73,16 @@ class OffsetSeqLog(sparkSession: SparkSession, path: String)
 
   override protected def serialize(offsetSeq: OffsetSeq, out: OutputStream): Unit = {
     // called inside a try-finally where the underlying stream is closed in the caller
+    //在调用程序中关闭底层流的try-finally内调用
     out.write(("v" + OffsetSeqLog.VERSION).getBytes(UTF_8))
 
     // write metadata
+    //写元数据
     out.write('\n')
     out.write(offsetSeq.metadata.map(_.json).getOrElse("").getBytes(UTF_8))
 
     // write offsets, one per line
+    //写偏移,每行一个
     offsetSeq.offsets.map(_.map(_.json)).foreach { offset =>
       out.write('\n')
       offset match {

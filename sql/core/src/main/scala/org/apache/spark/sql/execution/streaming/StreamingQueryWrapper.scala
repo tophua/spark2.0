@@ -25,12 +25,16 @@ import org.apache.spark.sql.streaming.{StreamingQuery, StreamingQueryException, 
  * Wrap non-serializable StreamExecution to make the query serializable as it's easy to for it to
  * get captured with normal usage. It's safe to capture the query but not use it in executors.
  * However, if the user tries to call its methods, it will throw `IllegalStateException`.
+  * 将不可序列化的StreamExecution封装起来,使得查询可序列化,因为它很容易被正常使用捕获,
+  * 捕获查询是安全的,但不用于执行者。
+  * 但是,如果用户试图调用它的方法,它将抛出`IllegalStateException`。
  */
 class StreamingQueryWrapper(@transient private val _streamingQuery: StreamExecution)
   extends StreamingQuery with Serializable {
 
   def streamingQuery: StreamExecution = {
-    /** Assert the codes run in the driver. */
+    /** Assert the codes run in the driver.
+      * 断言在驱动程序中运行的代码 */
     if (_streamingQuery == null) {
       throw new IllegalStateException("StreamingQuery cannot be used in executors")
     }
@@ -84,6 +88,7 @@ class StreamingQueryWrapper(@transient private val _streamingQuery: StreamExecut
   /**
    * This method is called in Python. Python cannot call "explain" directly as it outputs in the JVM
    * process, which may not be visible in Python process.
+    * 这个方法在Python中被调用,Python不能直接调用“explain”,因为它在JVM进程中输出,这在Python进程中可能不可见
    */
   def explainInternal(extended: Boolean): String = {
     streamingQuery.explainInternal(extended)

@@ -49,6 +49,8 @@ object MemoryStream {
  * A [[Source]] that produces value stored in memory as they are added by the user.  This [[Source]]
  * is intended for use in unit tests as it can only replay data when the object is still
  * available.
+  * 一种[Source],当用户添加时,生成存储在内存中的值,
+  * 这个[Source]是用于单元测试的,因为它只能在对象仍然可用时重播数据
  */
 case class MemoryStream[A : Encoder](id: Int, sqlContext: SQLContext)
     extends Source with Logging {
@@ -59,6 +61,7 @@ case class MemoryStream[A : Encoder](id: Int, sqlContext: SQLContext)
   /**
    * All batches from `lastCommittedOffset + 1` to `currentOffset`, inclusive.
    * Stored in a ListBuffer to facilitate removing committed batches.
+    * 所有批次` lastcommittedoffset + 1 `到` currentoffset `,包容,存储在ListBuffer促进消除提交的批。
    */
   @GuardedBy("this")
   protected val batches = new ListBuffer[Dataset[A]]
@@ -69,6 +72,8 @@ case class MemoryStream[A : Encoder](id: Int, sqlContext: SQLContext)
   /**
    * Last offset that was discarded, or -1 if no commits have occurred. Note that the value
    * -1 is used in calculations below and isn't just an arbitrary constant.
+    * 最后一个被丢弃的偏移量,或者如果没有提交,则为1。
+    * 注意,下面的计算中使用了值- 1,而不只是一个任意常量。
    */
   @GuardedBy("this")
   protected var lastOffsetCommitted : LongOffset = new LongOffset(-1)
@@ -116,6 +121,7 @@ case class MemoryStream[A : Encoder](id: Int, sqlContext: SQLContext)
     val endOrdinal = LongOffset.convert(end).getOrElse(LongOffset(-1)).offset.toInt + 1
 
     // Internal buffer only holds the batches after lastCommittedOffset.
+    //内部缓冲区仅包含lastCommittedOffset后的批处理
     val newBlocks = synchronized {
       val sliceStart = startOrdinal - lastOffsetCommitted.offset.toInt - 1
       val sliceEnd = endOrdinal - lastOffsetCommitted.offset.toInt - 1
@@ -178,16 +184,19 @@ case class MemoryStream[A : Encoder](id: Int, sqlContext: SQLContext)
 /**
  * A sink that stores the results in memory. This [[Sink]] is primarily intended for use in unit
  * tests and does not provide durability.
+  * 将结果存储在内存中的接收器,这个[[Sink]]主要用于单元测试,不提供耐久性
  */
 class MemorySink(val schema: StructType, outputMode: OutputMode) extends Sink with Logging {
 
   private case class AddedData(batchId: Long, data: Array[Row])
 
-  /** An order list of batches that have been written to this [[Sink]]. */
+  /** An order list of batches that have been written to this [[Sink]].
+    * 已写入此[Sink]的批订单列表 */
   @GuardedBy("this")
   private val batches = new ArrayBuffer[AddedData]()
 
-  /** Returns all rows that are stored in this [[Sink]]. */
+  /** Returns all rows that are stored in this [[Sink]].
+    * 返回存储在这个[Sink]中的所有行*/
   def allData: Seq[Row] = synchronized {
     batches.map(_.data).flatten
   }
@@ -243,6 +252,7 @@ class MemorySink(val schema: StructType, outputMode: OutputMode) extends Sink wi
 
 /**
  * Used to query the data that has been written into a [[MemorySink]].
+  * 用于查询数据已写入memorysink
  */
 case class MemoryPlan(sink: MemorySink, output: Seq[Attribute]) extends LeafNode {
   def this(sink: MemorySink) = this(sink, sink.schema.toAttributes)

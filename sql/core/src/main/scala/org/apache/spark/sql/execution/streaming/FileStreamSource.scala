@@ -31,6 +31,7 @@ import org.apache.spark.sql.types.StructType
 
 /**
  * A very simple source that reads files from the given directory as they appear.
+  * 从给定目录中读取文件的非常简单的源
  */
 class FileStreamSource(
     sparkSession: SparkSession,
@@ -63,7 +64,8 @@ class FileStreamSource(
     new FileStreamSourceLog(FileStreamSourceLog.VERSION, sparkSession, metadataPath)
   private var metadataLogCurrentOffset = metadataLog.getLatest().map(_._1).getOrElse(-1L)
 
-  /** Maximum number of new files to be considered in each batch */
+  /** Maximum number of new files to be considered in each batch
+    * 每个批次中要考虑的最大新文件数量*/
   private val maxFilesPerBatch = sourceOptions.maxFilesPerTrigger
 
   private val fileSortOrder = if (sourceOptions.latestFirst) {
@@ -88,8 +90,10 @@ class FileStreamSource(
       "the same and causes data lost.")
   }
 
-  /** A mapping from a file that we have processed to some timestamp it was last modified. */
+  /** A mapping from a file that we have processed to some timestamp it was last modified.
+    * 从我们处理的文件到最后一次修改的时间戳的映射。*/
   // Visible for testing and debugging in production.
+  //可见的生产测试和调试
   val seenFiles = new SeenFilesMap(maxFileAgeMs, fileNameOnly)
 
   metadataLog.allFiles().foreach { entry =>
@@ -101,17 +105,19 @@ class FileStreamSource(
 
   /**
    * Returns the maximum offset that can be retrieved from the source.
-   *
+   * 返回可以从源检索的最大偏移量
    * `synchronized` on this method is for solving race conditions in tests. In the normal usage,
    * there is no race here, so the cost of `synchronized` should be rare.
    */
   private def fetchMaxOffset(): FileStreamSourceOffset = synchronized {
     // All the new files found - ignore aged files and files that we have seen.
+    //找到的所有新文件 - 忽略我们已经看到的老化的文件和文件
     val newFiles = fetchAllFiles().filter {
       case (path, timestamp) => seenFiles.isNewFile(path, timestamp)
     }
 
     // Obey user's setting to limit the number of files in this batch trigger.
+    //服从用户的设置来限制此批处理触发器中的文件数量
     val batchFiles =
       if (maxFilesPerBatch.nonEmpty) newFiles.take(maxFilesPerBatch.get) else newFiles
 
@@ -143,16 +149,19 @@ class FileStreamSource(
   /**
    * For test only. Run `func` with the internal lock to make sure when `func` is running,
    * the current offset won't be changed and no new batch will be emitted.
+    * 仅供测试,使用内部锁运行`func`,确保`func`运行时,当前的偏移量不会被改变,也不会发出新的批次
    */
   def withBatchingLocked[T](func: => T): T = synchronized {
     func
   }
 
-  /** Return the latest offset in the [[FileStreamSourceLog]] */
+  /** Return the latest offset in the [[FileStreamSourceLog]]
+    * 返回[[FileStreamSourceLog]]中的最新偏移量*/
   def currentLogOffset: Long = synchronized { metadataLogCurrentOffset }
 
   /**
    * Returns the data that is between the offsets (`start`, `end`].
+    * 返回偏移量之间的数据（`start`，`end`]
    */
   override def getBatch(start: Option[Offset], end: Offset): DataFrame = {
     val startOffset = start.map(FileStreamSourceOffset(_).logOffset).getOrElse(-1L)
@@ -176,12 +185,13 @@ class FileStreamSource(
 
   /**
    * If the source has a metadata log indicating which files should be read, then we should use it.
+    * 如果源有一个元数据日志,指出哪些文件应该被读取,那么我们应该使用它
    * Only when user gives a non-glob path that will we figure out whether the source has some
    * metadata log
-   *
-   * None        means we don't know at the moment
-   * Some(true)  means we know for sure the source DOES have metadata
-   * Some(false) means we know for sure the source DOSE NOT have metadata
+   * 只有当用户给出一个非全局路径,我们才能确定源是否有一些元数据日志
+   * None        means we don't know at the moment 意味着我们目前不知道
+   * Some(true)  means we know for sure the source DOES have metadata 意味着我们确实知道源代码具有元数据
+   * Some(false) means we know for sure the source DOSE NOT have metadata 意味着我们知道确切的来源没有元数据
    */
   @volatile private[sql] var sourceHasMetadata: Option[Boolean] =
     if (SparkHadoopUtil.get.isGlobPath(new Path(path))) Some(false) else None
@@ -200,6 +210,7 @@ class FileStreamSource(
 
   /**
    * Returns a list of files found, sorted by their timestamp.
+    * 返回找到的文件列表,按其时间戳排序
    */
   private def fetchAllFiles(): Seq[(String, Long)] = {
     val startTime = System.nanoTime
@@ -214,17 +225,21 @@ class FileStreamSource(
           allFiles = allFilesUsingInMemoryFileIndex()
           if (allFiles.isEmpty) {
             // we still cannot decide
+            //我们仍然不能决定
           } else {
             // decide what to use for future rounds
             // double check whether source has metadata, preventing the extreme corner case that
             // metadata log and data files are only generated after the previous
             // `FileStreamSink.hasMetadata` check
+            //仔细检查源文件是否具有元数据,
+            // 防止在前面的“FileStreamSink.hasMetadata”检查之后才生成元数据日志和数据文件的极端情况
             if (FileStreamSink.hasMetadata(Seq(path), hadoopConf)) {
               sourceHasMetadata = Some(true)
               allFiles = allFilesUsingMetadataLogFileIndex()
             } else {
               sourceHasMetadata = Some(false)
               // `allFiles` have already been fetched using InMemoryFileIndex in this round
+              //在这一轮中，已经使用InMemoryFileIndex获取了“allFiles”
             }
           }
         }
@@ -254,10 +269,12 @@ class FileStreamSource(
   /**
    * Informs the source that Spark has completed processing all data for offsets less than or
    * equal to `end` and will only request offsets greater than `end` in the future.
+    * 通知Spark已完成处理小于或等于'end'的所有偏移量的数据,并且将来只会请求大于'end'的偏移量。
    */
   override def commit(end: Offset): Unit = {
     // No-op for now; FileStreamSource currently garbage-collects files based on timestamp
     // and the value of the maxFileAge parameter.
+    //现在不行 FileStreamSource当前基于时间戳和maxFileAge参数的值来垃圾收集文件
   }
 
   override def stop() {}
@@ -266,34 +283,40 @@ class FileStreamSource(
 
 object FileStreamSource {
 
-  /** Timestamp for file modification time, in ms since January 1, 1970 UTC. */
+  /** Timestamp for file modification time, in ms since January 1, 1970 UTC.
+    * 文件修改时间的时间戳，自1970年1月1日起，以毫秒为单位。*/
   type Timestamp = Long
 
   case class FileEntry(path: String, timestamp: Timestamp, batchId: Long) extends Serializable
 
   /**
    * A custom hash map used to track the list of files seen. This map is not thread-safe.
-   *
+   * 用于跟踪所看到文件列表的自定义哈希映射,这张Map不是线程安全的。
    * To prevent the hash map from growing indefinitely, a purge function is available to
    * remove files "maxAgeMs" older than the latest file.
+    * 为了防止哈希映射无限增长,可以使用清除功能删除比最新文件早的文件“maxAgeMs”
    */
   class SeenFilesMap(maxAgeMs: Long, fileNameOnly: Boolean) {
     require(maxAgeMs >= 0)
 
-    /** Mapping from file to its timestamp. */
+    /** Mapping from file to its timestamp.
+      * 从文件映射到其时间戳*/
     private val map = new java.util.HashMap[String, Timestamp]
 
-    /** Timestamp of the latest file. */
+    /** Timestamp of the latest file.
+      * 最新文件的时间戳*/
     private var latestTimestamp: Timestamp = 0L
 
-    /** Timestamp for the last purge operation. */
+    /** Timestamp for the last purge operation.
+      * 最后一次清除操作的时间戳 */
     private var lastPurgeTimestamp: Timestamp = 0L
 
     @inline private def stripPathIfNecessary(path: String) = {
       if (fileNameOnly) new Path(new URI(path)).getName else path
     }
 
-    /** Add a new file to the map. */
+    /** Add a new file to the map.
+      * 添加一个新的文件到Map。*/
     def add(path: String, timestamp: Timestamp): Unit = {
       map.put(stripPathIfNecessary(path), timestamp)
       if (timestamp > latestTimestamp) {
@@ -304,14 +327,19 @@ object FileStreamSource {
     /**
      * Returns true if we should consider this file a new file. The file is only considered "new"
      * if it is new enough that we are still tracking, and we have not seen it before.
+      * 如果我们认为这个文件是一个新文件,则返回true,
+      * 如果文件足够新以至于我们仍在跟踪,则该文件仅被视为“新”,而我们之前没有看到。
      */
     def isNewFile(path: String, timestamp: Timestamp): Boolean = {
       // Note that we are testing against lastPurgeTimestamp here so we'd never miss a file that
       // is older than (latestTimestamp - maxAgeMs) but has not been purged yet.
+      //请注意,我们正在对lastPurgeTimestamp进行测试,
+      // 因此我们绝对不会丢失比（latestTimestamp - maxAgeMs）更早但尚未清除的文件。
       timestamp >= lastPurgeTimestamp && !map.containsKey(stripPathIfNecessary(path))
     }
 
-    /** Removes aged entries and returns the number of files removed. */
+    /** Removes aged entries and returns the number of files removed.
+      * 删除老化的条目并返回删除的文件数量*/
     def purge(): Int = {
       lastPurgeTimestamp = latestTimestamp - maxAgeMs
       val iter = map.entrySet().iterator()

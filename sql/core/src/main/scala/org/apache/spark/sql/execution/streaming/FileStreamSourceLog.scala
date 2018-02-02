@@ -38,6 +38,7 @@ class FileStreamSourceLog(
   import CompactibleFileStreamLog._
 
   // Configurations about metadata compaction
+  //关于元数据压缩的配置
   protected override val defaultCompactInterval: Int =
     sparkSession.sessionState.conf.fileSourceLogCompactInterval
 
@@ -54,6 +55,7 @@ class FileStreamSourceLog(
 
   // A fixed size log entry cache to cache the file entries belong to the compaction batch. It is
   // used to avoid scanning the compacted log file to retrieve it's own batch data.
+  //用于缓存文件条目的固定大小的日志条目缓存属于压缩批处理,它用于避免扫描压缩的日志文件以检索它自己的批处理数据。
   private val cacheSize = compactInterval
   private val fileEntryCache = new JLinkedHashMap[Long, Array[FileEntry]] {
     override def removeEldestEntry(eldest: Entry[Long, Array[FileEntry]]): Boolean = {

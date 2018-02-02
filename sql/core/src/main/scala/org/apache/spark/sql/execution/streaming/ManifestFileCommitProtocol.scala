@@ -31,13 +31,14 @@ import org.apache.spark.internal.io.FileCommitProtocol.TaskCommitMessage
 /**
  * A [[FileCommitProtocol]] that tracks the list of valid files in a manifest file, used in
  * structured streaming.
- *
- * @param path path to write the final output to.
+ * 跟踪清单文件中有效文件列表的[FileCommitProtocol],用于结构化流式处理
+ * @param path path to write the final output to. 写入最终输出的路径
  */
 class ManifestFileCommitProtocol(jobId: String, path: String)
   extends FileCommitProtocol with Serializable with Logging {
 
   // Track the list of files added by a task, only used on the executors.
+  //跟踪任务添加的文件列表,仅用于执行者
   @transient private var addedFiles: ArrayBuffer[String] = _
 
   @transient private var fileLog: FileStreamSinkLog = _
@@ -46,6 +47,7 @@ class ManifestFileCommitProtocol(jobId: String, path: String)
   /**
    * Sets up the manifest log output and the batch id for this job.
    * Must be called before any other function.
+    * 为此作业设置清单日志输出和批处理标识,必须在任何其他功能之前被调用
    */
   def setupManifestOptions(fileLog: FileStreamSinkLog, batchId: Long): Unit = {
     this.fileLog = fileLog

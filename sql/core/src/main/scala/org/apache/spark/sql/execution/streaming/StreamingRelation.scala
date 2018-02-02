@@ -48,6 +48,7 @@ case class StreamingRelation(dataSource: DataSource, sourceName: String, output:
 
 /**
  * Used to link a streaming [[Source]] of data into a
+  * 用于将数据流[[Source]]链接到一个
  * [[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]].
  */
 case class StreamingExecutionRelation(
@@ -62,6 +63,9 @@ case class StreamingExecutionRelation(
   // swapped out with microbatches. But some dataframe operations (in particular explain) do lead
   // to this node surviving analysis. So we satisfy the LeafNode contract with the session default
   // value.
+  //这里没有明显的价值,在执行路径上,这个关系将被换成微型表格,
+  // 但是一些数据帧操作（特别是解释）确实导致了这个节点幸存的分析,
+  // 所以我们使用会话默认值来满足LeafNode合约
   override def computeStats(): Statistics = Statistics(
     sizeInBytes = BigInt(session.sessionState.conf.defaultSizeInBytes)
   )
@@ -70,6 +74,7 @@ case class StreamingExecutionRelation(
 /**
  * A dummy physical plan for [[StreamingRelation]] to support
  * [[org.apache.spark.sql.Dataset.explain]]
+  * [[StreamingRelation]]的虚拟物理计划支持[[org.apache.spark.sql.Dataset.explain]]
  */
 case class StreamingRelationExec(sourceName: String, output: Seq[Attribute]) extends LeafExecNode {
   override def toString: String = sourceName

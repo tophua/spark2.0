@@ -29,14 +29,17 @@ import org.apache.spark.unsafe.types.CalendarInterval
 
 /**
  * Internal implementation of the [[GroupState]] interface. Methods are not thread-safe.
- *
- * @param optionalValue Optional value of the state
+ * 内部实现[[GroupState]]接口,方法不是线程安全的。
+ * @param optionalValue Optional value of the state 状态的可选值
  * @param batchProcessingTimeMs Processing time of current batch, used to calculate timestamp
  *                              for processing time timeouts
+  *                              处理当前批次的时间,用于计算处理时间超时的时间戳
  * @param timeoutConf     Type of timeout configured. Based on this, different operations will
  *                        be supported.
+  *                        配置的超时类型,基于此,将支持不同的操作。
  * @param hasTimedOut     Whether the key for which this state wrapped is being created is
  *                        getting timed out or not.
+  *                        是否正在创建该状态的key正在被超时或不超时
  */
 private[sql] class GroupStateImpl[S] private(
     optionalValue: Option[S],
@@ -195,6 +198,7 @@ private[sql] class GroupStateImpl[S] private(
 
 private[sql] object GroupStateImpl {
   // Value used represent the lack of valid timestamp as a long
+  //使用的值表示缺少有效的时间戳
   val NO_TIMESTAMP = -1L
 
   def createForStreaming[S](

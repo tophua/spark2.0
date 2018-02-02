@@ -49,13 +49,15 @@ private case class DeactivateInstances(runId: UUID)
 private object StopCoordinator
   extends StateStoreCoordinatorMessage
 
-/** Helper object used to create reference to [[StateStoreCoordinator]]. */
+/** Helper object used to create reference to [[StateStoreCoordinator]].
+  * 用于创建对[[StateStoreCoordinator]]的引用的助手对象*/
 object StateStoreCoordinatorRef extends Logging {
 
   private val endpointName = "StateStoreCoordinator"
 
   /**
    * Create a reference to a [[StateStoreCoordinator]]
+    * 创建对[[StateStoreCoordinator]]的引用
    */
   def forDriver(env: SparkEnv): StateStoreCoordinatorRef = synchronized {
     try {
@@ -81,6 +83,7 @@ object StateStoreCoordinatorRef extends Logging {
 /**
  * Reference to a [[StateStoreCoordinator]] that can be used to coordinate instances of
  * [[StateStore]]s across all the executors, and get their locations for job scheduling.
+  * 引用一个[[StateStoreCoordinator]],可用于协调所有执行者中[[StateStore]]的实例,并获取其作业调度的位置
  */
 class StateStoreCoordinatorRef private(rpcEndpointRef: RpcEndpointRef) {
 
@@ -91,19 +94,22 @@ class StateStoreCoordinatorRef private(rpcEndpointRef: RpcEndpointRef) {
     rpcEndpointRef.send(ReportActiveInstance(stateStoreProviderId, host, executorId))
   }
 
-  /** Verify whether the given executor has the active instance of a state store */
+  /** Verify whether the given executor has the active instance of a state store
+    * 验证给定的执行程序是否具有状态存储的活动实例*/
   private[state] def verifyIfInstanceActive(
       stateStoreProviderId: StateStoreProviderId,
       executorId: String): Boolean = {
     rpcEndpointRef.askSync[Boolean](VerifyIfInstanceActive(stateStoreProviderId, executorId))
   }
 
-  /** Get the location of the state store */
+  /** Get the location of the state store
+    * 获取存储的位置*/
   private[state] def getLocation(stateStoreProviderId: StateStoreProviderId): Option[String] = {
     rpcEndpointRef.askSync[Option[String]](GetLocation(stateStoreProviderId))
   }
 
-  /** Deactivate instances related to a query */
+  /** Deactivate instances related to a query
+    * 取消激活与查询相关的实例 */
   private[sql] def deactivateInstances(runId: UUID): Unit = {
     rpcEndpointRef.askSync[Boolean](DeactivateInstances(runId))
   }
@@ -117,6 +123,7 @@ class StateStoreCoordinatorRef private(rpcEndpointRef: RpcEndpointRef) {
 /**
  * Class for coordinating instances of [[StateStore]]s loaded in executors across the cluster,
  * and get their locations for job scheduling.
+  * 用于协调在集群中执行器中加载的[[StateStore]]实例的协调类,并获取作业调度的位置
  */
 private class StateStoreCoordinator(override val rpcEnv: RpcEnv)
     extends ThreadSafeRpcEndpoint with Logging {

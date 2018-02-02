@@ -30,11 +30,13 @@ import org.apache.spark.sql.execution.datasources.{FileFormat, FileFormatWriter}
 
 object FileStreamSink extends Logging {
   // The name of the subdirectory that is used to store metadata about which files are valid.
+  //用于存储有关哪些文件有效的元数据的子目录的名称
   val metadataDir = "_spark_metadata"
 
   /**
    * Returns true if there is a single path that has a metadata log indicating which files should
    * be read.
+    * 如果存在具有指示应读取哪些文件的元数据日志的单个路径,则返回true
    */
   def hasMetadata(path: Seq[String], hadoopConf: Configuration): Boolean = {
     path match {
@@ -56,6 +58,7 @@ object FileStreamSink extends Logging {
 
   /**
    * Returns true if the path is the metadata dir or its ancestor is the metadata dir.
+    * 如果路径是元数据目录或其祖先是元数据目录,则返回true
    * E.g.:
    *  - ancestorIsMetadataDirectory(/.../_spark_metadata) => true
    *  - ancestorIsMetadataDirectory(/.../_spark_metadata/0) => true
@@ -81,6 +84,9 @@ object FileStreamSink extends Logging {
  * file paths is appended to the log atomically. In the case of partial failures, some duplicate
  * data may be present in the target directory, but only one copy of each file will be present
  * in the log.
+  * 将结果写入实木复合地板文件的接收器,每批都写出一个独特的目录,批处理中的所有文件都已成功写入后,
+  * 文件路径列表将以原子方式附加到日志中,在部分失败的情况下,目标目录中可能存在一些重复的数据,
+  * 但每个文件只有一个副本存在于日志中。
  */
 class FileStreamSink(
     sparkSession: SparkSession,
@@ -112,6 +118,7 @@ class FileStreamSink(
 
       // Get the actual partition columns as attributes after matching them by name with
       // the given columns names.
+      //获取实际的分区列作为属性后,按名称与给定的列名称
       val partitionColumns: Seq[Attribute] = partitionColumnNames.map { col =>
         val nameEquality = data.sparkSession.sessionState.conf.resolver
         data.logicalPlan.output.find(f => nameEquality(f.name, col)).getOrElse {

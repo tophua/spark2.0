@@ -34,7 +34,9 @@ public class Trigger {
 
   /**
    * A trigger policy that runs a query periodically based on an interval in processing time.
+   * 根据处理时间间隔周期性地运行查询的触发器策略
    * If `interval` is 0, the query will run as fast as possible.
+   * 如果“间隔”为0，查询将尽可能快地运行
    *
    * @since 2.2.0
    */

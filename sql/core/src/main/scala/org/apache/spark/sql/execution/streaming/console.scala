@@ -26,12 +26,15 @@ import org.apache.spark.sql.types.StructType
 
 class ConsoleSink(options: Map[String, String]) extends Sink with Logging {
   // Number of rows to display, by default 20 rows
+  //显示的行数,默认20行
   private val numRowsToShow = options.get("numRows").map(_.toInt).getOrElse(20)
 
   // Truncate the displayed data if it is too long, by default it is true
+  //如果显示的数据过长,则截断显示的数据,默认为true
   private val isTruncated = options.get("truncate").map(_.toBoolean).getOrElse(true)
 
   // Track the batch id
+  //跟踪批次ID
   private var lastBatchId = -1L
 
   override def addBatch(batchId: Long, data: DataFrame): Unit = synchronized {
@@ -77,9 +80,11 @@ class ConsoleSinkProvider extends StreamSinkProvider
       parameters: Map[String, String],
       data: DataFrame): BaseRelation = {
     // Number of rows to display, by default 20 rows
+    //显示的行数,默认20行
     val numRowsToShow = parameters.get("numRows").map(_.toInt).getOrElse(20)
 
     // Truncate the displayed data if it is too long, by default it is true
+    //如果显示的数据过长,则截断显示的数据,默认为true
     val isTruncated = parameters.get("truncate").map(_.toBoolean).getOrElse(true)
     data.show(numRowsToShow, isTruncated)
 

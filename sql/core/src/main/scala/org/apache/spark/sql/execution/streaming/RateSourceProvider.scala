@@ -36,15 +36,21 @@ import org.apache.spark.util.{ManualClock, SystemClock}
  *  A source that generates increment long values with timestamps. Each generated row has two
  *  columns: a timestamp column for the generated time and an auto increment long column starting
  *  with 0L.
- *
+ *  生成具有时间戳的增量长值的源,每个生成的行都有两列：生成时间的时间戳列和从0L开始的自动增量长列
+  *
  *  This source supports the following options:
+  *  该源支持以下选项：
  *  - `rowsPerSecond` (e.g. 100, default: 1): How many rows should be generated per second.
+  *  `rowsPerSecond`（例如100，默认值：1）：每秒应该生成多少行
  *  - `rampUpTime` (e.g. 5s, default: 0s): How long to ramp up before the generating speed
  *    becomes `rowsPerSecond`. Using finer granularities than seconds will be truncated to integer
  *    seconds.
+  *    `rampUpTime`（例如5s，默认值：0s）：在生成速度变成`rowsPerSecond`之前要爬升多久,使用比秒更精细的粒度将被截断为整数秒。
  *  - `numPartitions` (e.g. 10, default: Spark's default parallelism): The partition number for the
  *    generated rows. The source will try its best to reach `rowsPerSecond`, but the query may
  *    be resource constrained, and `numPartitions` can be tweaked to help reach the desired speed.
+  *    `numPartitions`（例如10，默认：Spark的默认并行）：生成行的分区号,
+  *    源代码将尽最大努力达到`rowsPerSecond`,但查询可能会受到资源限制,并且可以调整“numPartitions”来帮助达到所需的速度
  */
 class RateSourceProvider extends StreamSourceProvider with DataSourceRegister {
 
@@ -169,7 +175,8 @@ class RateStreamSource(
     }.offset
   }
 
-  /** When the system time runs backward, "lastTimeMs" will make sure we are still monotonic. */
+  /** When the system time runs backward, "lastTimeMs" will make sure we are still monotonic.
+    * 当系统时间倒退时，“lastTimeMs”将确保我们仍然是单调的*/
   @volatile private var lastTimeMs = startTimeMs
 
   override def schema: StructType = RateSourceProvider.SCHEMA
@@ -223,7 +230,8 @@ class RateStreamSource(
 
 object RateStreamSource {
 
-  /** Calculate the end value we will emit at the time `seconds`. */
+  /** Calculate the end value we will emit at the time `seconds`.
+    * 计算我们将在`seconds`时间发出的最终值。*/
   def valueAtSecond(seconds: Long, rowsPerSecond: Long, rampUpTimeSeconds: Long): Long = {
     // E.g., rampUpTimeSeconds = 4, rowsPerSecond = 10
     // Then speedDeltaPerSecond = 2
@@ -242,6 +250,7 @@ object RateStreamSource {
       }
     } else {
       // rampUpPart is just a special case of the above formula: rampUpTimeSeconds == seconds
+      //rampUpPart只是上面公式的特例：rampUpTimeSeconds ==秒
       val rampUpPart = valueAtSecond(rampUpTimeSeconds, rowsPerSecond, rampUpTimeSeconds)
       rampUpPart + (seconds - rampUpTimeSeconds) * rowsPerSecond
     }

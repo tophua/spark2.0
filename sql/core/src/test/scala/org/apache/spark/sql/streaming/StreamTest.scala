@@ -88,7 +88,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
   val streamingTimeout = 10.seconds
 
   /** A trait for actions that can be performed while testing a streaming DataFrame.
-    * 测试流数据帧时可以执行的操作的特征*/
+    * 测试流式DataFrame时可以执行的操作的特征*/
   trait StreamAction
 
   /** A trait to mark actions that require the stream to be actively running.
@@ -101,8 +101,11 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     * 将给定的数据添加到流中,随后的检查答案将被阻塞,直到数据被处理为止
    */
   object AddData {
-    def apply[A](source: MemoryStream[A], data: A*): AddDataMemory[A] =
+    def apply[A](source: MemoryStream[A], data: A*): AddDataMemory[A] ={
+      //println(source.id+"===="+data.mkString(","))
       AddDataMemory(source, data)
+    }
+
   }
 
   /** A trait that can be extended when testing a source.
@@ -186,6 +189,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
   /** Starts the stream, resuming if data has already been processed. It must not be running.
     * 启动流,如果数据已经处理,则恢复,它不能运行*/
   case class StartStream(
+       //根据处理时间间隔周期性地运行查询的触发器策略,如果“间隔”为0，查询将尽可能快地运行
       trigger: Trigger = Trigger.ProcessingTime(0),
       triggerClock: Clock = new SystemClock,
       additionalConfs: Map[String, String] = Map.empty)
@@ -259,20 +263,24 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     import org.apache.spark.sql.streaming.util.StreamManualClock
 
     // `synchronized` is added to prevent the user from calling multiple `testStream`s concurrently
+    //`synchronized 同步`添加防止用户调用多个` teststream `的同时
     // because this method assumes there is only one active query in its `StreamingQueryListener`
     // and it may not work correctly when multiple `testStream`s run concurrently.
-
+    //因为此方法假定只有一个活动查询其` StreamingQueryListener `,
+    //它可能无法正常工作在多个` teststream `的并发运行
     val stream = _stream.toDF()
     //在DF中使用会话，而不是默认会话
     val sparkSession = stream.sparkSession  // use the session in DF, not the default session
     var pos = 0
     var currentStream: StreamExecution = null
     var lastStream: StreamExecution = null
+    //源索引 - >偏移等待
     val awaiting = new mutable.HashMap[Int, Offset]() // source index -> offset to wait for
+    //将结果存储在内存中的接收器,这个[[Sink]]主要用于单元测试,不提供耐久性
     val sink = new MemorySink(stream.schema, outputMode)
     val resetConfValues = mutable.Map[String, Option[String]]()
 
-    @volatile
+    @volatile //不稳定
     var streamThreadDeathCause: Throwable = null
     // Set UncaughtExceptionHandler in `onQueryStarted` so that we can ensure catching fatal errors
     // during query initialization.
@@ -294,7 +302,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     sparkSession.streams.addListener(listener)
 
     // If the test doesn't manually start the stream, we do it automatically at the beginning.
-    //如果测试没有手动启动流,我们会在开始时自动执行。
+    //如果测试没有手动启动流,我们会在开始时自动执行
     val startedManually =
       actions.takeWhile(!_.isInstanceOf[StreamMustBeRunning]).exists(_.isInstanceOf[StartStream])
     val startedTest = if (startedManually) actions else StartStream() +: actions
@@ -338,13 +346,13 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
          |== Plan ==
          |${if (currentStream != null) currentStream.lastExecution else ""}
          """.stripMargin
-
+    //校验
     def verify(condition: => Boolean, message: String): Unit = {
       if (!condition) {
         failTest(message)
       }
     }
-
+    //终于
     def eventually[T](message: String)(func: => T): T = {
       try {
         Eventually.eventually(Timeout(streamingTimeout)) {
@@ -355,7 +363,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
           failTest(message, e)
       }
     }
-
+    //失败测试
     def failTest(message: String, cause: Throwable = null) = {
 
       // Recursively pretty print a exception with truncated stacktrace and internal cause
@@ -379,6 +387,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     }
 
     val metadataRoot = Utils.createTempDir(namePrefix = "streaming.metadata").getCanonicalPath
+    println("====="+metadataRoot)
     var manualClockExpectedTime = -1L
     try {
       startedTest.foreach { action =>
@@ -425,6 +434,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             } catch {
               case _: StreamingQueryException =>
                 // Ignore the exception. `StopStream` or `ExpectFailure` will catch it as well.
+                // 忽略异常,`StopStream`或者`ExpectFailure`也会抓住它
             }
 
           case AdvanceManualClock(timeToAdd) =>
@@ -445,10 +455,11 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             clock.advance(timeToAdd)
             manualClockExpectedTime += timeToAdd
             verify(clock.getTimeMillis() === manualClockExpectedTime,
+              //意外的时间更新后的时间
               s"Unexpected clock time after updating: " +
                 s"expecting $manualClockExpectedTime, current ${clock.getTimeMillis()}")
 
-          case StopStream =>
+          case StopStream => //无法停止未运行的流
             verify(currentStream != null, "can not stop a stream that is not running")
             try failAfter(streamingTimeout) {
               currentStream.stop()
@@ -514,6 +525,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
 
           case a: AssertOnQuery =>
             verify(currentStream != null || lastStream != null,
+              //当没有流启动时不能断言
               "cannot assert when no stream has been started")
             val streamToAssert = Option(currentStream).getOrElse(lastStream)
             //verify(a.condition(streamToAssert), s"Assert on query failed: ${a.message}")
@@ -604,7 +616,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
             }
 
             val sparkAnswer = try if (lastOnly) sink.latestBatchData else sink.allData catch {
-              case e: Exception =>
+              case e: Exception => //从接收器获取数据时出现异常
                 failTest("Exception while getting data from sink", e)
             }
 
@@ -770,6 +782,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
               }
             }
           assert(thrownException.cause.getClass === e.t.runtimeClass,
+            //抛出不正确的类型的异常
             "exception of incorrect type was throw")
       }
     }

@@ -38,7 +38,8 @@ import org.apache.spark.sql.types._
 import org.apache.spark.util.{CompletionIterator, NextIterator}
 
 
-/** Used to identify the state store for a given operator. */
+/** Used to identify the state store for a given operator.
+  * 用于识别给定操作员的状态存储*/
 case class StatefulOperatorStateInfo(
     checkpointLocation: String,
     queryRunId: UUID,
@@ -47,8 +48,10 @@ case class StatefulOperatorStateInfo(
 
 /**
  * An operator that reads or writes state from the [[StateStore]].
+  * 从[[StateStore]]读取或写入状态的操作员
  * The [[StatefulOperatorStateInfo]] should be filled in by `prepareForExecution` in
  * [[IncrementalExecution]].
+  * [[StatefulOperatorStateInfo]]应该由[[IncrementalExecution]]中的prepareForExecution填充
  */
 trait StatefulOperator extends SparkPlan {
   def stateInfo: Option[StatefulOperatorStateInfo]
@@ -60,13 +63,15 @@ trait StatefulOperator extends SparkPlan {
   }
 }
 
-/** An operator that reads from a StateStore. */
+/** An operator that reads from a StateStore.
+  * 从StateStore读取的操作符 */
 trait StateStoreReader extends StatefulOperator {
   override lazy val metrics = Map(
     "numOutputRows" -> SQLMetrics.createMetric(sparkContext, "number of output rows"))
 }
 
-/** An operator that writes to a StateStore. */
+/** An operator that writes to a StateStore.
+  * 写入StateStore的操作符*/
 trait StateStoreWriter extends StatefulOperator { self: SparkPlan =>
 
   override lazy val metrics = Map(
@@ -82,6 +87,7 @@ trait StateStoreWriter extends StatefulOperator { self: SparkPlan =>
   /**
    * Get the progress made by this stateful operator after execution. This should be called in
    * the driver after this SparkPlan has been executed and metrics have been updated.
+    * 在执行之后获取这个有状态操作符所取得的进展,在SparkPlan执行完毕并且指标已经更新之后,这应该在驱动程序中调用
    */
   def getProgress(): StateOperatorProgress = {
     new StateOperatorProgress(
@@ -90,7 +96,8 @@ trait StateStoreWriter extends StatefulOperator { self: SparkPlan =>
       memoryUsedBytes = longMetric("stateMemory").value)
   }
 
-  /** Records the duration of running `body` for the next query progress update. */
+  /** Records the duration of running `body` for the next query progress update.
+    * 为下一个查询进程更新记录运行`body`的持续时间*/
   protected def timeTakenMs(body: => Unit): Long = {
     val startTime = System.nanoTime()
     val result = body
@@ -100,7 +107,9 @@ trait StateStoreWriter extends StatefulOperator { self: SparkPlan =>
 
   /**
    * Set the SQL metrics related to the state store.
+    * 设置与状态存储相关的SQL度量标准
    * This should be called in that task after the store has been updated.
+    * 在存储更新之后,应该在这个任务中调用它
    */
   protected def setStoreMetrics(store: StateStore): Unit = {
     val storeMetrics = store.metrics
@@ -122,16 +131,20 @@ trait StateStoreWriter extends StatefulOperator { self: SparkPlan =>
   }
 }
 
-/** An operator that supports watermark. */
+/** An operator that supports watermark.
+  * 支持水印的运算符*/
 trait WatermarkSupport extends UnaryExecNode {
 
-  /** The keys that may have a watermark attribute. */
+  /** The keys that may have a watermark attribute.
+    * 可能具有水印属性的键*/
   def keyExpressions: Seq[Attribute]
 
-  /** The watermark value. */
+  /** The watermark value.
+    * 水印值*/
   def eventTimeWatermark: Option[Long]
 
-  /** Generate an expression that matches data older than the watermark */
+  /** Generate an expression that matches data older than the watermark
+    * 生成一个匹配比水印更早的数据的表达式 */
   lazy val watermarkExpression: Option[Expression] = {
     val optionalWatermarkAttribute =
       child.output.find(_.metadata.contains(EventTimeWatermark.delayKey))
@@ -139,6 +152,7 @@ trait WatermarkSupport extends UnaryExecNode {
     optionalWatermarkAttribute.map { watermarkAttribute =>
       // If we are evicting based on a window, use the end of the window.  Otherwise just
       // use the attribute itself.
+      //如果我们是基于窗口驱逐的话,请使用窗口的末尾,否则,只使用属性本身,
       val evictionExpression =
         if (watermarkAttribute.dataType.isInstanceOf[StructType]) {
           LessThanOrEqual(
@@ -155,7 +169,8 @@ trait WatermarkSupport extends UnaryExecNode {
     }
   }
 
-  /** Predicate based on keys that matches data older than the watermark */
+  /** Predicate based on keys that matches data older than the watermark
+    * 基于匹配比水印更早的数据的键来判断 */
   lazy val watermarkPredicateForKeys: Option[Predicate] = watermarkExpression.flatMap { e =>
     if (keyExpressions.exists(_.metadata.contains(EventTimeWatermark.delayKey))) {
       Some(newPredicate(e, keyExpressions))
@@ -164,7 +179,8 @@ trait WatermarkSupport extends UnaryExecNode {
     }
   }
 
-  /** Predicate based on the child output that matches data older than the watermark. */
+  /** Predicate based on the child output that matches data older than the watermark.
+    * 基于比水印更早的数据匹配的子输出的谓词*/
   lazy val watermarkPredicateForData: Option[Predicate] =
     watermarkExpression.map(newPredicate(_, child.output))
 
@@ -182,6 +198,7 @@ trait WatermarkSupport extends UnaryExecNode {
 /**
  * For each input tuple, the key is calculated and the value from the [[StateStore]] is added
  * to the stream (in addition to the input tuple) if present.
+  * 对于每个输入元组,计算Key并将[[StateStore]]中的值添加到流(除了输入元组之外)（如果存在）
  */
 case class StateStoreRestoreExec(
     keyExpressions: Seq[Attribute],
@@ -216,6 +233,7 @@ case class StateStoreRestoreExec(
 
 /**
  * For each input tuple, the key is calculated and the tuple is `put` into the [[StateStore]].
+  * 对于每个输入元组,计算Key,并将元组“放入”[[StateStore]]
  */
 case class StateStoreSaveExec(
     keyExpressions: Seq[Attribute],
@@ -266,6 +284,7 @@ case class StateStoreSaveExec(
             }
 
           // Update and output only rows being evicted from the StateStore
+            //只更新并输出从StateStore被逐出的行
           // Assumption: watermark predicates must be non-empty if append mode is allowed
           case Some(Append) =>
             allUpdatesTimeMs += timeTakenMs {
@@ -307,6 +326,7 @@ case class StateStoreSaveExec(
             }
 
           // Update and output modified rows from the StateStore.
+            //从StateStore更新并输出修改的行
           case Some(Update) =>
 
             val updatesStartTimeNs = System.nanoTime
@@ -314,6 +334,7 @@ case class StateStoreSaveExec(
             new Iterator[InternalRow] {
 
               // Filter late date using watermark if specified
+              //如果指定,使用水印过滤日期
               private[this] val baseIterator = watermarkPredicateForData match {
                 case Some(predicate) => iter.filter((row: InternalRow) => !predicate.eval(row))
                 case None => iter
@@ -324,6 +345,7 @@ case class StateStoreSaveExec(
                   allUpdatesTimeMs += NANOSECONDS.toMillis(System.nanoTime - updatesStartTimeNs)
 
                   // Remove old aggregates if watermark specified
+                  //如果指定了水印,请移除旧聚合
                   allRemovalsTimeMs += timeTakenMs { removeKeysOlderThanWatermark(store) }
                   commitTimeMs += timeTakenMs { store.commit() }
                   setStoreMetrics(store)
@@ -353,7 +375,8 @@ case class StateStoreSaveExec(
   override def outputPartitioning: Partitioning = child.outputPartitioning
 }
 
-/** Physical operator for executing streaming Deduplicate. */
+/** Physical operator for executing streaming Deduplicate.
+  * 物理运营商用于执行流式重复数据删除 */
 case class StreamingDeduplicateExec(
     keyExpressions: Seq[Attribute],
     child: SparkPlan,
@@ -361,12 +384,14 @@ case class StreamingDeduplicateExec(
     eventTimeWatermark: Option[Long] = None)
   extends UnaryExecNode with StateStoreWriter with WatermarkSupport {
 
-  /** Distribute by grouping attributes */
+  /** Distribute by grouping attributes
+    * 通过分组属性进行分配*/
   override def requiredChildDistribution: Seq[Distribution] =
     ClusteredDistribution(keyExpressions) :: Nil
 
   override protected def doExecute(): RDD[InternalRow] = {
     metrics // force lazy init at driver
+    //在驱动程序强制延迟初始化
 
     child.execute().mapPartitionsWithStateStore(
       getStateInfo,

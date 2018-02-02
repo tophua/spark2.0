@@ -19,6 +19,7 @@ package org.apache.spark.sql.execution.streaming
 
 /**
  * A simple offset for sources that produce a single linear stream of data.
+  * 产生单个线性数据流的源的简单偏移量
  */
 case class LongOffset(offset: Long) extends Offset {
 
@@ -32,12 +33,14 @@ object LongOffset {
 
   /**
    * LongOffset factory from serialized offset.
+    * LongOffset工厂从序列化偏移量
    * @return new LongOffset
    */
   def apply(offset: SerializedOffset) : LongOffset = new LongOffset(offset.json.toLong)
 
   /**
    * Convert generic Offset to LongOffset if possible.
+    * 如果可能,请将通用偏移量转换为LongOffset
    * @return converted LongOffset
    */
   def convert(offset: Offset): Option[LongOffset] = offset match {

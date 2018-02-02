@@ -29,6 +29,7 @@ abstract class Offset {
    * Equality based on JSON string representation. We leverage the
    * JSON representation for normalization between the Offset's
    * in memory and on disk representations.
+    * 基于JSON字符串表示的平等,我们利用JSON表示法在内存中的偏移和磁盘表示之间进行归一化。
    */
   override def equals(obj: Any): Boolean = obj match {
     case o: Offset => this.json == o.json
@@ -44,6 +45,8 @@ abstract class Offset {
    * used for saving offsets to the offset log.
    * Note: We assume that equivalent/equal offsets serialize to
    * identical JSON strings.
+    * 偏移量的JSON序列化表示,用于将偏移量保存到偏移量日志,
+    * 注意：我们假设等价/相等偏移量序列化为相同的JSON字符串。
    *
    * @return JSON string encoding
    */

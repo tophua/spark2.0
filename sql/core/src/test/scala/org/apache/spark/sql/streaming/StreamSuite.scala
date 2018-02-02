@@ -17,20 +17,15 @@
 
 package org.apache.spark.sql.streaming
 
-import java.io.{File, InterruptedIOException, IOException, UncheckedIOException}
+import java.io.{File, IOException, InterruptedIOException, UncheckedIOException}
 import java.nio.channels.ClosedByInterruptException
-import java.util.concurrent.{CountDownLatch, ExecutionException, TimeoutException, TimeUnit}
-
-import scala.reflect.ClassTag
-import scala.util.control.ControlThrowable
+import java.util.concurrent.{CountDownLatch, ExecutionException, TimeUnit, TimeoutException}
 
 import com.google.common.util.concurrent.UncheckedExecutionException
 import org.apache.commons.io.FileUtils
 import org.apache.hadoop.conf.Configuration
-
 import org.apache.spark.SparkContext
 import org.apache.spark.scheduler.{SparkListener, SparkListenerJobStart}
-import org.apache.spark.sql._
 import org.apache.spark.sql.catalyst.plans.logical.Range
 import org.apache.spark.sql.catalyst.streaming.InternalOutputModes
 import org.apache.spark.sql.execution.command.ExplainCommand
@@ -41,16 +36,19 @@ import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.sources.StreamSourceProvider
 import org.apache.spark.sql.streaming.util.StreamManualClock
 import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
+import org.apache.spark.sql.{DataFrame, _}
 import org.apache.spark.util.Utils
+
+import scala.reflect.ClassTag
+import scala.util.control.ControlThrowable
 
 class StreamSuite extends StreamTest {
 
   import testImplicits._
-  //映射与恢复
+  //map与恢复
   test("map with recovery") {
     val inputData = MemoryStream[Int]
     val mapped = inputData.toDS().map(_ + 1)
-
     testStream(mapped)(
       AddData(inputData, 1, 2, 3),
       StartStream(),
@@ -65,12 +63,11 @@ class StreamSuite extends StreamTest {
     // Make a table and ensure it will be broadcast.
     //制作一张表,并确保它将被广播。
     val smallTable = Seq((1, "one"), (2, "two"), (4, "four")).toDF("number", "word")
-
+    //smallTable.show
     // Join the input stream with a table.
     //用表格加入输入流
     val inputData = MemoryStream[Int]
     val joined = inputData.toDS().toDF().join(smallTable, $"value" === $"number")
-
     testStream(joined)(
       AddData(inputData, 1, 2, 3),
       CheckAnswer(Row(1, 1, "one"), Row(2, 2, "two")),
@@ -85,18 +82,21 @@ class StreamSuite extends StreamTest {
     val smallTable = Seq((1, "one"), (2, "two"), (4, "four")).toDF("number", "word")
 
     // Join the input stream with a table.
-    //用表格加入输入流
+    //连接输入流到表格中
     val inputData = MemoryStream[Int]
     val joined = inputData.toDF().join(smallTable, smallTable("number") === $"value")
 
     val outputStream = new java.io.ByteArrayOutputStream()
+    //控制台
     Console.withOut(outputStream) {
+      //println("===="+joined.explain())
       joined.explain()
     }
     assert(outputStream.toString.contains("StreamingRelation"))
   }
-  //结合一个流与自己
+  //一个自己连接的流
   test("SPARK-20432: union one stream with itself") {
+
     val df = spark.readStream.format(classOf[FakeDefaultSource].getName).load().select("a")
     val unioned = df.union(df)
     withTempDir { outputDir =>
@@ -117,12 +117,12 @@ class StreamSuite extends StreamTest {
     }
   }
   //联合两个流
+  //UNION 操作符用于合并两个或多个 SELECT 语句的结果集
+  //UNION 内部的 SELECT 语句必须拥有相同数量的列
   test("union two streams") {
     val inputData1 = MemoryStream[Int]
     val inputData2 = MemoryStream[Int]
-
     val unioned = inputData1.toDS().union(inputData2.toDS())
-
     testStream(unioned)(
       AddData(inputData1, 1, 3, 5),
       CheckAnswer(1, 3, 5),
@@ -144,17 +144,23 @@ class StreamSuite extends StreamTest {
       AddData(inputData, 1, 2, 3, 4),
       CheckAnswer(2, 4))
   }
-  //DataFrame重用
+  //DataFrame重新使用
   test("DataFrame reuse") {
     def assertDF(df: DataFrame) {
       withTempDir { outputDir =>
         withTempDir { checkpointDir =>
+          ////标准的DataSource 写入 API，只不过write变成了writeStream
           val query = df.writeStream.format("parquet")
+            //检查点位置
             .option("checkpointLocation", checkpointDir.getAbsolutePath)
+            //
             .start(outputDir.getAbsolutePath)
           try {
+            //阻塞,直到源中的所有可用数据都被处理并提交到接收器
             query.processAllAvailable()
+            //println("======"+outputDir.getAbsolutePath)
             val outputDf = spark.read.parquet(outputDir.getAbsolutePath).as[Long]
+            //outputDf.show(10,false)
             checkDataset[Long](outputDf, (0L to 10L).toArray: _*)
           } finally {
             query.stop()
@@ -164,6 +170,7 @@ class StreamSuite extends StreamTest {
     }
 
     val df = spark.readStream.format(classOf[FakeDefaultSource].getName).load()
+    //df.show()
     assertDF(df)
     assertDF(df)
   }

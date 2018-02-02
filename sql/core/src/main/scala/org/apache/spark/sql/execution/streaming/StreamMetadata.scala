@@ -35,7 +35,7 @@ import org.apache.spark.sql.streaming.StreamingQuery
  * Contains metadata associated with a [[StreamingQuery]]. This information is written
  * in the checkpoint location the first time a query is started and recovered every time the query
  * is restarted.
- *
+ * 包含与[StreamingQuery]关联的元数据,每当查询重新启动时,第一次启动查询并将其恢复时,将在检查点位置写入此信息。
  * @param id  unique id of the [[StreamingQuery]] that needs to be persisted across restarts
  */
 case class StreamMetadata(id: String) {
@@ -45,7 +45,8 @@ case class StreamMetadata(id: String) {
 object StreamMetadata extends Logging {
   implicit val format = Serialization.formats(NoTypeHints)
 
-  /** Read the metadata from file if it exists */
+  /** Read the metadata from file if it exists
+    * 如果存在,请从文件中读取元数据*/
   def read(metadataFile: Path, hadoopConf: Configuration): Option[StreamMetadata] = {
     val fs = metadataFile.getFileSystem(hadoopConf)
     if (fs.exists(metadataFile)) {
@@ -65,7 +66,8 @@ object StreamMetadata extends Logging {
     } else None
   }
 
-  /** Write metadata to file */
+  /** Write metadata to file
+    * 将元数据写入文件*/
   def write(
       metadata: StreamMetadata,
       metadataFile: Path,
