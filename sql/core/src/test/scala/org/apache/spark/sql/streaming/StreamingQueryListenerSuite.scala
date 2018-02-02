@@ -79,7 +79,9 @@ class StreamingQueryListenerSuite extends StreamTest with BeforeAndAfter {
       assert(listener.startEvent === null)
       assert(listener.progressEvents.isEmpty)
       assert(listener.terminationEvent === null)
-
+      //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+      //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       testStream(df, OutputMode.Append)(
 
         // Start event generated when query started
@@ -160,6 +162,9 @@ class StreamingQueryListenerSuite extends StreamTest with BeforeAndAfter {
     val listeners = (1 to 5).map(_ => new EventCollector)
     try {
       listeners.foreach(listener => spark.streams.addListener(listener))
+      //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+      //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       testStream(df, OutputMode.Append)(
         StartStream(),
         StopStream,

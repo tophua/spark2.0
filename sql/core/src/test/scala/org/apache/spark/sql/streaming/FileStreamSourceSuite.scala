@@ -524,6 +524,7 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
   //parquet文件读取
   test("read from parquet files") {
     withTempDirs { case (src, tmp) =>
+      //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
       val fileStream = createFileStream("parquet", src.getCanonicalPath, Some(valueSchema))
       val filtered = fileStream.filter($"value" contains "keep")
 
@@ -548,7 +549,7 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
         // Add a file so that we can infer its schema
         //添加一个文件,以便我们可以推断其架构
         AddParquetFileData.writeToFile(Seq("value0").toDF("k"), src, tmp)
-
+        //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
         val fileStream = createFileStream("parquet", src.getCanonicalPath)
 
         // FileStreamSource should infer the column "k"
@@ -571,6 +572,7 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
 
           // Should ignore rows that do not have the necessary k column
           //应该忽略没有必要的k列的行
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           AddParquetFileData(Seq("value5").toDF("v"), src, tmp),
           CheckAnswer("value0", "value1", "value2", "value3", null)
         )
@@ -891,6 +893,8 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
         .text(src.getCanonicalPath)
       val q = df
         .writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName("file_data")
         .start()
@@ -964,6 +968,8 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
           val df = spark.readStream.option("maxFilesPerTrigger", value).text(src.getCanonicalPath)
           val e = intercept[StreamingQueryException] {
             // Note: `maxFilesPerTrigger` is checked in the stream thread when creating the source
+            // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+            // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
             val q = df.writeStream.format("memory").queryName(testTable).start()
             try {
               q.processAllAvailable()
@@ -993,7 +999,8 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
       // Test `explain` not throwing errors
       //测试`解释`不要抛出错误
       df.explain()
-
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       val q = df.writeStream.queryName("file_explain").format("memory").start()
         .asInstanceOf[StreamingQueryWrapper]
         .streamingQuery
@@ -1054,7 +1061,9 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
       // This is to avoid actually running a Spark job with 10000 tasks
       //这是为了避免实际运行10000个任务的Spark作业
       val df = files.filter("1 == 0").groupBy().count()
-
+      //"Output"是写入到外部存储的写方式,
+      //Complete模式： 将整个更新表写入到外部存储，写入整个表的方式由存储连接器决定。
+      //Complete模式每次触发后，整个结果表将输出到接收器。聚合查询支持此选项。
       testStream(df, OutputMode.Complete)(
         AddTextFileData("0", src, tmp),
         CheckAnswer(0)

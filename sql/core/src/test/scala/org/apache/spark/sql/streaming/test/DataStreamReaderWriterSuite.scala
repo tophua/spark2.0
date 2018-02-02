@@ -100,7 +100,7 @@ class DefaultSource extends StreamSourceProvider with StreamSinkProvider {
       override def stop() {}
     }
   }
-
+//"Output"是写入到外部存储的写方式
   override def createSink(
       spark: SQLContext,
       parameters: Map[String, String],
@@ -121,6 +121,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     Utils.createTempDir(namePrefix = "streaming.metadata").getCanonicalPath
 
   after {
+    // 输出接收器 Foreach sink - 对输出中的记录运行任意计算。
     spark.streams.active.foreach(_.stop())
   }
   //不能在流式数据集上调用写入
@@ -348,6 +349,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     q1.stop()
     val q5 = startQueryWithName("name")
     assert(activeStreamNames.contains("name"))
+    // 输出接收器 Foreach sink - 对输出中的记录运行任意计算。
     spark.streams.active.foreach(_.stop())
   }
 
@@ -449,6 +451,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
       .load()
 
     val sq = df.writeStream
+      //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+      // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("console")
       .option("checkpointLocation", newMetadataDir)
       .trigger(ProcessingTime(2.seconds))
@@ -462,8 +466,12 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
       val path = dir.getCanonicalPath
       intercept[AnalysisException] {
         spark.range(10).writeStream
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
+          //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+          //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
           .outputMode("append")
           .partitionBy("id")
+          //文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
           .start(path)
       }
@@ -475,7 +483,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     val df = spark.readStream
       .format("org.apache.spark.sql.streaming.test")
       .load()
-
+    //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+    // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
     val sq = df.writeStream.format("console").start()
     sq.stop()
   }
@@ -489,8 +498,12 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
       val writer = df.groupBy("a")
         .count()
         .writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName(tableName)
+          //每次触发后，整个结果表将输出到接收器。聚合查询支持此选项。
+        //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
         .outputMode("complete")
       if (provideInWriter) {
         writer.option("checkpointLocation", chkLoc)
@@ -522,6 +535,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     q2.stop()
   }
   //MemorySink可以在完整模式下从检查点恢复
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
+  //每次触发后，整个结果表将输出到接收器。聚合查询支持此选项。
   test("MemorySink can recover from a checkpoint in Complete Mode") {
     val checkpointLoc = newMetadataDir
     val checkpointDir = new File(checkpointLoc, "offsets")
@@ -530,6 +545,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     testMemorySinkCheckpointRecovery(checkpointLoc, provideInWriter = true)
   }
 //MemorySink可以从完整模式下conf中提供的检查点恢复
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("SPARK-18927: MemorySink can recover from a checkpoint provided in conf in Complete Mode") {
     val checkpointLoc = newMetadataDir
     val checkpointDir = new File(checkpointLoc, "offsets")
@@ -540,6 +556,9 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     }
   }
   //追加模式内存接收器不支持检查点恢复
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
+  //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+  //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
   test("append mode memory sink's do not support checkpoint recovery") {
     import testImplicits._
     val ms = new MemoryStream[Int](0, sqlContext)
@@ -551,9 +570,14 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
 
     val e = intercept[AnalysisException] {
       df.writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName("test")
         .option("checkpointLocation", checkpointLoc)
+        //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+        //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         .outputMode("append")
         .start()
     }
@@ -584,6 +608,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
 
       val sdf = spark.readStream
         .schema(schema)
+        //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
         .format("parquet")
         .load(src.toString)
 
@@ -594,6 +619,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
 
       val sq = sdf.writeStream
         .queryName("corruption_test")
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .start()
       sq.processAllAvailable()
@@ -617,6 +644,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
           val queryName = "test_query"
           val ds = MemoryStream[Int].toDS
           ds.writeStream
+            // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+            // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
             .format("memory")
             .queryName(queryName)
             .option("checkpointLocation", userCheckpointPath.getAbsolutePath)
@@ -638,6 +667,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
       withSQLConf(SQLConf.CHECKPOINT_LOCATION.key -> checkpointPath.getAbsolutePath) {
         val queryName = "test_query"
         val ds = MemoryStream[Int].toDS
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         ds.writeStream.format("memory").queryName(queryName).start().stop()
         // Should use query name to create a folder in `checkpointPath`
         val queryCheckpointDir = new File(checkpointPath, queryName)
@@ -654,6 +685,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
     withTempDir { checkpointPath =>
       withSQLConf(SQLConf.CHECKPOINT_LOCATION.key -> checkpointPath.getAbsolutePath) {
         val ds = MemoryStream[Int].toDS
+        //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+        // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         ds.writeStream.format("console").start().stop()
         // Should create a random folder in `checkpointPath`
         assert(
@@ -665,6 +698,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
   //如果查询停止没有错误,临时检查点目录应该被删除
   test("temp checkpoint dir should be deleted if a query is stopped without errors") {
     import testImplicits._
+    //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+    // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
     val query = MemoryStream[Int].toDS.writeStream.format("console").start()
     query.processAllAvailable()
     val checkpointDir = new Path(
@@ -678,6 +713,8 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
   testQuietly("temp checkpoint dir should not be deleted if a query is stopped with an error") {
     import testImplicits._
     val input = MemoryStream[Int]
+    //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+    // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
     val query = input.toDS.map(_ / 0).writeStream.format("console").start()
     val checkpointDir = new Path(
       query.asInstanceOf[StreamingQueryWrapper].streamingQuery.resolvedCheckpointRoot)

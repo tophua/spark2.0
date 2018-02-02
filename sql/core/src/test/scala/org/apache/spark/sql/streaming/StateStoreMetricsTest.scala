@@ -16,7 +16,7 @@
  */
 
 package org.apache.spark.sql.streaming
-
+//状态存储度量测试
 trait StateStoreMetricsTest extends StreamTest {
 
   def assertNumStateRows(total: Seq[Long], updated: Seq[Long]): AssertOnQuery =

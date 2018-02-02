@@ -18,7 +18,7 @@
 package org.apache.spark.sql.streaming
 
 import org.apache.spark.sql.execution.streaming._
-
+  //内存源压力套件
 class MemorySourceStressSuite extends StreamTest {
   import testImplicits._
   //内存强调测试

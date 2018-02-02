@@ -41,6 +41,7 @@ import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
  *    }
  * }}}
  */
+//
 class MockSourceProvider extends StreamSourceProvider {
   override def sourceSchema(
       spark: SQLContext,

@@ -90,6 +90,7 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
     )
   }
   //简单计数，完整模式
+  ////Complete模式每次触发后，整个结果表将输出到接收器。聚合查询支持此选项。
   test("simple count, complete mode") {
     val inputData = MemoryStream[Int]
 
@@ -98,7 +99,7 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
         .groupBy($"value")
         .agg(count("*"))
         .as[(Int, Long)]
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(aggregated, Complete)(
       AddData(inputData, 3),
       CheckLastBatch((3, 1)),
@@ -113,6 +114,9 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
     )
   }
   //简单计数，追加模式
+  //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+  //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
   test("simple count, append mode") {
     val inputData = MemoryStream[Int]
 
@@ -123,8 +127,14 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
         .as[(Int, Long)]
 
     val e = intercept[AnalysisException] {
+      //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+      //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       testStream(aggregated, Append)()
     }
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
+    //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+    //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
     Seq("append", "not supported").foreach { m =>
       assert(e.getMessage.toLowerCase(Locale.ROOT).contains(m.toLowerCase(Locale.ROOT)))
     }
@@ -140,7 +150,7 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
         .toDF("value", "count")
         .orderBy($"count".desc)
         .as[(Int, Long)]
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(aggregated, Complete)(
       AddData(inputData, 3),
       CheckLastBatch(isSorted = true, (3, 1)),
@@ -192,6 +202,7 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
 
     // Test with Complete mode 测试完成模式
     inputData.reset()
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(aggregated, Complete)(
       AddData(inputData, 1),
       CheckLastBatch((1, 1), (2, 1)),
@@ -270,7 +281,7 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
         .groupBy($"value")
         .agg(count("*"))
         .where('value >= current_timestamp().cast("long") - 10L)
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(aggregated, Complete)(
       StartStream(Trigger.ProcessingTime("10 seconds"), triggerClock = clock),
 
@@ -333,6 +344,7 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
         .agg(count("*"))
         .where($"value".cast("date") >= date_sub(current_date(), 10))
         .select(($"value".cast("long") / DateTimeUtils.SECONDS_PER_DAY).cast("long"), $"count(1)")
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(aggregated, Complete)(
       StartStream(Trigger.ProcessingTime("10 day"), triggerClock = clock),
       // advance clock to 10 days, should retain all keys
@@ -391,7 +403,9 @@ class StreamingAggregationSuite extends StateStoreMetricsTest
     // make sure we're planning an aggregate in the first place
     //确保我们正在计划一个聚合首先
     assert(batchDF.queryExecution.optimizedPlan match { case _: Aggregate => true })
-
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
+    //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+    //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
     testStream(joinDF, Append)(
       AddData(streamInput, 0, 1, 2, 3),
       CheckLastBatch((0, 0, 2), (1, 1, 3)),

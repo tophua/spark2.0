@@ -32,7 +32,7 @@ trait OffsetSuite extends SparkFunSuite {
     }
   }
 }
-
+//长偏移距套件
 class LongOffsetSuite extends OffsetSuite {
   val one = LongOffset(1)
   val two = LongOffset(2)

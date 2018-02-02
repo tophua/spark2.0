@@ -259,6 +259,9 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
    */
   def testStream(
       _stream: Dataset[_],
+      //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+      //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       outputMode: OutputMode = OutputMode.Append)(actions: StreamAction*): Unit = synchronized {
     import org.apache.spark.sql.streaming.util.StreamManualClock
 
@@ -277,6 +280,7 @@ trait StreamTest extends QueryTest with SharedSQLContext with TimeLimits with Be
     //源索引 - >偏移等待
     val awaiting = new mutable.HashMap[Int, Offset]() // source index -> offset to wait for
     //将结果存储在内存中的接收器,这个[[Sink]]主要用于单元测试,不提供耐久性
+    //"Output"是写入到外部存储的写方式
     val sink = new MemorySink(stream.schema, outputMode)
     val resetConfValues = mutable.Map[String, Option[String]]()
 

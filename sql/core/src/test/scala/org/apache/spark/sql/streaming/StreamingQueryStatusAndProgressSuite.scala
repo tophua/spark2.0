@@ -148,7 +148,10 @@ class StreamingQueryStatusAndProgressSuite extends StreamTest with Eventually {
       .agg(count("*"))
       .writeStream
       .queryName("progress_serializable_test")
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("memory")
+      //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
       .outputMode("complete")
       .start()
     try {
@@ -187,7 +190,10 @@ class StreamingQueryStatusAndProgressSuite extends StreamTest with Eventually {
         .agg(count("*"))
         .writeStream
         .queryName("metric_continuity")
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
+        //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
         .outputMode("complete")
         .start()
       try {

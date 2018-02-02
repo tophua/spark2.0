@@ -36,7 +36,7 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
   test("deduplicate with all columns") {
     val inputData = MemoryStream[String]
     val result = inputData.toDS().dropDuplicates()
-
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     testStream(result, Append)(
       AddData(inputData, "a"),
       CheckLastBatch("a"),
@@ -53,7 +53,7 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
   test("deduplicate with some columns") {
     val inputData = MemoryStream[(String, Int)]
     val result = inputData.toDS().dropDuplicates("_1")
-
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     testStream(result, Append)(
       AddData(inputData, "a" -> 1),
       CheckLastBatch("a" -> 1),
@@ -70,7 +70,7 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
   test("multiple deduplicates") {
     val inputData = MemoryStream[(String, Int)]
     val result = inputData.toDS().dropDuplicates().dropDuplicates("_1")
-
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     testStream(result, Append)(
       AddData(inputData, "a" -> 1),
       CheckLastBatch("a" -> 1),
@@ -90,10 +90,19 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
     val inputData = MemoryStream[Int]
     val result = inputData.toDS()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .dropDuplicates()
       .select($"eventTime".cast("long").as[Long])
-
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     testStream(result, Append)(
       AddData(inputData, (1 to 5).flatMap(_ => (10 to 15)): _*),
       CheckLastBatch(10 to 15: _*),
@@ -121,12 +130,31 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
     )
   }
   //使用聚合 - 附加模式进行重复数据删除
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
   test("deduplicate with aggregate - append mode") {
     val inputData = MemoryStream[Int]
     val windowedaggregate = inputData.toDS()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .dropDuplicates()
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -200,6 +228,7 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
     )
   }
   //用聚合 - 完整模式进行重复数据删除
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("deduplicate with aggregate - complete mode") {
     val inputData = MemoryStream[(String, Int)]
     val result = inputData.toDS()
@@ -208,7 +237,7 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
       .groupBy("str")
       .agg(sum("num"))
       .as[(String, Long)]
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(result, Complete)(
       AddData(inputData, "a" -> 1),
       CheckLastBatch("a" -> 1L),
@@ -232,7 +261,9 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
         val inputData = MemoryStream[String]
         val result = inputData.toDS().dropDuplicates()
         val q = result.writeStream
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
+          //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
           .outputMode(Append)
           .option("checkpointLocation", checkpointDir.getPath)
           .start(outputPath)
@@ -259,6 +290,15 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
     val input = MemoryStream[(Int, Int)]
     val df = input.toDS.toDF("time", "id")
       .withColumn("time", $"time".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("time", "1 second")
       .dropDuplicates("id", "time") // Change the column positions
       .select($"id")
@@ -278,6 +318,15 @@ class DeduplicateSuite extends StateStoreMetricsTest with BeforeAndAfterAll {
     val input = MemoryStream[(Int, Int)]
     val df = input.toDS.toDF("id", "time")
       .withColumn("time", $"time".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("time", "1 second")
       .dropDuplicates("id")
       .select($"id", $"time".cast("long"))

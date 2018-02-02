@@ -94,7 +94,10 @@ class StreamingQuerySuite extends StreamTest with BeforeAndAfter with Logging wi
         if (cpDir == null || !restart) cpDir = s"$dir/${RandomStringUtils.randomAlphabetic(10)}"
         MemoryStream[Int].toDS().groupBy().count()
           .writeStream
+          // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+          // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
           .format("memory")
+          //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
           .outputMode("complete")
           .queryName(s"name${RandomStringUtils.randomAlphabetic(10)}")
           .option("checkpointLocation", cpDir)
@@ -264,7 +267,7 @@ class StreamingQuerySuite extends StreamTest with BeforeAndAfter with Logging wi
     }
 
     var lastProgressBeforeStop: StreamingQueryProgress = null
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(mapped, OutputMode.Complete)(
       StartStream(ProcessingTime(1000), triggerClock = clock),
       AssertStreamExecThreadIsWaitingForTime(1000),
@@ -542,6 +545,8 @@ class StreamingQuerySuite extends StreamTest with BeforeAndAfter with Logging wi
     def startQuery(ds: Dataset[Int], queryName: String): StreamingQuery = {
       ds.writeStream
         .queryName(queryName)
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .start()
     }
@@ -702,6 +707,8 @@ class StreamingQuerySuite extends StreamTest with BeforeAndAfter with Logging wi
     * 返回流DF的第一个触发器结束时的查询进度*/
   private def getFirstProgress(streamingDF: DataFrame): StreamingQueryProgress = {
     try {
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       val q = streamingDF.writeStream.format("memory").queryName("test").start()
       q.processAllAvailable()
       q.recentProgress.head

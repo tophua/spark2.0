@@ -79,6 +79,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
   test("error on bad column") {
     val inputData = MemoryStream[Int].toDF()
     val e = intercept[AnalysisException] {
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       inputData.withWatermark("badColumn", "1 minute")
     }
     assert(e.getMessage contains "badColumn")
@@ -87,6 +96,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
   test("error on wrong type") {
     val inputData = MemoryStream[Int].toDF()
     val e = intercept[AnalysisException] {
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       inputData.withWatermark("value", "1 minute")
     }
     assert(e.getMessage contains "value")
@@ -102,7 +120,7 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
       .select($"window".getField("start").cast("long").as[Long], $"count".as[Long])
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(aggWithoutWatermark, outputMode = Complete)(
       AddData(inputData1, 15),
       CheckAnswer((15, 1)),
@@ -117,6 +135,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
     val inputData2 = MemoryStream[Int]
     val aggWithWatermark = inputData2.toDF()
         .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
         .withWatermark("eventTime", "10 seconds")
         .groupBy(window($"eventTime", "5 seconds") as 'window)
         .agg(count("*") as 'count)
@@ -158,11 +185,21 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
     )
   }
   //追加模式
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
   test("append mode") {
     val inputData = MemoryStream[Int]
 
     val windowedAggregation = inputData.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -192,6 +229,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
 
     val windowedAggregation = inputData.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -222,6 +268,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
     val input = MemoryStream[Long]
     val aggWithWatermark = input.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "2 years 5 months")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -250,6 +305,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
     val inputData = MemoryStream[Int]
     val df = inputData.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -299,6 +363,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
 
     val windowedAggregation = inputData.toDF()
         .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
         .withWatermark("eventTime", "10 seconds")
         .groupBy(window($"eventTime", "5 seconds") as 'window)
         .agg(count("*") as 'count)
@@ -328,6 +401,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
 
     val firstDf = first.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .select('value)
 
@@ -335,6 +417,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
 
     val secondDf = second.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "5 seconds")
       .select('value)
 
@@ -342,7 +433,10 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
       val unionWriter = firstDf.union(secondDf).agg(sum('value))
         .writeStream
         .option("checkpointLocation", checkpointDir.getCanonicalPath)
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
+        //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
         .outputMode("complete")
         .queryName("test")
 
@@ -404,11 +498,21 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
     }
   }
   //完整模式
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("complete mode") {
     val inputData = MemoryStream[Int]
 
     val windowedAggregation = inputData.toDF()
         .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
         .withWatermark("eventTime", "10 seconds")
         .groupBy(window($"eventTime", "5 seconds") as 'window)
         .agg(count("*") as 'count)
@@ -416,6 +520,7 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
 
     // No eviction when asked to compute complete results.
     //要求计算完整的结果时不要驱逐
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(windowedAggregation, OutputMode.Complete)(
       AddData(inputData, 10, 11, 12),
       CheckAnswer((10, 3)),
@@ -435,6 +540,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
 
     val windowedAggregation = inputData.toDF()
         .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
         .withWatermark("eventTime", "10 seconds")
         .groupBy($"eventTime")
         .agg(count("*") as 'count)
@@ -455,21 +569,57 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
   test("delay threshold should not be negative.") {
     val inputData = MemoryStream[Int].toDF()
     var e = intercept[IllegalArgumentException] {
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       inputData.withWatermark("value", "-1 year")
     }
     assert(e.getMessage contains "should not be negative.")
 
     e = intercept[IllegalArgumentException] {
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       inputData.withWatermark("value", "1 year -13 months")
     }
     assert(e.getMessage contains "should not be negative.")
 
     e = intercept[IllegalArgumentException] {
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       inputData.withWatermark("value", "1 month -40 days")
     }
     assert(e.getMessage contains "should not be negative.")
 
     e = intercept[IllegalArgumentException] {
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       inputData.withWatermark("value", "-10 seconds")
     }
     assert(e.getMessage contains "should not be negative.")
@@ -479,7 +629,25 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
     val df = MemoryStream[(Long, Long)].toDF()
       .withColumn("first", $"_1".cast("timestamp"))
       .withColumn("second", $"_2".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("first", "1 minute")
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("second", "2 minutes")
 
     val eventTimeColumns = df.logicalPlan.output
@@ -491,6 +659,15 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
   test("EventTime watermark should be ignored in batch query.") {
     val df = testData
       .withColumn("eventTime", $"key".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "1 minute")
       .select("eventTime")
       .as[Long]
@@ -510,12 +687,24 @@ class EventTimeWatermarkSuite extends StreamTest with BeforeAndAfter with Matche
         .json(dir.getCanonicalPath)
 
       val groupEvents = input
+        /**
+          * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+          * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+          * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+          * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+          * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+          * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+          * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+          */
         .withWatermark("eventTime", "2 seconds")
         .groupBy("symbol", "eventTime")
         .agg(count("price") as 'count)
         .select("symbol", "eventTime", "count")
       val q = groupEvents.writeStream
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         .outputMode("append")
+        //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+        // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("console")
         .start()
       try {

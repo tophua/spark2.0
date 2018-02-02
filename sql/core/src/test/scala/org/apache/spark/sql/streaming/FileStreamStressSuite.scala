@@ -109,6 +109,7 @@ class FileStreamStressSuite extends StreamTest {
     val input = spark.readStream.format("text").load(inputDir)
 
     def startStream(): StreamingQuery = {
+      //解决序列化问题
       val errorMsg = injectedErrorMsg  // work around serialization issue
       val output = input
         .repartition(5)
@@ -127,12 +128,14 @@ class FileStreamStressSuite extends StreamTest {
         output
           .writeStream
           .partitionBy("id")
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
           .option("checkpointLocation", checkpoint)
           .start(outputDir)
       } else {
         output
           .writeStream
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
           .option("checkpointLocation", checkpoint)
           .start(outputDir)
@@ -151,6 +154,7 @@ class FileStreamStressSuite extends StreamTest {
           if e.getCause != null && e.getCause.getCause != null &&
               e.getCause.getCause.getMessage.contains(injectedErrorMsg) =>
           // Getting the expected error message
+          //获取预期的错误消息
           failures += 1
       }
     }

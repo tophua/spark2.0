@@ -46,6 +46,7 @@ class FileStreamSinkSuite extends StreamTest {
       query =
         df.writeStream
           .option("checkpointLocation", checkpointDir)
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
           .start(outputDir)
 
@@ -77,6 +78,7 @@ class FileStreamSinkSuite extends StreamTest {
       .writeStream
       .partitionBy("value")
       .option("checkpointLocation", checkpointDir)
+      //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
       .format("parquet")
       .start(outputDir)
 
@@ -112,6 +114,7 @@ class FileStreamSinkSuite extends StreamTest {
           .writeStream
           .partitionBy("id")
           .option("checkpointLocation", checkpointDir)
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
           .start(outputDir)
 
@@ -202,6 +205,7 @@ class FileStreamSinkSuite extends StreamTest {
               .writeStream
               .partitionBy("id1", "id2")
               .option("checkpointLocation", checkpointDir.getAbsolutePath)
+              //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
               .format("parquet")
               .start(outputPath)
 
@@ -237,6 +241,15 @@ class FileStreamSinkSuite extends StreamTest {
     val inputDF = inputData.toDF.toDF("time")
     val outputDf = inputDF
       .selectExpr("CAST(time AS timestamp) AS timestamp")
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("timestamp", "10 seconds")
       .groupBy(window($"timestamp", "5 seconds"))
       .count()
@@ -251,6 +264,7 @@ class FileStreamSinkSuite extends StreamTest {
       query =
         outputDf.writeStream
           .option("checkpointLocation", checkpointDir)
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           .format("parquet")
           .start(outputDir)
 
@@ -292,6 +306,7 @@ class FileStreamSinkSuite extends StreamTest {
     }
   }
   //不支持更新和完成输出模式
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("Update and Complete output mode not supported") {
     val df = MemoryStream[Int].toDF().groupBy().count()
     val outputDir = Utils.createTempDir(namePrefix = "stream.output").getCanonicalPath
@@ -300,6 +315,7 @@ class FileStreamSinkSuite extends StreamTest {
 
       def testOutputMode(mode: String): Unit = {
         val e = intercept[AnalysisException] {
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           df.writeStream.format("parquet").outputMode(mode).start(dir.getCanonicalPath)
         }
         Seq(mode, "not support").foreach { w =>
@@ -308,6 +324,7 @@ class FileStreamSinkSuite extends StreamTest {
       }
 
       testOutputMode("update")
+      //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
       testOutputMode("complete")
     }
   }

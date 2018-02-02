@@ -269,10 +269,16 @@ class StreamingQueryManagerSuite extends StreamTest with BeforeAndAfter {
               Utils.createTempDir(namePrefix = "streaming.checkpoint").getCanonicalPath
             query =
               df.writeStream
+                // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+                // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
                 .format("memory")
                 .queryName(s"query$i")
                 .option("checkpointLocation", metadataRoot)
+                //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+                //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
+                //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
                 .outputMode("append")
+
                 .start()
           } catch {
             case NonFatal(e) =>

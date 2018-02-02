@@ -103,6 +103,7 @@ class StreamSuite extends StreamTest {
       withTempDir { checkpointDir =>
         val query =
           unioned
+            //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
             .writeStream.format("parquet")
             .option("checkpointLocation", checkpointDir.getAbsolutePath)
             .start(outputDir.getAbsolutePath)
@@ -150,6 +151,7 @@ class StreamSuite extends StreamTest {
       withTempDir { outputDir =>
         withTempDir { checkpointDir =>
           ////标准的DataSource 写入 API，只不过write变成了writeStream
+          //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
           val query = df.writeStream.format("parquet")
             //检查点位置
             .option("checkpointLocation", checkpointDir.getAbsolutePath)
@@ -183,6 +185,8 @@ class StreamSuite extends StreamTest {
       query =
         df.union(df)
           .writeStream
+          // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+          // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
           .format("memory")
           .queryName("memory")
           .start()
@@ -397,7 +401,9 @@ class StreamSuite extends StreamTest {
   }
   //输出模式API在Scala
   test("output mode API in Scala") {
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     assert(OutputMode.Append === InternalOutputModes.Append)
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     assert(OutputMode.Complete === InternalOutputModes.Complete)
     assert(OutputMode.Update === InternalOutputModes.Update)
   }
@@ -420,6 +426,9 @@ class StreamSuite extends StreamTest {
     assert(!explainString.contains("LocalTableScan"))
 
     // Test StreamingQuery.display 测试StreamingQuery.display
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
+    // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+    // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
     val q = df.writeStream.queryName("memory_explain").outputMode("complete").format("memory")
       .start()
       .asInstanceOf[StreamingQueryWrapper]
@@ -464,8 +473,11 @@ class StreamSuite extends StreamTest {
         .json(testPath.getCanonicalPath)
         .dropDuplicates("_1")
         .writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName("testquery")
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         .outputMode("append")
         .start()
       try {
@@ -489,6 +501,8 @@ class StreamSuite extends StreamTest {
       .format(classOf[ThrowingIOExceptionLikeHadoop12074].getName)
       .load()
       .writeStream
+      //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+      // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("console")
       .start()
     assert(ThrowingIOExceptionLikeHadoop12074.createSourceLatch
@@ -509,6 +523,8 @@ class StreamSuite extends StreamTest {
       .format(classOf[ThrowingInterruptedIOException].getName)
       .load()
       .writeStream
+      //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+      // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("console")
       .start()
     assert(ThrowingInterruptedIOException.createSourceLatch
@@ -521,7 +537,7 @@ class StreamSuite extends StreamTest {
   test("SPARK-19873: streaming aggregation with change in number of partitions") {
     val inputData = MemoryStream[(Int, Int)]
     val agg = inputData.toDS().groupBy("_1").count()
-
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     testStream(agg, OutputMode.Complete())(
       AddData(inputData, (1, 0), (2, 0)),
       StartStream(additionalConfs = Map(SQLConf.SHUFFLE_PARTITIONS.key -> "2")),
@@ -551,7 +567,10 @@ class StreamSuite extends StreamTest {
         .groupBy($"value")
         .agg(count("*"))
         .writeStream
+        //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
         .outputMode("complete")
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
     }
 
@@ -633,6 +652,8 @@ class StreamSuite extends StreamTest {
         i
       }
       .writeStream
+      //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+      // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("console")
       .start()
 
@@ -669,6 +690,8 @@ class StreamSuite extends StreamTest {
       .toDS()
       .map(_ + 1)
       .writeStream
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("memory")
       .queryName(queryName)
       .start()
@@ -692,6 +715,8 @@ class StreamSuite extends StreamTest {
       val query = MemoryStream[Int].toDF
         .writeStream
         .option("checkpointLocation", checkpointLocation)
+        //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+        // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("console")
         .start()
       try {
@@ -709,6 +734,9 @@ class StreamSuite extends StreamTest {
     withSQLConf("spark.sql.streaming.stateStore.providerClass" -> providerClassName) {
       val input = MemoryStream[Int]
       val df = input.toDS().groupBy().count()
+      //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       val query = df.writeStream.outputMode("complete").format("memory").queryName("name").start()
       input.addData(1, 2, 3)
       val e = intercept[Exception] {
@@ -730,7 +758,10 @@ class StreamSuite extends StreamTest {
 
     def runQuery(queryName: String, checkpointLoc: String): Unit = {
       val query = df.writeStream
+        //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
         .outputMode("complete")
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName(queryName)
         .option("checkpointLocation", checkpointLoc)
@@ -776,6 +807,8 @@ class StreamSuite extends StreamTest {
         .format(classOf[ThrowingExceptionInCreateSource].getName)
         .load()
         .writeStream
+        //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+        // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("console")
         .start()
       assert(ThrowingExceptionInCreateSource.createSourceLatch
