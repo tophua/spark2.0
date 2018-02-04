@@ -557,6 +557,8 @@ class DataFrameReaderWriterSuite extends QueryTest with SharedSQLContext with Be
     withTable("same_name") {
       withTempView("same_name") {
         spark.range(10).createTempView("same_name")
+        //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+        //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
         spark.range(20).write.mode(SaveMode.Append).saveAsTable("same_name")
         assert(
           spark.sessionState.catalog.tableExists(TableIdentifier("same_name", Some("default"))))
@@ -570,6 +572,8 @@ class DataFrameReaderWriterSuite extends QueryTest with SharedSQLContext with Be
       withTempView("same_name") {
         sql("CREATE TABLE same_name(id LONG) USING parquet")
         spark.range(10).createTempView("same_name")
+        //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+        //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
         spark.range(20).write.mode(SaveMode.Append).saveAsTable("same_name")
         checkAnswer(spark.table("same_name"), spark.range(10).toDF())
         checkAnswer(spark.table("default.same_name"), spark.range(20).toDF())
@@ -666,6 +670,8 @@ class DataFrameReaderWriterSuite extends QueryTest with SharedSQLContext with Be
     withTable("t") {
       Seq(1 -> "a", 2 -> "b").toDF("i", "j").write.bucketBy(2, "i").saveAsTable("t")
       val e = intercept[AnalysisException] {
+        //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+        //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
         Seq(3 -> "c").toDF("i", "j").write.bucketBy(3, "i").mode("append").saveAsTable("t")
       }
       assert(e.message.contains("Specified bucketing does not match that of the existing table"))
@@ -688,6 +694,8 @@ class DataFrameReaderWriterSuite extends QueryTest with SharedSQLContext with Be
   test("SPARK-18913: append to a table with special column names") {
     withTable("t") {
       Seq(1 -> "a").toDF("x.x", "y.y").write.saveAsTable("t")
+      //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+      //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
       Seq(2 -> "b").toDF("x.x", "y.y").write.mode("append").saveAsTable("t")
       checkAnswer(spark.table("t"), Row(1, "a") :: Row(2, "b") :: Nil)
     }

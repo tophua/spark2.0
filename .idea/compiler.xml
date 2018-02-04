@@ -11,7 +11,6 @@
         <module name="spark-examples_2.11" />
         <module name="spark-graphx_2.11" />
         <module name="spark-hive_2.11" />
-        <module name="spark-kvstore_2.11" />
         <module name="spark-launcher_2.11" />
         <module name="spark-mllib-local_2.11" />
         <module name="spark-mllib_2.11" />
@@ -26,6 +25,8 @@
         <module name="spark-streaming-flume_2.11" />
         <module name="spark-streaming-kafka-0-10-assembly_2.11" />
         <module name="spark-streaming-kafka-0-10_2.11" />
+        <module name="spark-streaming-kafka-0-8-assembly_2.11" />
+        <module name="spark-streaming-kafka-0-8_2.11" />
         <module name="spark-streaming_2.11" />
         <module name="spark-tags_2.11" />
         <module name="spark-tools_2.11" />
@@ -45,7 +46,7 @@
       <module name="spark-mllib_2.11" target="1.8" />
       <module name="spark-network-common_2.11" target="1.8" />
       <module name="spark-network-shuffle_2.11" target="1.8" />
-      <module name="spark-parent_2.11" target="1.5" />
+      <module name="spark-parent_2.11" target="1.8" />
       <module name="spark-repl_2.11" target="1.8" />
       <module name="spark-sketch_2.11" target="1.8" />
       <module name="spark-sql-kafka-0-10_2.11" target="1.8" />
@@ -55,6 +56,8 @@
       <module name="spark-streaming-flume_2.11" target="1.8" />
       <module name="spark-streaming-kafka-0-10-assembly_2.11" target="1.8" />
       <module name="spark-streaming-kafka-0-10_2.11" target="1.8" />
+      <module name="spark-streaming-kafka-0-8-assembly_2.11" target="1.8" />
+      <module name="spark-streaming-kafka-0-8_2.11" target="1.8" />
       <module name="spark-streaming_2.11" target="1.8" />
       <module name="spark-tags_2.11" target="1.8" />
       <module name="spark-tools_2.11" target="1.8" />

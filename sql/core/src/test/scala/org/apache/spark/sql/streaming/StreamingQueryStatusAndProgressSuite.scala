@@ -31,7 +31,7 @@ import org.apache.spark.sql.execution.streaming.MemoryStream
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.streaming.StreamingQueryStatusAndProgressSuite._
-
+//start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
 class StreamingQueryStatusAndProgressSuite extends StreamTest with Eventually {
   test("StreamingQueryProgress - prettyJson") {
     val json1 = testProgress1.prettyJson
@@ -106,7 +106,7 @@ class StreamingQueryStatusAndProgressSuite extends StreamTest with Eventually {
       """.stripMargin.trim)
     assert(compact(parse(json2)) === testProgress2.json)
   }
-
+  //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
   test("StreamingQueryProgress - json") {
     assert(compact(parse(testProgress1.json)) === testProgress1.json)
     assert(compact(parse(testProgress2.json)) === testProgress2.json)

@@ -89,7 +89,7 @@ class StreamingQuerySuite extends StreamTest with BeforeAndAfter with Logging wi
     val inputData = MemoryStream[Int]
     withTempDir { dir =>
       var cpDir: String = null
-
+      //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
       def startQuery(restart: Boolean): StreamingQuery = {
         if (cpDir == null || !restart) cpDir = s"$dir/${RandomStringUtils.randomAlphabetic(10)}"
         MemoryStream[Int].toDS().groupBy().count()
@@ -101,6 +101,7 @@ class StreamingQuerySuite extends StreamTest with BeforeAndAfter with Logging wi
           .outputMode("complete")
           .queryName(s"name${RandomStringUtils.randomAlphabetic(10)}")
           .option("checkpointLocation", cpDir)
+          //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
           .start()
       }
 

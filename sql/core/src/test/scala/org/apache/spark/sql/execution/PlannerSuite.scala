@@ -154,6 +154,7 @@ class PlannerSuite extends SharedSQLContext {
   test("SPARK-11390 explain should print PushedFilters of PhysicalRDD") {
     withTempPath { file =>
       val path = file.getCanonicalPath
+      //输出接收器 文件接收器 - 将输出存储到目录,支持对分区表的写入。按时间分区可能有用。
       testData.write.parquet(path)
       val df = spark.read.parquet(path)
       df.createOrReplaceTempView("testPushed")

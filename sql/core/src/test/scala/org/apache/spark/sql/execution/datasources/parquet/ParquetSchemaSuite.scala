@@ -32,6 +32,7 @@ abstract class ParquetSchemaTest extends ParquetTest with SharedSQLContext {
   /**
    * Checks whether the reflected Parquet message type for product type `T` conforms `messageType`.
     * 检查产品类型“T”的反射Parquet消息类型是否符合messageType。
+    * spark.sql.streaming.schemaInference设置为true来重新启用模式推断。
    */
   protected def testSchemaInference[T <: Product: ClassTag: TypeTag](
       testName: String,

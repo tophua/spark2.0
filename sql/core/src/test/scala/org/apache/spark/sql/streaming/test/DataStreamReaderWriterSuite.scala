@@ -281,7 +281,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
 
     /**
       * Start a query with a specific name
-      * 用一个特定的名字开始查询
+      * 用一个特定的名字开始查询,StreamingQuery对象，它是连续运行的执行的句柄
       * */
     def startQueryWithName(name: String = ""): StreamingQuery = {
       spark.readStream
@@ -291,6 +291,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
         .format("org.apache.spark.sql.streaming.test")
         .option("checkpointLocation", newMetadataDir)
         .queryName(name)
+        //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
         .start()
     }
 
@@ -305,6 +306,7 @@ class DataStreamReaderWriterSuite extends StreamTest with BeforeAndAfter {
         .writeStream
         .format("org.apache.spark.sql.streaming.test")
         .option("checkpointLocation", newMetadataDir)
+        //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
         .start()
     }
 

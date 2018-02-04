@@ -168,6 +168,8 @@ class RateSourceSuite extends StreamTest {
           .option(option, value)
           .load()
           .writeStream
+          //控制台接收器（用于调试） - 每次有触发器时将输出打印到控制台/ stdout。
+          // 这应该用于低数据量上的调试目的,因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
           .format("console")
           .start()
           .awaitTermination()

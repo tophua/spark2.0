@@ -42,6 +42,7 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
       val input = MemoryStream[Int]
       val query = input.toDS().repartition(2).writeStream
         .option("checkpointLocation", checkpointDir.getCanonicalPath)
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         .outputMode(OutputMode.Append)
         .foreach(new TestForeachWriter())
         .start()
@@ -102,6 +103,7 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
         .groupBy().count().as[Long].map(_.toInt)
         .writeStream
         .option("checkpointLocation", checkpointDir.getCanonicalPath)
+        //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
         .outputMode(OutputMode.Complete)
         .foreach(new TestForeachWriter())
         .start()
@@ -173,11 +175,21 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
     }
   }
   //带水印的foreach：完整
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("foreach with watermark: complete") {
     val inputData = MemoryStream[Int]
 
     val windowedAggregation = inputData.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -187,6 +199,7 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
 
     val query = windowedAggregation
       .writeStream
+      //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
       .outputMode(OutputMode.Complete)
       .foreach(new TestForeachWriter())
       .start()
@@ -207,11 +220,21 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
     }
   }
   //foreach with watermark:附加
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
   test("foreach with watermark: append") {
     val inputData = MemoryStream[Int]
 
     val windowedAggregation = inputData.toDF()
       .withColumn("eventTime", $"value".cast("timestamp"))
+      /**
+        * 在Spark 2.1中，我们引入了水印，让我们的引擎自动跟踪数据中的当前事件时间，并尝试相应地清理旧的状态。
+        * 您可以通过指定事件时间列和根据事件时间预计数据延迟的阈值来定义查询的水印。对于在时间T开始的特定窗口，
+        * 引擎将保持状态并允许后期数据更新状态，直到（由引擎看到的最大事件时间 - 后期阈值> T）。
+        * 换句话说，阈值内的晚数据将被聚合，但晚于阈值的数据将被丢弃。
+        * 我们定义查询的水印对列“timestamp”的值，并且还定义“10分钟”作为允许数据超时的阈值。
+        * 如果此查询在Append输出模式（稍后在“输出模式”部分中讨论）中运行，则引擎将从列“timestamp”跟踪当前事件时间，
+        * 并在最终确定窗口计数和添加之前等待事件时间的额外“10分钟”他们到结果表
+        */
       .withWatermark("eventTime", "10 seconds")
       .groupBy(window($"eventTime", "5 seconds") as 'window)
       .agg(count("*") as 'count)
@@ -221,6 +244,7 @@ class ForeachSinkSuite extends StreamTest with SharedSQLContext with BeforeAndAf
 
     val query = windowedAggregation
       .writeStream
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       .outputMode(OutputMode.Append)
       .foreach(new TestForeachWriter())
       .start()

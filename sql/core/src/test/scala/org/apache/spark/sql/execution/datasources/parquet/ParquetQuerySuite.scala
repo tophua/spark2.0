@@ -49,6 +49,7 @@ class ParquetQuerySuite extends QueryTest with ParquetTest with SharedSQLContext
     }
   }
   //追加
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
   test("appending") {
     val data = (0 until 10).map(i => (i, i.toString))
     spark.createDataFrame(data).toDF("c1", "c2").createOrReplaceTempView("tmp")
@@ -84,12 +85,15 @@ class ParquetQuerySuite extends QueryTest with ParquetTest with SharedSQLContext
     }
   }
   //追加时不使用缓存
+  //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
   test("SPARK-15678: not use cache on append") {
     withTempDir { dir =>
       val path = dir.toString
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       spark.range(1000).write.mode("append").parquet(path)
       val df = spark.read.parquet(path).cache()
       assert(df.count() == 1000)
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       spark.range(10).write.mode("append").parquet(path)
       assert(df.count() == 1010)
       assert(spark.read.parquet(path).count() == 1010)
@@ -395,8 +399,9 @@ class ParquetQuerySuite extends QueryTest with ParquetTest with SharedSQLContext
   test("SPARK-10005 Schema merging for nested struct") {
     withTempPath { dir =>
       val path = dir.getCanonicalPath
-
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       def append(df: DataFrame): Unit = {
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         df.write.mode(SaveMode.Append).parquet(path)
       }
 
@@ -638,6 +643,7 @@ class ParquetQuerySuite extends QueryTest with ParquetTest with SharedSQLContext
         .coalesce(1)
 
       df1.write.parquet(path)
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       df2.write.mode(SaveMode.Append).parquet(path)
 
       val userDefinedSchema = new StructType()
@@ -669,8 +675,9 @@ class ParquetQuerySuite extends QueryTest with ParquetTest with SharedSQLContext
         .range(1, 2)
         .selectExpr("NAMED_STRUCT('a', id, 'b', id + 1, 'c', id + 2) AS s")
         .coalesce(1)
-
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       df1.write.mode(SaveMode.Append).parquet(path)
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       df2.write.mode(SaveMode.Append).parquet(path)
 
       checkAnswer(
@@ -702,7 +709,7 @@ class ParquetQuerySuite extends QueryTest with ParquetTest with SharedSQLContext
             |) AS s
           """.stripMargin)
         .coalesce(1)
-
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       df.write.mode(SaveMode.Append).parquet(path)
 
       val userDefinedSchema =

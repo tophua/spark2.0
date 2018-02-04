@@ -161,11 +161,15 @@ class JDBCWriteSuite extends SharedSQLContext with BeforeAndAfter {
     assert(2 === spark.read.jdbc(url1, "TEST.DROPTEST", properties).collect()(0).length)
   }
   //创建然后插入附加
+  //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+  //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
   test("CREATE then INSERT to append") {
     val df = spark.createDataFrame(sparkContext.parallelize(arr2x2), schema2)
     val df2 = spark.createDataFrame(sparkContext.parallelize(arr1x2), schema2)
 
     df.write.jdbc(url, "TEST.APPENDTEST", new Properties())
+    //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+    //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
     df2.write.mode(SaveMode.Append).jdbc(url, "TEST.APPENDTEST", new Properties())
     assert(3 === spark.read.jdbc(url, "TEST.APPENDTEST", new Properties()).count())
     assert(2 === spark.read.jdbc(url, "TEST.APPENDTEST", new Properties()).collect()(0).length)

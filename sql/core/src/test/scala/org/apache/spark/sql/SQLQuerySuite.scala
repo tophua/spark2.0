@@ -2165,7 +2165,8 @@ class SQLQuerySuite extends QueryTest with SharedSQLContext {
 
       Seq(1 -> "a", 2 -> "b").toDF("i", "j").write.mode("overwrite").insertInto("tbl")
       checkAnswer(sql("SELECT i, j FROM tbl"), Row(1, "a") :: Row(2, "b") :: Nil)
-
+      //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+      //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
       Seq(3 -> "c", 4 -> "d").toDF("i", "j").write.mode("append").saveAsTable("tbl")
       checkAnswer(
         sql("SELECT i, j FROM tbl"),
@@ -2452,6 +2453,8 @@ class SQLQuerySuite extends QueryTest with SharedSQLContext {
       withTable("srcpart_15752") {
         val data = (1 to 10).map(i => (i, s"data-$i", i % 2, if ((i % 2) == 0) "a" else "b"))
           .toDF("col1", "col2", "partcol1", "partcol2")
+        //其中只有自上次触发后添加到结果表中的新行将输出到接收器。这仅支持那些添加到结果表中的行从不会更改的查询。
+        //因此,该模式保证每行只输出一次（假设容错宿）。例如，只有select，where，map，flatMap，filter，join等的查询将支持Append模式。
         data.write.partitionBy("partcol1", "partcol2").mode("append").saveAsTable("srcpart_15752")
         checkAnswer(
           sql("select partcol1 from srcpart_15752 group by partcol1"),

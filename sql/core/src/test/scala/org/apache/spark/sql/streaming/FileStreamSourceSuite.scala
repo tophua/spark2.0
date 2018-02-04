@@ -899,6 +899,7 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
         .queryName("file_data")
         .start()
         .asInstanceOf[StreamingQueryWrapper]
+        //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
         .streamingQuery
       q.processAllAvailable()
       val memorySink = q.sink.asInstanceOf[MemorySink]
@@ -1003,6 +1004,7 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
       // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       val q = df.writeStream.queryName("file_explain").format("memory").start()
         .asInstanceOf[StreamingQueryWrapper]
+        //start（）才能真正开始执行查询,这返回一个StreamingQuery对象,它是连续运行的执行的句柄
         .streamingQuery
       try {
         assert("No physical plan. Waiting for data." === q.explainInternal(false))
@@ -1029,7 +1031,7 @@ class FileStreamSourceSuite extends FileStreamSourceTest {
       }
     }
   }
-  //将文件名写入WAL Array [String]
+  //将文件名写入WAL Array [String],Write Ahead Logs （预写日志）来确保 end-to-end exactly-once （端到端的完全一次性） 容错保证
   test("SPARK-17372 - write file names to WAL as Array[String]") {
     // Note: If this test takes longer than the timeout, then its likely that this is actually
     // running a Spark job with 10000 tasks. This test tries to avoid that by

@@ -1673,6 +1673,7 @@ class DataFrameSuite extends QueryTest with SharedSQLContext {
     }
   }
   //完全支持特殊字符
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("SPARK-10656: completely support special chars") {
     val df = Seq(1 -> "a").toDF("i_$.a", "d^'a.")
     checkAnswer(df.select(df("*")), Row(1, "a"))

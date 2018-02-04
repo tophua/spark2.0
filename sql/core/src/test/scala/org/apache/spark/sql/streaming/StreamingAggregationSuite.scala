@@ -38,7 +38,7 @@ import org.apache.spark.sql.types.StructType
 object FailureSinglton {
   var firstTime = true
 }
-
+//streaming aggregations （流聚合）
 class StreamingAggregationSuite extends StateStoreMetricsTest
     with BeforeAndAfterAll with Assertions {
 

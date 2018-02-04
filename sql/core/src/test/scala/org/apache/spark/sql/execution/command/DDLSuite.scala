@@ -1812,15 +1812,18 @@ abstract class DDLSuite extends QueryTest with SQLTestUtils {
       // Misses some partition columns
       //漏掉一些分区列
       intercept[AnalysisException] {
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         df.write.mode("append").partitionBy("a").saveAsTable("partitionedTable")
       }
       // Wrong order
       intercept[AnalysisException] {
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         df.write.mode("append").partitionBy("b", "a").saveAsTable("partitionedTable")
       }
       // Partition columns not specified
       //未指定分区列
       intercept[AnalysisException] {
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         df.write.mode("append").saveAsTable("partitionedTable")
       }
       assert(sql("select * from partitionedTable").collect().size == 1)
@@ -1830,12 +1833,14 @@ abstract class DDLSuite extends QueryTest with SQLTestUtils {
       // See the write method in DataSource.scala.
       Seq((4, 5, 6)).toDF("a", "B", "c")
         .write
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         .mode("append")
         .partitionBy("a", "B")
         .saveAsTable("partitionedTable")
 
       Seq((7, 8, 9)).toDF("a", "b", "c")
         .write
+        //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
         .mode("append")
         .partitionBy("a", "b")
         .saveAsTable("partitionedTable")

@@ -131,6 +131,8 @@ class StateStoreCoordinatorSuite extends SparkFunSuite with SharedSparkContext {
       val aggregated = inputData.toDF().groupBy("value").agg(count("*")) // stateful query
       val checkpointLocation = Utils.createTempDir().getAbsoluteFile
       val query = aggregated.writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .outputMode("update")
         .queryName("query")

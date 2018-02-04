@@ -36,6 +36,8 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
   //直接在追加输出模式下添加数据
   test("directly add data in Append output mode") {
     implicit val schema = new StructType().add(new StructField("value", IntegerType))
+    //"Output"是写入到外部存储的写方式,
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     val sink = new MemorySink(schema, OutputMode.Append)
 
     // Before adding data, check output
@@ -73,6 +75,7 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
     checkAnswer(sink.allData, 1 to 9)
   }
   //在更新输出模式下直接添加数据
+  //Output"是写入到外部存储的写方式,
   test("directly add data in Update output mode") {
     implicit val schema = new StructType().add(new StructField("value", IntegerType))
     val sink = new MemorySink(schema, OutputMode.Update)
@@ -113,6 +116,7 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
   //直接在完整输出模式下添加数据
   test("directly add data in Complete output mode") {
     implicit val schema = new StructType().add(new StructField("value", IntegerType))
+    //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
     val sink = new MemorySink(schema, OutputMode.Complete)
 
     // Before adding data, check output
@@ -153,7 +157,10 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
   test("registering as a table in Append output mode") {
     val input = MemoryStream[Int]
     val query = input.toDF().writeStream
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("memory")
+      //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
       .outputMode("append")
       .queryName("memStream")
       .start()
@@ -173,13 +180,17 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
     query.stop()
   }
   //在完整输出模式下注册为表
+  //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
   test("registering as a table in Complete output mode") {
     val input = MemoryStream[Int]
     val query = input.toDF()
       .groupBy("value")
       .count()
       .writeStream
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("memory")
+      //Complete Mode 将整个更新表写入到外部存储,写入整个表的方式由存储连接器决定
       .outputMode("complete")
       .queryName("memStream")
       .start()
@@ -202,6 +213,8 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
   test("registering as a table in Update output mode") {
     val input = MemoryStream[Int]
     val query = input.toDF().writeStream
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
       .format("memory")
       .outputMode("update")
       .queryName("memStream")
@@ -224,6 +237,7 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
   //内存计划统计
   test("MemoryPlan statistics") {
     implicit val schema = new StructType().add(new StructField("value", IntegerType))
+    //Append模式：只有自上次触发后在结果表中附加的新行将被写入外部存储器。这仅适用于结果表中的现有行不会更改的查询。
     val sink = new MemorySink(schema, OutputMode.Append)
     val plan = new MemoryPlan(sink)
 
@@ -247,6 +261,8 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
     (0 until 1000).foreach { _ =>
       val input = MemoryStream[Int]
       val query = input.toDF().writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName("memStream")
         .start()
@@ -271,6 +287,8 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
     val error = intercept[AnalysisException] {
       val input = MemoryStream[Int]
       val query = input.toDF().writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
           .format("memory")
           .start()
     }
@@ -283,6 +301,8 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
 
     val input = MemoryStream[Int]
     val query = input.toDF().writeStream
+      // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+      // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName("memStream")
         .option("checkpointLocation", location)
@@ -293,6 +313,8 @@ class MemorySinkSuite extends StreamTest with BeforeAndAfter {
 
     intercept[AnalysisException] {
       input.toDF().writeStream
+        // 输出接收器 内存接收器（用于调试） - 输出作为内存表存储在内存中。支持附加和完成输出模式。
+        // 这应该用于低数据量上的调试目的，因为每次触发后，整个输出被收集并存储在驱动程序的内存中。
         .format("memory")
         .queryName("memStream")
         .option("checkpointLocation", location)
