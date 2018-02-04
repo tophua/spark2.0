@@ -204,8 +204,8 @@
     <orderEntry type="library" name="Maven: org.datanucleus:datanucleus-core:3.2.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.thrift:libthrift:0.9.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.thrift:libfb303:0.9.3" level="project" />
-    <orderEntry type="module" module-name="spark-streaming-flume_2.11" scope="PROVIDED" />
-    <orderEntry type="module" module-name="spark-streaming-flume-sink_2.11" scope="PROVIDED" />
+    <orderEntry type="library" name="Maven: org.apache.spark:spark-streaming-flume_2.11:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.spark:spark-streaming-flume-sink_2.11:2.2.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.flume:flume-ng-core:1.6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.flume:flume-ng-configuration:1.6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.mina:mina-core:2.0.4" level="project" />
