@@ -160,7 +160,7 @@ object LinearRegressionExample {
     //Root mean squared error (RMSE): 0.5858636434734112
     DecisionTreeExample.evaluateRegressionModel(lirModel, test, "label")
 
-    sc.stop()
+    spark.stop()
   }
 }
 // scalastyle:on println

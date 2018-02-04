@@ -75,7 +75,7 @@ object AggregateMessagesDemo extends App{
         */
       println(triplet.dstId+"==srcAttr_1=="+triplet.srcAttr._1+"==srcAttr._2=="+triplet.srcAttr._2+"=attr="+triplet.attr)
       if(triplet.srcAttr._2>triplet.dstAttr._2){
-        println("==="+(1,triplet.srcAttr._2))
+      //  println("==="+(1,triplet.srcAttr._2))
         /**
           * ===(1,70)
           * ===(1,70)
